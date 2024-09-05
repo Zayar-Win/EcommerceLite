@@ -10,7 +10,7 @@
                 <Search class="w-[25px]" />
             </div>
         </div>
-        <div class="flex items-center text-white">
+        <div @click="setIsCartOpen(true)" class="flex items-center text-white">
             <div class="flex items-center">
                 <p class="w-[25px] rounded-full flex text-sm items-center justify-center h-[25px] bg-primary" >0</p>
                 <Bag class="w-[50px] h-[80px]" />
@@ -22,11 +22,15 @@
 <script>
 import Bag from '@/assets/icons/Bag.vue';
 import Search from '@/assets/icons/Search.vue';
+import { mapMutations } from 'vuex';
 
 export default {
     components:{
         Search,
         Bag
+    },
+    methods:{
+        ...mapMutations(['setIsCartOpen'])
     }
 }
 </script>
