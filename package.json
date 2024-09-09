@@ -2,7 +2,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "vite",
+        "start": "vite",
         "build": "vite build"
     },
     "devDependencies": {
@@ -22,6 +22,10 @@
         "filepond-plugin-file-validate-size": "^2.2.8",
         "filepond-plugin-file-validate-type": "^1.2.9",
         "filepond-plugin-image-preview": "^4.6.12",
-        "vue-filepond": "^7.0.4"
+        "vue-filepond": "^7.0.4",
+        "@fortawesome/fontawesome-free": "^6.6.0",
+        "@vueuse/core": "^11.0.3",
+        "mitt": "^3.0.1",
+        "vuex": "^4.0.2"
     }
 }
