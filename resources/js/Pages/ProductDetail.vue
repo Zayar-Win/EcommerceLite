@@ -1,4 +1,5 @@
 <template>
+    <ImageSliderModal :images="images" />
     <SectionContainer>
         <div class="mt-10 flex md:flex-row flex-col xl:gap-10 gap-5">
             <div class="lg:basis-[65%] md:basis-[60%]">
@@ -206,12 +207,25 @@
 import RelatedProductCard from '@/Components/Common/RelatedProductCard.vue';
 import ProductCard from '@/Components/Common/ProductCard.vue';
 import SectionContainer from '@/Components/Common/SectionContainer.vue';
+import ImageSliderModal from '@/Components/ImageSliderModal.vue';
 
 export default {
     components:{
         SectionContainer,
         ProductCard,
-        RelatedProductCard
+        RelatedProductCard,
+        ImageSliderModal
+    },
+    data(){
+        return {
+            images : [
+                "https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f697b67b9d8d605cd0fde8_more-image-1-shop-product-shopwave-template.png",
+                "https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f697b67640273bfe19c51b_more-image-2-shop-product-shopwave-template.png",
+                "https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f697b6ea32fefb0084af2c_more-image-3-shop-product-shopwave-template.png",
+                "https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f697b658cd9b63ae33e44d_more-image-4-shop-product-shopwave-template.png",
+                "https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a777d6557d526b9dba47_image-12-shop-product-shopwave-template.png"
+            ]
+        }
     }
 }
 </script>
