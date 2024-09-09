@@ -1,9 +1,6 @@
 <template>
-    <div @click="(e) => {
-        e.stopPropagation();
-        setIsCartOpen(false)
-    }" v-if="isCartOpen" class="fixed top-0 flex  items-center justify-center left-0 w-full h-full bg-[rgba(0,0,0,0.5)]">
-        <div @click.stop class="bg-white overflow-hidden relative h-[95%] xl:w-[40%] lg:w-[50%] md:w-[60%] w-[90%] rounded-xl">
+    <Modal :show="isCartOpen" @close="setIsCartOpen(false)">
+        <div class="bg-white overflow-hidden relative h-[95%] rounded-xl">
             <div class="flex items-center justify-between border-b-[1px] border-b-black/10 px-7 py-6">
                 <p class="text-lg font-bold">Your Cart</p>
                 <Close @click="setIsCartOpen(false)" class="text-black cursor-pointer" />
@@ -115,15 +112,17 @@
                 <button class="w-full h-full text-white bg-primary rounded-full py-4 font-bold mt-3">Continue to Checkout</button>
             </div>
         </div>
-    </div>
+    </Modal>
 </template>
 <script>
 import Close from '@/assets/icons/Close.vue';
 import { mapGetters, mapMutations } from 'vuex';
+import Modal from '../Modal.vue';
 
 export default {
     components:{
-        Close
+        Close,
+        Modal
     },
     computed : {
         ...mapGetters(['isCartOpen']),
