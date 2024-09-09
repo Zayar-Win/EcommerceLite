@@ -1,22 +1,22 @@
 <template>
-    <div class="flex gap-5 px-32 mt-10 mb-10">
+    <div class="flex lg:flex-row flex-col gap-5 xl:px-32 sm:px-5 px-2 mt-10 mb-10">
         <div class="basis-[60%]">
             <h1 class="font-bold text-2xl ">Billing Details</h1>
             <div class="mt-6 border-[1px] border-black/10  px-6 pt-8 pb-8">
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid md:grid-cols-2 gap-4">
                     <Input label="FirstName" placeHolder="Enter your first name" />
                     <Input label="LastName" placeHolder="Enter your last name" />
                     <Input label="Phone" placeHolder="Enter your mobile phone number" />
                     <Input label="Email" placeHolder="Enter your email address" type="email" />
-                    <div class="col-span-2">
+                    <div class="md:col-span-2">
                         <select class="w-full border-[1px] border-black/20 focus:border-primary transition-all py-3 rounded-lg">
                             <option>Yangon</option>
                             <option>Bahan</option>
                         </select>
                     </div>
-                    <Input class="col-span-2" label="Account UserName" placeHolder="Username"  />
-                    <Input class="col-span-2" label="Create Account Password" placeHolder="Password" type="password" />
-                    <div class="flex col-span-2 flex-col">
+                    <Input class="md:col-span-2" label="Account UserName" placeHolder="Username"  />
+                    <Input class="md:col-span-2" label="Create Account Password" placeHolder="Password" type="password" />
+                    <div class="flex md:col-span-2 flex-col">
                         <label class="font-semibold text-sm">Order Notes(optional)</label>
                         <textarea rows="5" class="outline-none focus:ring-0 border-[1px] border-black/10 py-4 rounded-lg focus:border-primary transition-all mt-2" :type='type' :placeholder="placeHolder"></textarea>
                     </div>
@@ -31,19 +31,19 @@
                     <div class="flex items-center gap-8">
                         <div class="flex font-bold items-center justify-between grow">
                             <p>Waffle Coral Velet Full Modle </p>
+                        </div>
+                        <div class="font-bold flex gap-2 shrink-0">
                             <p class="text-black/50">x 1</p>
-                        </div>
-                        <div class="font-bold">
-                            4850 ks
-                        </div>
+                            <p>4850 ks</p>
+                        </div> 
                     </div>
                     <div class="flex items-center gap-8">
                         <div class="flex font-bold items-center justify-between grow">
                             <p>Waffle Coral Velet Full Modle </p>
-                            <p class="text-black/50">x 1</p>
                         </div>
-                        <div class="font-bold">
-                            4850 ks
+                        <div class="font-bold flex gap-2 shrink-0">
+                            <p class="text-black/50">x 1</p>
+                            <p>4850 ks</p>
                         </div>
                     </div>
                 </div>

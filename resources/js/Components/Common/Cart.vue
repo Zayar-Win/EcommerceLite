@@ -104,7 +104,7 @@
                 </div>
                 
             </div>
-            <div class='px-8 absolute bottom-0 bg-white left-0 w-full z-10 mt-10 py-10'>
+            <div class='px-8 absolute bottom-0 bg-white left-0 w-full z-10 mt-10 md:py-10 py-5'>
                 <div class="flex text-lg items-center justify-between">
                     <p class="text-black/60">Subtotal :</p>
                     <p class="font-bold">$ 107.98 USD</p>

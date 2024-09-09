@@ -1,5 +1,5 @@
 <template lang="">
-    <div class="bg-secondary xl:px-32 px-5 grid gap-y-10 xl:grid-cols-5 md:grid-cols-3 py-20 text-white">
+    <div class="bg-secondary xl:px-32 sm:px-5 px-2 grid gap-y-10 xl:grid-cols-5 md:grid-cols-3 py-20 text-white">
         <div>
             <h1 class="text-lg font-bold">Menu</h1>
             <ul class="mt-6 gap-2 font-semibold flex flex-col">

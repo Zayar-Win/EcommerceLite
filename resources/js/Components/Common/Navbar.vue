@@ -1,5 +1,5 @@
 <template lang="">
-    <div class="flex items-center justify-between xl:px-32 px-5 bg-secondary">
+    <div class="flex items-center justify-between xl:px-32 sm:px-5 px-2 bg-secondary">
         <div>
             <img src="/Logo.png" class="md:w-[150px] w-[100px] h-[80px] object-cover md:h-[12
             0px]" />
