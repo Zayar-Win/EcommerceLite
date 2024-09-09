@@ -1,24 +1,15 @@
 <template>
-    <ImageSliderModal :images="images" />
+    <ImageSliderModal :open="open" @close="open = false" :images="images" />
     <SectionContainer>
         <div class="mt-10 flex md:flex-row flex-col xl:gap-10 gap-5">
             <div class="lg:basis-[65%] md:basis-[60%]">
                 <div class="flex lg:flex-row flex-col-reverse gap-5">
                     <div class="basis-[10%] flex lg:flex-col flex-row gap-4">
-                        <div class="w-full h-auto rounded-lg overflow-hidden group cursor-pointer">
-                            <img class="w-full h-full group-hover:scale-[1.1] transition-all" src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f697b67b9d8d605cd0fde8_more-image-1-shop-product-shopwave-template.png" />
-                        </div>
-                        <div class="w-full h-auto rounded-lg overflow-hidden group cursor-pointer">
-                            <img class="w-full h-full group-hover:scale-[1.1] transition-all" src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f697b67b9d8d605cd0fde8_more-image-1-shop-product-shopwave-template.png" />
-                        </div>
-                        <div class="w-full h-auto rounded-lg overflow-hidden group cursor-pointer">
-                            <img class="w-full h-full group-hover:scale-[1.1] transition-all" src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f697b67b9d8d605cd0fde8_more-image-1-shop-product-shopwave-template.png" />
-                        </div>
-                        <div class="w-full h-auto rounded-lg overflow-hidden group cursor-pointer">
-                            <img class="w-full h-full group-hover:scale-[1.1] transition-all" src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f697b67b9d8d605cd0fde8_more-image-1-shop-product-shopwave-template.png" />
+                        <div @click="open = true" v-for="image in images" :key="image" class="w-full h-auto rounded-lg overflow-hidden group cursor-pointer">
+                            <img class="w-full h-full group-hover:scale-[1.1] transition-all" :src="image" />
                         </div>
                     </div>
-                    <div class="basis-[90%]">
+                    <div @click="open = true" class="basis-[90%]">
                         <div class="w-full h-auto cursor-pointer group rounded-xl overflow-hidden">
                             <img class="w-full h-full group-hover:scale-[1.1] transition-all duration-200" src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a777d6557d526b9dba47_image-12-shop-product-shopwave-template.png" />
                         </div>
@@ -224,7 +215,8 @@ export default {
                 "https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f697b6ea32fefb0084af2c_more-image-3-shop-product-shopwave-template.png",
                 "https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f697b658cd9b63ae33e44d_more-image-4-shop-product-shopwave-template.png",
                 "https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a777d6557d526b9dba47_image-12-shop-product-shopwave-template.png"
-            ]
+            ],
+            open:false
         }
     }
 }
