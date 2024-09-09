@@ -16,6 +16,8 @@
                 :modules="[FreeMode, Navigation, Thumbs]"
                 class="mySwiper2"
                 ref="mainSwiperRef"
+                @slideChange="slideChangeHandler"
+
                 >
                 <swiper-slide
                 v-for="image in images"
@@ -38,11 +40,13 @@
                     class="mySwiper"
                     >
                     <swiper-slide
-                    v-for="image in images"
+                    class="relative"
+                    v-for="(image,i) in images"
                     :key="image"
                         >
                         <img 
                         :src="image" class="w-full h-full object-cover" />
+                        <div v-if="activeIndex == i" class="absolute top-0 left-0 w-full h-full bg-gray-500/70"></div>
                     </swiper-slide>
                     </swiper>
                 </div>
@@ -81,6 +85,7 @@
                 FreeMode,
                 Navigation,
                 Thumbs,
+                activeIndex: 0,
             }
         },
         computed:{
@@ -94,6 +99,9 @@
                 if(!value){
                     this.deleteSwipers()
                 }
+            },
+            activeIndex(){
+                console.log(this.activeIndex)
             }
         },
         methods:{
@@ -112,6 +120,9 @@
                     this.mainSwiper.destroy(true, true);
                     this.mainSwiper = null
                 }
+            },
+            slideChangeHandler(swiper){
+                this.activeIndex = swiper.realIndex
             }
         },
         onBeforeMount(){
