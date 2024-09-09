@@ -1,5 +1,5 @@
 <template>
-    <Modal v-if="open" @close="$emit('close')" :show="open" maxWidth="2xl" containerClass="!bg-transparent select-none !shadow-none">
+    <Modal @close="$emit('close')" :show="open" maxWidth="2xl" containerClass="!bg-transparent select-none !shadow-none">
         <div class="h-full">
             <div class="h-[80%] overflow-hidden">
                 <swiper
