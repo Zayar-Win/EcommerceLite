@@ -61,38 +61,25 @@
                 <div class="mt-8 ">
                     <p class="font-semibold mb-3">Bank Transfer</p>
                     <div class="grid grid-cols-5 gap-2">
-                        <div class="border border-black/30 rounded-md overflow-hidden">
-                            <img class="w-full h-full object-cover" src="https://tbqmall.co/wp-content/uploads/2023/09/tbqhs-kpay-checkout.png" />
-                        </div> 
-                        <div class="border border-black/30 rounded-md overflow-hidden">
-                            <img class="w-full h-full object-cover" src="https://tbqmall.co/wp-content/uploads/2023/09/tbqhs-wavepay-checkout.png" />
-                        </div> 
-                        <div class="border border-black/30 rounded-md overflow-hidden">
-                            <img class="w-full h-full object-cover" src="https://tbqmall.co/wp-content/uploads/2023/09/tbqhs-ayapay-checkout.png" />
-                        </div> 
-                        <div class="border border-black/30 rounded-md overflow-hidden">
-                            <img class="w-full h-full object-cover" src="https://tbqmall.co/wp-content/uploads/2023/09/tbqhs-onepay-checkout.png" />
-                        </div> 
-                        <div class="border border-black/30 rounded-md overflow-hidden">
-                            <img class="w-full h-full object-cover" src="https://tbqmall.co/wp-content/uploads/2023/09/tbqhs-uabpay-checkout.png" />
+                        <div v-for="payment in payments" @click="selectedPayment = payment?.name" class="border  rounded-md overflow-hidden" :class="[payment?.name == selectedPayment ? 'border-primary border-2' : 'border-black/30']">
+                            <img class="w-full h-full object-cover" :src="payment?.icon" />
                         </div> 
                     </div>
                     <p class="mt-4 text-sm font-bold text-black/50">
                         Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.
                     </p>
-                    <div class="mt-5 flex flex-col gap-3">
+                    <div v-for="payment in payments" class="mt-5 flex-col gap-3" :class="[payment.name === selectedPayment ? 'flex' :'hidden']">
                         <div>
                             <p class="font-semibold text-lg">Acc No.</p>
-                            <p class=" font-semibold text-black">09775149336</p>
+                            <p class=" font-semibold text-black">{{payment?.ph_number}}</p>
                         </div>
-                        
                         <div>
                             <p class="font-semibold text-lg">Username.</p>
                             <p class=" font-semibold text-black">Zayarwin</p>
                         </div>
                         <div>
                             <h1 class="font-semibold text-lg">QR Code.</h1>
-                            <img class="w-[300px] mx-auto h-auto" src="https://www.kbzbank.com/wp-content/uploads/2023/05/MRCS-QR-Copy-1.png?w=474" />
+                            <img class="w-[300px] mx-auto h-auto" :src="payment?.qr_code" />
                         </div>
                     </div>
                 </div>
@@ -111,7 +98,18 @@ import Input from '@/Components/Common/Input.vue';
 export default {
     components:{
         Input,
+    },
+    props:{
+        payments : {
+            type :Array
+        }
+    },
+    data(){
+        return{
+            selectedPayment : this.payments[0]?.name ?? null
+        }
     }
+
 }
 </script>
 <style>
