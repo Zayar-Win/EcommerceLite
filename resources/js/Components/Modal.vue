@@ -14,6 +14,10 @@ const props = defineProps({
         type: Boolean,
         default: true,
     },
+    containerClass:{
+        type : String,
+        default:''
+    }
 });
 
 const emit = defineEmits(['close']);
@@ -62,7 +66,7 @@ const maxWidthClass = computed(() => {
 <template>
     <Teleport to="body">
         <Transition leave-active-class="duration-200">
-            <div v-show="show" class="fixed inset-0 overflow-y-auto px-4 py-6 sm:px-0 z-50" scroll-region>
+            <div v-show="show" class="fixed top-0 flex items-center justify-center left-0 w-full h-full  inset-0 overflow-hidden px-4 py-6 sm:px-0 z-50" scroll-region>
                 <Transition
                     enter-active-class="ease-out duration-300"
                     enter-from-class="opacity-0"
@@ -86,8 +90,8 @@ const maxWidthClass = computed(() => {
                 >
                     <div
                         v-show="show"
-                        class="mb-6 bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:mx-auto"
-                        :class="maxWidthClass"
+                        class=" bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-xl h-full transform transition-all sm:w-full sm:mx-auto"
+                        :class="[maxWidthClass,containerClass]"
                     >
                         <slot v-if="show" />
                     </div>
