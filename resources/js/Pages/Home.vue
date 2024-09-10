@@ -2,10 +2,10 @@
     <SectionContainer>
         <div class="bg-[#F7F8F9]  py-24 my-10 rounded-xl flex flex-col items-center justify-center">
             <h1 class="text-3xl font-bold">Shop</h1>
-            <p class="w-[50%] text-center mt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
+            <p class="lg:w-[50%] w-[70%] text-center mt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
         </div>
-        <div class="flex top-0 mb-[100px]">
-            <div class="w-[25%] sticky self-start top-16">
+        <div class="flex md:flex-row flex-col top-0 mb-[100px]">
+            <div class="lg:w-[25%] md:w-[35%] w-full md:sticky self-start top-16">
                 <div class="flex items-center pl-2 rounded-full bg-white border-[1px] h-[50px]">
                     <Search class="text-black/50" />
                     <input type="text" class="w-full p-0 border-none bg-transparent outline-none focus:ring-0" placeholder="Search for products" />
@@ -22,8 +22,8 @@
                     </div>
                 </div>
             </div>
-            <div class="w-[75%] pl-[8%]">
-                <div class="grid grid-cols-4 mb-14 gap-x-5 gap-y-10">
+            <div class="lg:w-[75%] md:w-[65%] md:mt-0 mt-10 w-full md:pl-[8%]">
+                <div class="grid lg:grid-cols-4 md:grid-cols-2 mb-14 gap-x-5 gap-y-10">
                     <div class="cursor-pointer">
                         <div class="w-full h-auto group rounded-xl overflow-hidden">
                             <img class="w-full group-hover:scale-[1.1] transition-all duration-200 h-full" src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a777d6557d526b9dba47_image-12-shop-product-shopwave-template-p-500.png" />

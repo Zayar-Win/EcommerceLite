@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -14,7 +15,9 @@ Route::get('/products/t-shirt', function () {
 });
 
 Route::get('/checkout', function () {
-    return Inertia::render('Checkout');
+    return Inertia::render('Checkout', [
+        'payments' => Payment::all()
+    ]);
 });
 
 Route::get('/dashboard', function () {
