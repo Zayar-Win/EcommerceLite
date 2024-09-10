@@ -10,7 +10,7 @@ const props = defineProps({
 
     class: {
         type: String,
-        default: 'text-white bg-primary hover:bg-blue-900'
+        default: 'text-white bg-primary hover:bg-yellow-700'
     },
 
     method: {
