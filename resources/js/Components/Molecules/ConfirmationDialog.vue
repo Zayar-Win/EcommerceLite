@@ -51,9 +51,6 @@ import Modal from '@/Components/Atoms/Modal.vue';
 import NormalButton from '@/Components/Atoms/NormalButton.vue';
 import FormButton from '@/Components/Atoms/FormButton.vue';
 import ConfirmWarning from '@/Components/Icons/ConfirmWarning.vue';
-import ArrowUp from '@/Components/Icons/ArrowUp.vue';
-import ArrowDown from '@/Components/Icons/ArrowDown.vue';
-import QuestionCircle from '../Icons/QuestionCircle.vue';
 
 const props = defineProps({
     title: {
