@@ -44,7 +44,8 @@
                     <div class="overflow-x-auto w-full">
                         <Table :items="users.data">
                             <template #table-header>
-                                <SortableTableHeaderCell class="min-w-[100px]"
+                                <SortableTableHeaderCell
+                                    class="min-w-[100px]"
                                     label="ID"
                                     sort="id"
                                     :url="route('admin.users.index')"
@@ -134,7 +135,11 @@
 
                                 <TableActionCell class="min-w-[350px]">
                                     <InertiaLinkButton
-                                    :href="route('admin.users.edit', { user: item?.id })"
+                                        :href="
+                                            route('admin.users.edit', {
+                                                user: item?.id,
+                                            })
+                                        "
                                         class="bg-blue-600 !py-1 flex gap-1 items-center hover:bg-blue-700 text-white !text-xs !font-semibold"
                                     >
                                         <Edit class="w-[20px]" />
@@ -145,10 +150,9 @@
                                         @click="
                                             destroy(
                                                 'User',
-                                                route(
-                                                    'admin.users.destroy.force',
-                                                    { user: item?.id }
-                                                )
+                                                route('admin.users.destroy', {
+                                                    user: item?.id,
+                                                })
                                             )
                                         "
                                         class="bg-red-600 flex items-center gap-1 !py-1 hover:bg-red-700 text-white !text-xs !font-semibold"
@@ -177,10 +181,9 @@ import Table from "@/Components/Common/Table.vue";
 import TableContainer from "@/Components/Common/TableContainer.vue";
 import TableDataCell from "@/Components/Common/TableDataCell.vue";
 import TableHeaderCell from "@/Components/Common/TableHeaderCell.vue";
-import Breadcrumb from '@/Components/Molecules/Breadcrumb.vue';
+import Breadcrumb from "@/Components/Molecules/Breadcrumb.vue";
 // import { Head } from '@inertiajs/vue3';
-import { useCRUDOperations } from '@/Composables/useCRUDOperations';
-const { destroy,restore } = useCRUDOperations();
+import { useCRUDOperations } from "@/Composables/useCRUDOperations";
 export default {
     components: {
         TableContainer,
@@ -196,12 +199,19 @@ export default {
         DashboardTableDataSearchBox,
         // Head
         Breadcrumb,
-        useCRUDOperations
+        useCRUDOperations,
     },
     props: {
         users: {
             type: Object,
         },
+    },
+    setup() {
+        const { destroy } = useCRUDOperations();
+
+        return {
+            destroy,
+        };
     },
 };
 </script>

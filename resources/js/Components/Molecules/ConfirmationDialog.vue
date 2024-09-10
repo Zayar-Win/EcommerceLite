@@ -2,10 +2,7 @@
     <Modal data-cy="confirmation-modal" :open="isOpen" @closeModal="handleCloseModal" :can-close-backdrop="dialogOptions.allowClickOutside">
         <form class="p-5 space-x-3" @submit.prevent="confirmDialog">
             <ConfirmWarning v-if="dialogOptions.svgIcon === 'warning'" class="mx-auto mb-5" />
-            <ArrowUp v-else-if="dialogOptions.svgIcon === 'upgrade'" class="mx-auto mb-5 size-20 text-primary"/>
-            <ArrowDown v-else-if="dialogOptions.svgIcon === 'downgrade'" class="mx-auto mb-5 size-20 text-primary"/>
-            <QuestionCircle v-else-if="dialogOptions.svgIcon === 'cancel'||dialogOptions.svgIcon === 'resume'||dialogOptions.svgIcon === 'unsubscribe'||dialogOptions.svgIcon === 'question'" class="mx-auto mb-5 size-20 text-primary"/>
-            <h1 class="text-center font-semibold text-lg text-darkGray mb-5" :class="dialogOptions.titleClass">
+            <h1 class="text-center font-semibold text-lg text-darkGray mb-5 text-black" :class="dialogOptions.titleClass">
                 {{ dialogOptions.title }}
             </h1>
             <div v-if="dialogOptions.body">

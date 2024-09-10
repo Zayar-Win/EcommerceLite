@@ -9,6 +9,8 @@ import { useCRUDOperations } from "@/Composables/useCRUDOperations";
 import { onMounted, computed } from "vue";
 import InertiaLinkButton from "@/Components/Atoms/InertiaLinkButton.vue";
 import SelectBox from '@/Components/Atoms/SelectBox.vue';
+import { userSchema } from '@/Schemas/userSchema';
+
 
 const props = defineProps({
     mode: {
@@ -26,7 +28,7 @@ const props = defineProps({
     },
 });
 
-// const syncCountryISO=ref(null);
+// const schema = computed(() => (props.mode === 'create' ? userCreateSchema : userEditSchema));
 
 const { form, create, edit, errors, processing } = useCRUDOperations({
     name: "",
@@ -40,7 +42,7 @@ const { form, create, edit, errors, processing } = useCRUDOperations({
     dob: "",
     address: "",
     role_id: "",
-});
+},userSchema);
 
 onMounted(() => {
     if (props.user && props.mode === "edit") {
@@ -117,7 +119,7 @@ const isFormValid = computed(() => {
                         required
                     />
 
-                    <ValidationError :message="errors?.phone_type" />
+                    <ValidationError :message="errors?.phone" />
                 </div>
 
                 <div>
@@ -167,7 +169,7 @@ const isFormValid = computed(() => {
 
                     <SelectBox
                         v-model="form.role_id"
-                        name="phone-type"
+                        name="role"
                         :options="roles"
                         required
                         :selected="mode==='edit' && form?.role_id"

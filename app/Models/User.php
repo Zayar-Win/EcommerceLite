@@ -4,7 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use Attribute;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -55,7 +55,6 @@ class User extends Authenticatable
             get: fn ($value) => $value ? date('Y-m-d', strtotime($value)) : null,
         );
     }
-
 
     public function scopeFilterBy(Builder $query, ?array $filterBy): Builder
     {

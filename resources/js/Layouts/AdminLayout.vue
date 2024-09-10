@@ -1,7 +1,7 @@
 <script setup>
 
 import SideNav from '@/Components/Admin/SideNav.vue';
-
+import ConfirmationDialog from '@/Components/Molecules/ConfirmationDialog.vue';
 </script>
 
 <template>
@@ -20,5 +20,6 @@ import SideNav from '@/Components/Admin/SideNav.vue';
                 </div>
             </main>
         </div>
+        <ConfirmationDialog/>
     </div>
 </template>

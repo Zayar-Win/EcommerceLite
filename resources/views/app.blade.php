@@ -10,7 +10,7 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-<!-- Font awesome -->
+    <!-- Font awesome -->
     <script src="https://kit.fontawesome.com/18c274e5f3.js" crossorigin="anonymous"></script>
         <!-- Scripts -->
         @routes
