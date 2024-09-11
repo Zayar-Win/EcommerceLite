@@ -8,26 +8,26 @@
             <div class="lg:w-[25%] md:w-[35%] w-full md:sticky self-start top-16">
                 <div class="flex items-center pl-2 rounded-full bg-white border-[1px] h-[50px]">
                     <Search class="text-black/50" />
-                    <input type="text" class="w-full p-0 border-none bg-transparent outline-none focus:ring-0" placeholder="Search for products" />
+                    <input v-model="search" type="text" class="w-full p-0 pl-2 border-none bg-transparent outline-none focus:ring-0" placeholder="Search for products" />
                 </div>
                 <div>
                     <p class="text mt-8 mb-3 font-bold">Product By Category</p>
                     <div>
-                        <div v-for="(category,i) in categories" :key="category.categroy" class="flex items-center cursor-pointer gap-2 py-3 px-2  border-t-[1px] border-t-black/10" 
+                        <div v-for="(c,i) in categories" :key="c.categroy" @click="category = c.category" class="flex items-center cursor-pointer gap-2 py-3 px-2  border-t-[1px] border-t-black/10" 
                         :class="[i == categories.length -1 ? 'border-b-[1px] border-b-black/10' : '']"
                         >
-                            <component :is="category.icon" class='w-[20px] h-[20px] text-primary' />
-                            <p class="text-sm hover:text-primary transition-all">{{category.category}}</p>
+                            <component :is="c.icon" class='w-[20px] h-[20px] text-primary' />
+                            <p class="text-sm hover:text-primary transition-all">{{c.category}}</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="lg:w-[75%] md:w-[65%] md:mt-0 mt-10 w-full md:pl-[8%]">
-                <div class="grid lg:grid-cols-4 md:grid-cols-2 mb-14 gap-x-5 gap-y-10">
-                    <div v-for="product in products" class="cursor-pointer">
+                <div v-if="products?.length > 0" class="grid lg:grid-cols-4 md:grid-cols-2 mb-14 gap-x-5 gap-y-10">
+                    <div  v-for="product in products" class="cursor-pointer">
                         <Link :href="route('product-detail',{product})">
                             <div class="w-full h-auto group rounded-xl overflow-hidden">
-                                <img class="w-full group-hover:scale-[1.1] transition-all duration-200 h-full" :src="product.images[Math.floor(Math.random() * product.images.length)].url" />
+                                <img class="w-full group-hover:scale-[1.1] transition-all duration-200 h-full" :src="product.images[0].url" />
                             </div>
                             <p class="mt-3 font-semibold">{{product?.name}}</p>
                             <div class="flex gap-2 text-sm items-center font-semibold mt-1">
@@ -36,6 +36,9 @@
                             </div>
                         </Link>
                     </div>
+                </div>
+                <div v-else class="w-full h-[300px] flex items-center justify-center font-bold font-lg text-black/40">
+                    <p>No Products yet.</p>
                 </div>
             </div>
         </div>
@@ -53,6 +56,7 @@ import Footer from '@/Components/Common/Footer.vue';
 import Navbar from '@/Components/Common/Navbar.vue';
 import SectionContainer from '@/Components/Common/SectionContainer.vue';
 import { Link } from '@inertiajs/vue3';
+import { debounce } from 'lodash';
 
 export default {
     components:{
@@ -65,10 +69,15 @@ export default {
     props:{
         products : {
             type : Object
+        },
+        filters : {
+            type : Object
         }
     },
     data(){
         return {
+            search : this.filters.search ?? '',
+            category : this.filters.category ?? null,
             categories : [
                 {
                     icon : Cloth,
@@ -93,9 +102,31 @@ export default {
             ]
         }
     },
-    mounted(){
-        console.log(this.products)
-    }
+    computed:{
+        dynamicParams(){
+            let params = {}
+            if(this.search) params.search = this.search;
+            if(this.category) params.category = this.category;
+            return params
+        }   
+    },  
+    watch:{
+        search(){
+                this.fetchProducts()
+        },
+        category(){
+            console.log(this.category)
+            this.fetchProducts()
+        }
+    },
+    methods:{
+        fetchProducts: debounce(function (){
+            this.$inertia.get(route('home',this.dynamicParams),{},{
+                preserveScroll : true,
+                preserveState : true
+            })
+        },300)
+    },
 }
 </script>
 <style lang="">

@@ -9,8 +9,13 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
+    $products = Product::with(['images', 'category'])->filter(request()->all())->get();
     return Inertia::render('Home', [
-        'products' => Product::with(['images'])->get()
+        'products' => $products,
+        'filters' => [
+            'search' => request('search'),
+            'category' => request('category')
+        ]
     ]);
 })->name('home');
 Route::get('/products/{product:slug}', function (Product $product) {
