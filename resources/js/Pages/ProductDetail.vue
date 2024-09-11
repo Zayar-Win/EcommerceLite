@@ -34,7 +34,7 @@
                         </div>
                         <div class="flex items-center ">
                             <p class="basis-[35%] font-semibold">Stock:</p>
-                            <p class="basis-[65%] text-black/70">{{ totalStock }}</p>
+                            <p :class="[totalStock ? '' : 'text-red-500']" class="basis-[65%] text-black/70">{{ totalStock ? totalStock : 'Out of stock' }}</p>
                         </div>
                         <!-- <div class="flex items-center ">
                             <p class="basis-[35%] font-semibold">Color:</p>
@@ -45,14 +45,12 @@
                     <div class="flex lg:items-center lg:flex-row flex-col gap-3 mt-4 mb-2">
                         <div class="lg:basis-[40%]">
                             <p class="font-bold mb-2">Quantity</p>
-                            <input class="w-full border-black/10 rounded-full py-3 pl-5" :max="totalStock" type="number" />
+                            <input :disabled="!totalStock" :value="totalStock ? 1 : 0 " class="w-full border-black/10 rounded-full py-3 pl-5" :max="totalStock" type="number" />
                         </div>
-                        <div class="lg:basis-[60%] w-full">
+                        <div v-if="isClothCategory" class="lg:basis-[60%] w-full">
                             <p class="font-bold mb-2">Size</p>
-                            <select class="w-full border-black/10 rounded-full py-3 ">
-                                <option>Red</option>
-                                <option>Green</option>
-                                <option>Blue</option>
+                            <select v-model="selectedSize" class="w-full border-black/10 rounded-full py-3 ">
+                                <option v-for="size in sizes" :value="size" :key="size">{{size}}</option>
                             </select>
                         </div>
                     </div>
@@ -132,7 +130,7 @@
                         </div>
                         <div class="flex items-center ">
                             <p class="basis-[35%] font-semibold">Stock:</p>
-                            <p class="basis-[65%] text-black/70">{{totalStock}}</p>
+                            <p :class="[totalStock ? '' : 'text-red-500']" class="basis-[65%] text-black/70">{{totalStock ? totalStock : 'Out of stock'}}</p>
                         </div>
                         <!-- <div class="flex items-center ">
                             <p class="basis-[35%] font-semibold">Color:</p>
@@ -143,11 +141,11 @@
                     <div class="flex lg:items-center lg:flex-row flex-col gap-3 mt-4 mb-2">
                         <div class="lg:basis-[40%]">
                             <p class="font-bold mb-2">Quantity</p>
-                            <input value="1" class="w-full border-black/10 rounded-full py-3 pl-5" :max="totalStock" type="number" />
+                            <input :disabled="!totalStock" :value="totalStock ? 1 : 0" class="w-full border-black/10 rounded-full py-3 pl-5" :max="totalStock" type="number" />
                         </div>
-                        <div class="lg:basis-[60%] w-full">
+                        <div v-if="isClothCategory" class="lg:basis-[60%] w-full">
                             <p class="font-bold mb-2">Size</p>
-                            <select  v-model="selectedSize" class="w-full border-black/10 rounded-full py-3 ">
+                            <select   v-model="selectedSize" class="w-full border-black/10 rounded-full py-3 ">
                                 <option v-for="size in sizes" :value="size" :key="size">{{size}}</option>
                             </select>
                         </div>
@@ -205,13 +203,20 @@ export default {
         }
     },
     computed:{
+        isClothCategory(){
+            return this.product?.category?.name == 'Clothes'
+        },
         currentProductDetail(){
             return this.product?.product_details?.filter(detail => {
                 return detail?.size?.name == this.selectedSize;
             })[0];
         },
         totalStock(){
-            return this.currentProductDetail?.stock_quantity;
+            if(this.isClothCategory){
+                return this.currentProductDetail?.stock_quantity;
+            }else{
+                return this.product?.product_details[0]?.stock_quantity;
+            }
         }
     },
     inject:['$formatNumber'],
