@@ -10,9 +10,9 @@
                 <Search class="w-[25px]" />
             </div>
         </div>
-        <div @click="setIsCartOpen(true)" class="flex items-center text-white">
+        <div @click="setIsCartOpen(true)" class="flex items-center cursor-pointer text-white">
             <div class="flex items-center">
-                <p class="w-[25px] rounded-full flex text-sm items-center justify-center h-[25px] bg-primary" >0</p>
+                <p class="w-[25px] rounded-full flex text-sm items-center justify-center h-[25px] bg-primary" >{{cartItems.length}}</p>
                 <Bag class="md:w-[50px] w-[30px] h-[50px] md:h-[80px]" />
             </div>
             <p>Your Cart</p>
@@ -23,13 +23,16 @@
 import Bag from '@/assets/icons/Bag.vue';
 import Search from '@/assets/icons/Search.vue';
 import { Link } from '@inertiajs/vue3';
-import { mapMutations } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
     components:{
         Search,
         Bag,
         Link
+    },
+    computed:{
+        ...mapGetters(['cartItems'])
     },
     methods:{
         ...mapMutations(['setIsCartOpen'])

@@ -22,7 +22,7 @@
                     <p class="mt-2 text-[16px] mb-5 text-black/70 font-medium">{{ product?.description }}</p>
                     <p  v-if="product?.discount && product?.discount > 0"class="text-lg font-medium line-through text-black/60">{{ product?.price ?? '1000' }} MMK</p>
                     <div class="flex items-end mt-1 gap-2">
-                        <p class="font-bold text-2xl">{{Math.floor(product?.price - (((product?.discount ?? 100) / 100) * product?.price))}} MMK</p>
+                        <p class="font-bold text-2xl">{{Math.floor(product?.price - (((product?.discount ?? 0) / 100) * product?.price))}} MMK</p>
                         <p v-if="product?.discount && Number(product?.discount) > 0" class="text-primary font-semibold">%{{ $formatNumber(product?.discount) }} Off</p>
                     </div>
                     <div class="my-8 h-[1px] w-full bg-black/20"></div>
@@ -45,7 +45,7 @@
                     <div class="flex lg:items-center lg:flex-row flex-col gap-3 mt-4 mb-2">
                         <div class="lg:basis-[40%]">
                             <p class="font-bold mb-2">Quantity</p>
-                            <input :disabled="!totalStock" :value="totalStock ? 1 : 0 " class="w-full border-black/10 rounded-full py-3 pl-5" :max="totalStock" type="number" />
+                            <input :disabled="!totalStock" v-model="quantity" class="w-full border-black/10 rounded-full py-3 pl-5" :max="totalStock" type="number" />
                         </div>
                         <div v-if="isClothCategory" class="lg:basis-[60%] w-full">
                             <p class="font-bold mb-2">Size</p>
@@ -54,7 +54,7 @@
                             </select>
                         </div>
                     </div>
-                    <button class="w-full h-full text-white bg-primary rounded-full py-4 font-bold mt-3">Add to Cart</button>
+                    <button @click="handleAddItemToCart" :disabled="!totalStock" class="w-full h-full disabled:opacity-45 disabled:cursor-not-allowed text-white bg-primary rounded-full py-4 font-bold mt-3">Add to Cart</button>
                 </div>
                 <div class="md:mt-0 mt-10">
                     <h1 class="text-2xl font-semibold">Latest Products</h1>
@@ -118,7 +118,7 @@
                     <p class="mt-2 text-[16px] mb-5 text-black/70 line-clamp-3 font-medium">{{product?.description}}</p>
                     <p v-if="product?.discount && product?.discount > 0" class="text-lg font-medium line-through text-black/60">{{ product?.price ?? '1000' }} MMK</p>
                     <div class="flex items-end mt-1 gap-2">
-                        <p class="font-bold text-2xl">{{Math.floor(product?.price - (((product?.discount ?? 100) / 100) * product?.price))}} MMK</p>
+                        <p class="font-bold text-2xl">{{Math.floor(product?.price - (((product?.discount ?? 0) / 100) * product?.price))}} MMK</p>
                         <p v-if="product?.discount && Number(product?.discount) > 0" class="text-primary font-semibold">%{{ $formatNumber(product?.discount) }} Off</p>
                     </div>
                     <div class="my-8 h-[1px] w-full bg-black/20"></div>
@@ -141,7 +141,7 @@
                     <div class="flex lg:items-center lg:flex-row flex-col gap-3 mt-4 mb-2">
                         <div class="lg:basis-[40%]">
                             <p class="font-bold mb-2">Quantity</p>
-                            <input :disabled="!totalStock" :value="totalStock ? 1 : 0" class="w-full border-black/10 rounded-full py-3 pl-5" :max="totalStock" type="number" />
+                            <input :disabled="!totalStock" v-model="quantity" class="w-full border-black/10 rounded-full py-3 pl-5" :max="totalStock" type="number" />
                         </div>
                         <div v-if="isClothCategory" class="lg:basis-[60%] w-full">
                             <p class="font-bold mb-2">Size</p>
@@ -150,7 +150,7 @@
                             </select>
                         </div>
                     </div>
-                    <button class="w-full h-full text-white bg-primary rounded-full py-4 font-bold mt-3">Add to Cart</button>
+                    <button @click="handleAddItemToCart" :disabled="!totalStock" class="w-full h-full disabled:opacity-45 disabled:cursor-not-allowed text-white bg-primary rounded-full py-4 font-bold mt-3">Add to Cart</button>
                 </div>
                 <div class="mt-12">
                     <h1 class="text-2xl font-medium mb-7">Related Product</h1>
@@ -180,6 +180,7 @@ import RelatedProductCard from '@/Components/Common/RelatedProductCard.vue';
 import ProductCard from '@/Components/Common/ProductCard.vue';
 import SectionContainer from '@/Components/Common/SectionContainer.vue';
 import ImageSliderModal from '@/Components/ImageSliderModal.vue';
+import { mapMutations } from 'vuex';
 
 export default {
     components:{
@@ -207,9 +208,13 @@ export default {
             return this.product?.category?.name == 'Clothes'
         },
         currentProductDetail(){
-            return this.product?.product_details?.filter(detail => {
-                return detail?.size?.name == this.selectedSize;
-            })[0];
+            if(this.isClothCategory){
+                return this.product?.product_details?.filter(detail => {
+                    return detail?.size?.name == this.selectedSize;
+                })[0];
+            }else{
+                return this.product?.product_details[0];
+            }
         },
         totalStock(){
             if(this.isClothCategory){
@@ -224,11 +229,28 @@ export default {
         return {
             images : this.product?.images.map(image => image?.url),
             open:false,
-            selectedSize : this.sizes[0]
+            selectedSize : this.sizes[0],
+            quantity : this.totalStock ? 1 : 0
+        }
+    },
+    methods:{
+        ...mapMutations(['addItemToCart']),
+        handleAddItemToCart(){
+            let item = {
+                product : {
+                    ...this.product,
+                    //use product detail when showing item in card!!
+                    product_detail : this.currentProductDetail,
+                    quantity : this.quantity
+                }
+            };
+
+            this.addItemToCart(item);
+
         }
     },
     mounted(){
-        console.log(this.product)
+        this.quantity = this.totalStock ? 1 : 0
     }
 }
 </script>

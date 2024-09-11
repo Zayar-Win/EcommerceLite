@@ -52,7 +52,7 @@ Route::get('/checkout', function () {
     return Inertia::render('Checkout', [
         'payments' => Payment::all()
     ]);
-});
+})->name('checkout');
 
 Route::get('/admin/dashboard', function () {
     return Inertia::render('Admin/Dashboard');

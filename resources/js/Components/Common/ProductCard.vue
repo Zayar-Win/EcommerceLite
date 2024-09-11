@@ -8,7 +8,7 @@
                 <p class="text-sm text-primary">{{product?.category?.name}}</p>
                 <h1 class="mt-2 md:text-lg text-base line-clamp-1 font-bold group-hover:text-primary transition-all duration-200">{{product?.name}}</h1>
                 <div class="flex xl:flex-row flex-col xl:items-center font-semibold mt-2 xl:gap-2">
-                    <p class="text-primary">{{Math.floor(product?.price - (((product?.discount ?? 100) / 100) * product?.price))}} MMK</p>
+                    <p class="text-primary">{{Math.floor(product?.price - (((product?.discount ?? 0) / 100) * product?.price))}} MMK</p>
                     <p v-if="product?.discount && product?.discount > 0" class=" line-through text-black/40">{{ product?.price ?? '1000' }} MMK</p>
                 </div>
             </div>  
