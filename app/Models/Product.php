@@ -24,13 +24,13 @@ class Product extends Model
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    public function productDetail()
+    public function productDetails()
     {
-        return $this->belongsTo(ProductDetail::class, 'product_detail_id');
+        return $this->hasMany(ProductDetail::class);
     }
 
     public function images()
     {
-        return $this->morphMany(Image::class, 'image');
+        return $this->morphMany(Image::class, 'imageable');
     }
 }
