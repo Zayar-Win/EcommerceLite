@@ -40,11 +40,11 @@
                 <div v-else class="w-full h-[300px] flex items-center justify-center font-bold font-lg text-black/40">
                     <p>No Products yet.</p>
                 </div>
-                <p ref="observer" v-if="products?.length > 0 " class="opacity-0">Load More</p>
+                <p ref="observer" v-if="products?.length > 0" class="opacity-0">Load More</p>
                 <div class="w-full flex justify-center">
                     <div v-if="products?.length && isLoading" class="w-8 h-8  animate-spin rounded-full border-[3px] border-primary border-t-transparent"></div>
                 </div>
-                <p v-if="currentPage == lastPage" class="text-center">No more products</p>
+                <p v-if="currentPage == lastPage && products?.length" class="text-center">No more products</p>
             </div>
         </div>
     </SectionContainer>
@@ -123,22 +123,26 @@ export default {
     },  
     watch:{
         search(){
-                this.fetchProducts()
+            this.fetchProducts()
+
         },
         category(){
-            console.log(this.category)
             this.fetchProducts()
         }
     },
     methods:{
-        fetchProducts: debounce(function (){
+        fetchProducts: debounce( function (){
             this.$inertia.get(route('home',this.dynamicParams),{},{
                 preserveScroll : true,
-                preserveState : true
+                preserveState : true,
+                onSuccess:(data) => {
+                    this.products = data.props.productsData.data;
+                    this.currentPage = 1;
+                    this.lastPage = data.props.productsData.lastPage
+                }
             })
             //we need to reset our products bcz if dont reset our products 
             //the products will concat with old products
-            this.products = [];
         },300),
         initObserver(){
             const options = {

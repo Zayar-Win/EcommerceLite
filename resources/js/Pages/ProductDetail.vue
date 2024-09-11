@@ -20,10 +20,10 @@
                     <div class="inline-block px-3 py-1 bg-primary rounded-full text-white font-semibold text-sm">Hot</div>
                     <h1 class="text-2xl mt-3 font-medium">{{product?.name}}</h1>
                     <p class="mt-2 text-[16px] mb-5 text-black/70 font-medium">{{ product?.description }}</p>
-                    <p  v-if="product?.discount && product?.discount > 0"class="text-lg font-medium line-through text-black/60">{{ product?.price ?? '1000' }} MMK</p>
+                    <p  v-if="currentProductDetail?.discount && currentProductDetail?.discount > 0"class="text-lg font-medium line-through text-black/60">{{ currentProductDetail?.price ?? '1000' }} MMK</p>
                     <div class="flex items-end mt-1 gap-2">
-                        <p class="font-bold text-2xl">{{Math.floor(product?.price - (((product?.discount ?? 0) / 100) * product?.price))}} MMK</p>
-                        <p v-if="product?.discount && Number(product?.discount) > 0" class="text-primary font-semibold">%{{ $formatNumber(product?.discount) }} Off</p>
+                        <p class="font-bold text-2xl">{{Math.floor(currentProductDetail?.price - (((currentProductDetail?.discount ?? 0) / 100) * currentProductDetail?.price))}} MMK</p>
+                        <p v-if="currentProductDetail?.discount && Number(currentProductDetail?.discount) > 0" class="text-primary font-semibold">%{{ $formatNumber(currentProductDetail?.discount) }} Off</p>
                     </div>
                     <div class="my-8 h-[1px] w-full bg-black/20"></div>
                     <p class="font-semibold text-lg">Product information</p>
@@ -116,10 +116,10 @@
                     <div class="inline-block px-3 py-1 bg-primary rounded-full text-white font-semibold text-sm">Hot</div>
                     <h1 class="text-2xl mt-3 font-medium">{{product?.name}}</h1>
                     <p class="mt-2 text-[16px] mb-5 text-black/70 line-clamp-3 font-medium">{{product?.description}}</p>
-                    <p v-if="product?.discount && product?.discount > 0" class="text-lg font-medium line-through text-black/60">{{ product?.price ?? '1000' }} MMK</p>
+                    <p v-if="currentProductDetail?.discount && currentProductDetail?.discount > 0" class="text-lg font-medium line-through text-black/60">{{ currentProductDetail?.price ?? '1000' }} MMK</p>
                     <div class="flex items-end mt-1 gap-2">
-                        <p class="font-bold text-2xl">{{Math.floor(product?.price - (((product?.discount ?? 0) / 100) * product?.price))}} MMK</p>
-                        <p v-if="product?.discount && Number(product?.discount) > 0" class="text-primary font-semibold">%{{ $formatNumber(product?.discount) }} Off</p>
+                        <p class="font-bold text-2xl">{{Math.floor(currentProductDetail?.price - (((currentProductDetail?.discount ?? 0) / 100) * currentProductDetail?.price))}} MMK</p>
+                        <p v-if="currentProductDetail?.discount && Number(currentProductDetail?.discount) > 0" class="text-primary font-semibold">%{{ $formatNumber(currentProductDetail?.discount) }} Off</p>
                     </div>
                     <div class="my-8 h-[1px] w-full bg-black/20"></div>
                     <p class="font-semibold text-lg">Product information</p>
