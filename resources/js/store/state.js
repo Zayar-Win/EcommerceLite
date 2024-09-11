@@ -1,4 +1,5 @@
 export default{
     isCartOpen : false,
-    isSideNavOpen : false
+    isSideNavOpen : false,
+    cartItems : []
 }
