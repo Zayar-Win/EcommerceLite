@@ -1,4 +1,4 @@
-<template lang="">
+<template >
     <SectionContainer>
         <div class="bg-[#F7F8F9]  py-24 my-10 rounded-xl flex flex-col items-center justify-center">
             <h1 class="text-3xl font-bold">Shop</h1>
@@ -24,137 +24,18 @@
             </div>
             <div class="lg:w-[75%] md:w-[65%] md:mt-0 mt-10 w-full md:pl-[8%]">
                 <div class="grid lg:grid-cols-4 md:grid-cols-2 mb-14 gap-x-5 gap-y-10">
-                    <div class="cursor-pointer">
-                        <div class="w-full h-auto group rounded-xl overflow-hidden">
-                            <img class="w-full group-hover:scale-[1.1] transition-all duration-200 h-full" src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a777d6557d526b9dba47_image-12-shop-product-shopwave-template-p-500.png" />
-                        </div>
-                        <p class="mt-3 font-semibold">Basic Gray T-Shirt</p>
-                        <div class="flex gap-2 text-sm items-center font-medium mt-1">
-                            <p class="text-primary">$29.99 USD</p>
-                            <p class='line-through'>$49.99 USD</p>
-                        </div>
+                    <div v-for="product in products" class="cursor-pointer">
+                        <Link :href="route('product-detail',{product})">
+                            <div class="w-full h-auto group rounded-xl overflow-hidden">
+                                <img class="w-full group-hover:scale-[1.1] transition-all duration-200 h-full" :src="product.images[Math.floor(Math.random() * product.images.length)].url" />
+                            </div>
+                            <p class="mt-3 font-semibold">{{product?.name}}</p>
+                            <div class="flex gap-2 text-sm items-center font-semibold mt-1">
+                                <p class="text-primary">{{Math.floor(product?.price - ((product?.discount / 100) * product?.price))}} MMK</p>
+                                <p v-if="product?.discount || product?.discount !== 0" class=" line-through">{{ product?.price ?? '1000' }} MMK</p>
+                            </div>
+                        </Link>
                     </div>
-                    <div class="cursor-pointer">
-                        <div class="w-full h-auto group rounded-xl overflow-hidden">
-                            <img class="w-full group-hover:scale-[1.1] transition-all duration-200 h-full" src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a777d6557d526b9dba47_image-12-shop-product-shopwave-template-p-500.png" />
-                        </div>
-                        <p class="mt-3 font-semibold">Basic Gray T-Shirt</p>
-                        <div class="flex gap-2 text-sm items-center font-medium mt-1">
-                            <p class="text-primary">$29.99 USD</p>
-                            <p class='line-through'>$49.99 USD</p>
-                        </div>
-                    </div>
-                    <div class="cursor-pointer">
-                        <div class="w-full h-auto group rounded-xl overflow-hidden">
-                            <img class="w-full group-hover:scale-[1.1] transition-all duration-200 h-full" src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a777d6557d526b9dba47_image-12-shop-product-shopwave-template-p-500.png" />
-                        </div>
-                        <p class="mt-3 font-semibold">Basic Gray T-Shirt</p>
-                        <div class="flex gap-2 text-sm items-center font-medium mt-1">
-                            <p class="text-primary">$29.99 USD</p>
-                            <p class='line-through'>$49.99 USD</p>
-                        </div>
-                    </div>
-                    <div class="cursor-pointer">
-                        <div class="w-full h-auto group rounded-xl overflow-hidden">
-                            <img class="w-full group-hover:scale-[1.1] transition-all duration-200 h-full" src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a777d6557d526b9dba47_image-12-shop-product-shopwave-template-p-500.png" />
-                        </div>
-                        <p class="mt-3 font-semibold">Basic Gray T-Shirt</p>
-                        <div class="flex gap-2 text-sm items-center font-medium mt-1">
-                            <p class="text-primary">$29.99 USD</p>
-                            <p class='line-through'>$49.99 USD</p>
-                        </div>
-                    </div>
-                    <div class="cursor-pointer">
-                        <div class="w-full h-auto group rounded-xl overflow-hidden">
-                            <img class="w-full group-hover:scale-[1.1] transition-all duration-200 h-full" src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a777d6557d526b9dba47_image-12-shop-product-shopwave-template-p-500.png" />
-                        </div>
-                        <p class="mt-3 font-semibold">Basic Gray T-Shirt</p>
-                        <div class="flex gap-2 text-sm items-center font-medium mt-1">
-                            <p class="text-primary">$29.99 USD</p>
-                            <p class='line-through'>$49.99 USD</p>
-                        </div>
-                    </div>
-                    <div class="cursor-pointer">
-                        <div class="w-full h-auto group rounded-xl overflow-hidden">
-                            <img class="w-full group-hover:scale-[1.1] transition-all duration-200 h-full" src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a777d6557d526b9dba47_image-12-shop-product-shopwave-template-p-500.png" />
-                        </div>
-                        <p class="mt-3 font-semibold">Basic Gray T-Shirt</p>
-                        <div class="flex gap-2 text-sm items-center font-medium mt-1">
-                            <p class="text-primary">$29.99 USD</p>
-                            <p class='line-through'>$49.99 USD</p>
-                        </div>
-                    </div>
-                    <div class="cursor-pointer">
-                        <div class="w-full h-auto group rounded-xl overflow-hidden">
-                            <img class="w-full group-hover:scale-[1.1] transition-all duration-200 h-full" src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a777d6557d526b9dba47_image-12-shop-product-shopwave-template-p-500.png" />
-                        </div>
-                        <p class="mt-3 font-semibold">Basic Gray T-Shirt</p>
-                        <div class="flex gap-2 text-sm items-center font-medium mt-1">
-                            <p class="text-primary">$29.99 USD</p>
-                            <p class='line-through'>$49.99 USD</p>
-                        </div>
-                    </div>
-                    <div class="cursor-pointer">
-                        <div class="w-full h-auto group rounded-xl overflow-hidden">
-                            <img class="w-full group-hover:scale-[1.1] transition-all duration-200 h-full" src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a777d6557d526b9dba47_image-12-shop-product-shopwave-template-p-500.png" />
-                        </div>
-                        <p class="mt-3 font-semibold">Basic Gray T-Shirt</p>
-                        <div class="flex gap-2 text-sm items-center font-medium mt-1">
-                            <p class="text-primary">$29.99 USD</p>
-                            <p class='line-through'>$49.99 USD</p>
-                        </div>
-                    </div>
-                    <div class="cursor-pointer">
-                        <div class="w-full h-auto group rounded-xl overflow-hidden">
-                            <img class="w-full group-hover:scale-[1.1] transition-all duration-200 h-full" src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a777d6557d526b9dba47_image-12-shop-product-shopwave-template-p-500.png" />
-                        </div>
-                        <p class="mt-3 font-semibold">Basic Gray T-Shirt</p>
-                        <div class="flex gap-2 text-sm items-center font-medium mt-1">
-                            <p class="text-primary">$29.99 USD</p>
-                            <p class='line-through'>$49.99 USD</p>
-                        </div>
-                    </div>
-                    <div class="cursor-pointer">
-                        <div class="w-full h-auto group rounded-xl overflow-hidden">
-                            <img class="w-full group-hover:scale-[1.1] transition-all duration-200 h-full" src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a777d6557d526b9dba47_image-12-shop-product-shopwave-template-p-500.png" />
-                        </div>
-                        <p class="mt-3 font-semibold">Basic Gray T-Shirt</p>
-                        <div class="flex gap-2 text-sm items-center font-medium mt-1">
-                            <p class="text-primary">$29.99 USD</p>
-                            <p class='line-through'>$49.99 USD</p>
-                        </div>
-                    </div>
-                    <div class="cursor-pointer">
-                        <div class="w-full h-auto group rounded-xl overflow-hidden">
-                            <img class="w-full group-hover:scale-[1.1] transition-all duration-200 h-full" src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a777d6557d526b9dba47_image-12-shop-product-shopwave-template-p-500.png" />
-                        </div>
-                        <p class="mt-3 font-semibold">Basic Gray T-Shirt</p>
-                        <div class="flex gap-2 text-sm items-center font-medium mt-1">
-                            <p class="text-primary">$29.99 USD</p>
-                            <p class='line-through'>$49.99 USD</p>
-                        </div>
-                    </div>
-                    <div class="cursor-pointer">
-                        <div class="w-full h-auto group rounded-xl overflow-hidden">
-                            <img class="w-full group-hover:scale-[1.1] transition-all duration-200 h-full" src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a777d6557d526b9dba47_image-12-shop-product-shopwave-template-p-500.png" />
-                        </div>
-                        <p class="mt-3 font-semibold">Basic Gray T-Shirt</p>
-                        <div class="flex gap-2 text-sm items-center font-medium mt-1">
-                            <p class="text-primary">$29.99 USD</p>
-                            <p class='line-through'>$49.99 USD</p>
-                        </div>
-                    </div>
-                    <div class="cursor-pointer">
-                        <div class="w-full h-auto group rounded-xl overflow-hidden">
-                            <img class="w-full group-hover:scale-[1.1] transition-all duration-200 h-full" src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a777d6557d526b9dba47_image-12-shop-product-shopwave-template-p-500.png" />
-                        </div>
-                        <p class="mt-3 font-semibold">Basic Gray T-Shirt</p>
-                        <div class="flex gap-2 text-sm items-center font-medium mt-1">
-                            <p class="text-primary">$29.99 USD</p>
-                            <p class='line-through'>$49.99 USD</p>
-                        </div>
-                    </div>
-                    
                 </div>
             </div>
         </div>
@@ -171,13 +52,20 @@ import Search from '@/assets/icons/Search.vue';
 import Footer from '@/Components/Common/Footer.vue';
 import Navbar from '@/Components/Common/Navbar.vue';
 import SectionContainer from '@/Components/Common/SectionContainer.vue';
+import { Link } from '@inertiajs/vue3';
 
 export default {
     components:{
         Navbar,
         Footer,
         SectionContainer,
-        Search
+        Search,
+        Link
+    },
+    props:{
+        products : {
+            type : Object
+        }
     },
     data(){
         return {
@@ -204,6 +92,9 @@ export default {
                 }
             ]
         }
+    },
+    mounted(){
+        console.log(this.products)
     }
 }
 </script>
