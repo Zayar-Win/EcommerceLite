@@ -27,7 +27,7 @@
                 </swiper-slide>
                 </swiper>
             </div>
-            <div class="h-[20%] flex items-center">
+            <div class="h-[20%] flex items-center ">
                 <div class="w-[80%] mx-auto">
                     <swiper
                     @swiper="setThumbsSwiper"

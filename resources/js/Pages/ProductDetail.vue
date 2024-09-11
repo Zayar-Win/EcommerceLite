@@ -11,35 +11,35 @@
                     </div>
                     <div @click="open = true" class="basis-[90%]">
                         <div class="w-full h-auto cursor-pointer group rounded-xl overflow-hidden">
-                            <img class="w-full h-full group-hover:scale-[1.1] transition-all duration-200" src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a777d6557d526b9dba47_image-12-shop-product-shopwave-template.png" />
+                            <img class="w-full h-full group-hover:scale-[1.1] transition-all duration-200" :src="images[0]" />
                         </div>
                     </div>
                 </div>
                 <div class="w-full h-[1px] bg-black/10 my-16"></div>
                 <div class="border-[1px] md:hidden block border-black/10 rounded-xl py-6 px-6">
                     <div class="inline-block px-3 py-1 bg-primary rounded-full text-white font-semibold text-sm">Hot</div>
-                    <h1 class="text-2xl mt-3 font-medium">Basic Gray T-Shirt</h1>
-                    <p class="mt-2 text-[16px] mb-5 text-black/70 font-medium">Nisi quis eleifend quam adipiscing vitae aliquet bibendum enim facilisis gravida neque</p>
-                    <p class="text-lg font-medium line-through text-black/60">$ 39.99 USD</p>
+                    <h1 class="text-2xl mt-3 font-medium">{{product?.name}}</h1>
+                    <p class="mt-2 text-[16px] mb-5 text-black/70 font-medium">{{ product?.description }}</p>
+                    <p  v-if="product?.discount && product?.discount > 0"class="text-lg font-medium line-through text-black/60">{{ product?.price ?? '1000' }} MMK</p>
                     <div class="flex items-end mt-1 gap-2">
-                        <p class="font-bold text-2xl">$ 29.99 USD</p>
-                        <p class="text-primary font-semibold">%25 Off</p>
+                        <p class="font-bold text-2xl">{{Math.floor(product?.price - (((product?.discount ?? 100) / 100) * product?.price))}} MMK</p>
+                        <p v-if="product?.discount && Number(product?.discount) > 0" class="text-primary font-semibold">%{{ $formatNumber(product?.discount) }} Off</p>
                     </div>
                     <div class="my-8 h-[1px] w-full bg-black/20"></div>
                     <p class="font-semibold text-lg">Product information</p>
                     <div class="flex flex-col gap-2 mt-3">
                         <div class="flex items-center ">
                             <p class="basis-[35%] font-semibold">Brand:</p>
-                            <p class="basis-[65%] text-black/70">Fashion Co.</p>
+                            <p class="basis-[65%] text-black/70">{{product?.category?.name}}</p>
                         </div>
                         <div class="flex items-center ">
-                            <p class="basis-[35%] font-semibold">Model name:</p>
-                            <p class="basis-[65%] text-black/70">Basic Gray T-Shirt</p>
+                            <p class="basis-[35%] font-semibold">Stock:</p>
+                            <p class="basis-[65%] text-black/70">{{  }}</p>
                         </div>
-                        <div class="flex items-center ">
+                        <!-- <div class="flex items-center ">
                             <p class="basis-[35%] font-semibold">Color:</p>
                             <p class="basis-[65%] text-black/70">Gray</p>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="my-8 h-[1px] w-full bg-black/20"></div>
                     <div class="flex lg:items-center lg:flex-row flex-col gap-3 mt-4 mb-2">
@@ -48,7 +48,7 @@
                             <input class="w-full border-black/10 rounded-full py-3 pl-5" type="number" />
                         </div>
                         <div class="lg:basis-[60%] w-full">
-                            <p class="font-bold mb-2">Color</p>
+                            <p class="font-bold mb-2">Size</p>
                             <select class="w-full border-black/10 rounded-full py-3 ">
                                 <option>Red</option>
                                 <option>Green</option>
@@ -61,9 +61,7 @@
                 <div class="md:mt-0 mt-10">
                     <h1 class="text-2xl font-semibold">Latest Products</h1>
                     <div class="grid lg:grid-cols-3 mb-10 mt-7 gap-3">
-                        <ProductCard category="Fashion" name="Basis Gray Cap" :discountPrice="9.99" :normalPrice="19.99" />
-                        <ProductCard category="Fashion" name="Basis Gray Cap" :discountPrice="9.99" :normalPrice="19.99" />
-                        <ProductCard category="Fashion" name="Basis Gray Cap" :discountPrice="9.99" :normalPrice="19.99" />
+                        <ProductCard v-for="product in latestProducts" :category="product?.category?.name" :name="product?.name" :discountPrice="Math.floor(product?.price - (((product?.discount ?? 100) / 100) * product?.price))" :normalPrice="product?.price" />
                     </div>
                 </div>
                 <div class="w-full h-[1px] bg-black/10 my-16"></div>
@@ -71,15 +69,7 @@
                     <h1 class="text-2xl font-semibold">Product information</h1>
                     <div class="mt-4">
                         <p class="text-lg text-black/50">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit lobortis arcu enim urna adipiscing praesent velit viverra sit semper lorem eu cursus vel hendrerit elementum morbi curabitur etiam nibh justo, lorem aliquet donec sed sit mi dignissim at ante massa mattis.
-
-                            Viverra aliquet eget sit amet tellus cras. Cursus sit amet dictum sit amet. Diam donec adipiscing tristique risus nec. Diam donec adipiscing tristique risus nec feugiat in. Quisque egestas diam in arcu cursus euismod quis viverra nibh. Quis imperdiet massa tincidunt nunc.
-
-                            Neque sodales ut etiam sit amet nisl purus non tellus orci ac auctor
-                            Adipiscing elit ut aliquam purus sit amet viverra suspendisse potent purus in massa temp
-                            Mauris commodo quis imperdiet massa tincidunt nunc pulvinar
-                            Adipiscing elit ut aliquam purus sit amet viverra suspendisse potenti diam vel quam
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit lobortis arcu enim urna adipiscing praesent velit viverra sit semper lorem eu cursus vel hendrerit elementum morbi curabitur etiam nibh justo, lorem aliquet donec sed sit mi dignissim at ante massa mattis.
+                        {{ product?.description }}
                         </p>
                     </div>
                 </div>
@@ -116,10 +106,9 @@
                     </div>
                 </div> -->
                 <div class="my-16">
-                    <h1 class="text-2xl font-semibold">Shipping Information</h1>
+                    <h1 class="text-2xl font-semibold">Shipping Information Updated</h1>
                     <p class="text-lg text-black/50">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit lobortis arcu enim urna adipiscing praesent velit viverra sit semper lorem eu cursus vel hendrerit elementum morbi curabitur etiam nibh justo, lorem aliquet donec sed sit mi dignissim at ante massa mattis.
-
                         Viverra aliquet eget sit amet tellus cras. Cursus sit amet dictum sit amet. Diam donec adipiscing tristique risus nec. Diam donec adipiscing tristique risus nec feugiat in. Quisque egestas diam in arcu cursus euismod quis viverra nibh. Quis imperdiet massa tincidunt nunc.
                     </p>
                 </div>
@@ -127,41 +116,39 @@
             <div class="lg:basis-[35%] md:basis-[40%]">
                 <div class="border-[1px] md:block hidden border-black/10 rounded-xl py-6 px-6">
                     <div class="inline-block px-3 py-1 bg-primary rounded-full text-white font-semibold text-sm">Hot</div>
-                    <h1 class="text-2xl mt-3 font-medium">Basic Gray T-Shirt</h1>
-                    <p class="mt-2 text-[16px] mb-5 text-black/70 font-medium">Nisi quis eleifend quam adipiscing vitae aliquet bibendum enim facilisis gravida neque</p>
-                    <p class="text-lg font-medium line-through text-black/60">$ 39.99 USD</p>
+                    <h1 class="text-2xl mt-3 font-medium">{{product?.name}}</h1>
+                    <p class="mt-2 text-[16px] mb-5 text-black/70 line-clamp-3 font-medium">{{product?.description}}</p>
+                    <p v-if="product?.discount && product?.discount > 0" class="text-lg font-medium line-through text-black/60">{{ product?.price ?? '1000' }} MMK</p>
                     <div class="flex items-end mt-1 gap-2">
-                        <p class="font-bold text-2xl">$ 29.99 USD</p>
-                        <p class="text-primary font-semibold">%25 Off</p>
+                        <p class="font-bold text-2xl">{{Math.floor(product?.price - (((product?.discount ?? 100) / 100) * product?.price))}} MMK</p>
+                        <p v-if="product?.discount && Number(product?.discount) > 0" class="text-primary font-semibold">%{{ $formatNumber(product?.discount) }} Off</p>
                     </div>
                     <div class="my-8 h-[1px] w-full bg-black/20"></div>
                     <p class="font-semibold text-lg">Product information</p>
                     <div class="flex flex-col gap-2 mt-3">
                         <div class="flex items-center ">
-                            <p class="basis-[35%] font-semibold">Brand:</p>
-                            <p class="basis-[65%] text-black/70">Fashion Co.</p>
+                            <p class="basis-[35%] font-semibold">Category:</p>
+                            <p class="basis-[65%] text-black/70">{{product?.category?.name}}</p>
                         </div>
-                        <div class="flex items-center ">
+                        <!-- <div class="flex items-center ">
                             <p class="basis-[35%] font-semibold">Model name:</p>
                             <p class="basis-[65%] text-black/70">Basic Gray T-Shirt</p>
                         </div>
                         <div class="flex items-center ">
                             <p class="basis-[35%] font-semibold">Color:</p>
                             <p class="basis-[65%] text-black/70">Gray</p>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="my-8 h-[1px] w-full bg-black/20"></div>
                     <div class="flex lg:items-center lg:flex-row flex-col gap-3 mt-4 mb-2">
                         <div class="lg:basis-[40%]">
                             <p class="font-bold mb-2">Quantity</p>
-                            <input class="w-full border-black/10 rounded-full py-3 pl-5" type="number" />
+                            <input value="1" class="w-full border-black/10 rounded-full py-3 pl-5" type="number" />
                         </div>
                         <div class="lg:basis-[60%] w-full">
-                            <p class="font-bold mb-2">Color</p>
+                            <p class="font-bold mb-2">Size</p>
                             <select class="w-full border-black/10 rounded-full py-3 ">
-                                <option>Red</option>
-                                <option>Green</option>
-                                <option>Blue</option>
+                                <option v-for="size in sizes"  :key="size">{{size}}</option>
                             </select>
                         </div>
                     </div>
@@ -170,11 +157,7 @@
                 <div class="mt-12">
                     <h1 class="text-2xl font-medium mb-7">Related Product</h1>
                     <div class="flex flex-col gap-7">
-                        <RelatedProductCard />
-                        <RelatedProductCard />
-                        <RelatedProductCard />
-                        <RelatedProductCard />
-                        <RelatedProductCard />
+                        <RelatedProductCard v-for="product in relatedProducts" :key="product?.id" :product="product" />
                     </div>
                 </div>
             </div>
@@ -207,17 +190,29 @@ export default {
         RelatedProductCard,
         ImageSliderModal
     },
+    props:{
+        product : {
+            type : Object
+        },
+        sizes : {
+            type :Object
+        },
+        latestProducts : {
+            type:Object
+        },
+        relatedProducts:{
+            type : Object
+        }
+    },
+    inject:['$formatNumber'],
     data(){
         return {
-            images : [
-                "https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f697b67b9d8d605cd0fde8_more-image-1-shop-product-shopwave-template.png",
-                "https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f697b67640273bfe19c51b_more-image-2-shop-product-shopwave-template.png",
-                "https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f697b6ea32fefb0084af2c_more-image-3-shop-product-shopwave-template.png",
-                "https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f697b658cd9b63ae33e44d_more-image-4-shop-product-shopwave-template.png",
-                "https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a777d6557d526b9dba47_image-12-shop-product-shopwave-template.png"
-            ],
+            images : this.product?.images.map(image => image?.url),
             open:false
         }
+    },
+    mounted(){
+        console.log(this.product)
     }
 }
 </script>
