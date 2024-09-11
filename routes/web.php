@@ -9,9 +9,16 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    $products = Product::with(['images', 'category'])->filter(request()->all())->get();
+    $products = Product::with(['images', 'category'])->filter(request()->all())->paginate(20);
+
+
+    if (request()->expectsJson()) {
+        return response()->json([
+            'productsData' => $products,
+        ]);
+    }
     return Inertia::render('Home', [
-        'products' => $products,
+        'productsData' => $products,
         'filters' => [
             'search' => request('search'),
             'category' => request('category')

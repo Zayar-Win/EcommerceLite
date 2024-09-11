@@ -22,7 +22,7 @@
                     </div>
                 </div>
             </div>
-            <div class="lg:w-[75%] md:w-[65%] md:mt-0 mt-10 w-full md:pl-[8%]">
+            <div class="lg:w-[75%] md:w-[65%] md:mt-0 mt-10 w-full mb-12 md:pl-[8%]">
                 <div v-if="products?.length > 0" class="grid lg:grid-cols-4 md:grid-cols-2 mb-14 gap-x-5 gap-y-10">
                     <div  v-for="product in products" class="cursor-pointer">
                         <Link :href="route('product-detail',{product})">
@@ -40,6 +40,11 @@
                 <div v-else class="w-full h-[300px] flex items-center justify-center font-bold font-lg text-black/40">
                     <p>No Products yet.</p>
                 </div>
+                <p ref="observer" v-if="products?.length > 0 " class="opacity-0">Load More</p>
+                <div class="w-full flex justify-center">
+                    <div v-if="products?.length && isLoading" class="w-8 h-8  animate-spin rounded-full border-[3px] border-primary border-t-transparent"></div>
+                </div>
+                <p v-if="currentPage == lastPage" class="text-center">No more products</p>
             </div>
         </div>
     </SectionContainer>
@@ -56,6 +61,7 @@ import Footer from '@/Components/Common/Footer.vue';
 import Navbar from '@/Components/Common/Navbar.vue';
 import SectionContainer from '@/Components/Common/SectionContainer.vue';
 import { Link } from '@inertiajs/vue3';
+import axios from 'axios';
 import { debounce } from 'lodash';
 
 export default {
@@ -67,7 +73,7 @@ export default {
         Link
     },
     props:{
-        products : {
+        productsData : {
             type : Object
         },
         filters : {
@@ -78,6 +84,11 @@ export default {
         return {
             search : this.filters.search ?? '',
             category : this.filters.category ?? null,
+            products : this.productsData?.data,
+            currentPage : this.productsData?.current_page,
+            lastPage :this.productsData?.last_page,
+            isLoading : false,
+            observer : null,
             categories : [
                 {
                     icon : Cloth,
@@ -125,8 +136,37 @@ export default {
                 preserveScroll : true,
                 preserveState : true
             })
-        },300)
+            //we need to reset our products bcz if dont reset our products 
+            //the products will concat with old products
+            this.products = [];
+        },300),
+        initObserver(){
+            const options = {
+                root :null,
+                rootMargin : '0px',
+                threshold : 0.1
+            }
+            this.observer = new IntersectionObserver(async(entries) => {
+                const [entry] = entries;
+                if(entry.isIntersecting){
+                    if(this.currentPage < this.lastPage && !this.isLoading){
+                        this.isLoading = true;
+                    this.currentPage = this.currentPage + 1;
+                    const response = await axios.get(route('home',{page : this.currentPage , ...this.dynamicParams}));
+                    this.products = [...this.products,...response?.data?.productsData.data]
+                    this.isLoading = false;
+                    }
+                }
+            },options)
+            this.observer.observe(this.$refs.observer)
+        }
     },
+    mounted(){
+        this.initObserver();
+    },
+    beforeMount(){
+        this.observer?.disconnect();
+    }
 }
 </script>
 <style lang="">
