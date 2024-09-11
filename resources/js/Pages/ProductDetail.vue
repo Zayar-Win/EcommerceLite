@@ -34,7 +34,7 @@
                         </div>
                         <div class="flex items-center ">
                             <p class="basis-[35%] font-semibold">Stock:</p>
-                            <p class="basis-[65%] text-black/70">{{  }}</p>
+                            <p class="basis-[65%] text-black/70">{{ totalStock }}</p>
                         </div>
                         <!-- <div class="flex items-center ">
                             <p class="basis-[35%] font-semibold">Color:</p>
@@ -45,7 +45,7 @@
                     <div class="flex lg:items-center lg:flex-row flex-col gap-3 mt-4 mb-2">
                         <div class="lg:basis-[40%]">
                             <p class="font-bold mb-2">Quantity</p>
-                            <input class="w-full border-black/10 rounded-full py-3 pl-5" type="number" />
+                            <input class="w-full border-black/10 rounded-full py-3 pl-5" :max="totalStock" type="number" />
                         </div>
                         <div class="lg:basis-[60%] w-full">
                             <p class="font-bold mb-2">Size</p>
@@ -61,7 +61,7 @@
                 <div class="md:mt-0 mt-10">
                     <h1 class="text-2xl font-semibold">Latest Products</h1>
                     <div class="grid lg:grid-cols-3 mb-10 mt-7 gap-3">
-                        <ProductCard v-for="product in latestProducts" :category="product?.category?.name" :name="product?.name" :discountPrice="Math.floor(product?.price - (((product?.discount ?? 100) / 100) * product?.price))" :normalPrice="product?.price" />
+                        <ProductCard v-for="product in latestProducts" :product="product" :key="product?.id"/>
                     </div>
                 </div>
                 <div class="w-full h-[1px] bg-black/10 my-16"></div>
@@ -130,11 +130,11 @@
                             <p class="basis-[35%] font-semibold">Category:</p>
                             <p class="basis-[65%] text-black/70">{{product?.category?.name}}</p>
                         </div>
-                        <!-- <div class="flex items-center ">
-                            <p class="basis-[35%] font-semibold">Model name:</p>
-                            <p class="basis-[65%] text-black/70">Basic Gray T-Shirt</p>
-                        </div>
                         <div class="flex items-center ">
+                            <p class="basis-[35%] font-semibold">Stock:</p>
+                            <p class="basis-[65%] text-black/70">{{totalStock}}</p>
+                        </div>
+                        <!-- <div class="flex items-center ">
                             <p class="basis-[35%] font-semibold">Color:</p>
                             <p class="basis-[65%] text-black/70">Gray</p>
                         </div> -->
@@ -143,12 +143,12 @@
                     <div class="flex lg:items-center lg:flex-row flex-col gap-3 mt-4 mb-2">
                         <div class="lg:basis-[40%]">
                             <p class="font-bold mb-2">Quantity</p>
-                            <input value="1" class="w-full border-black/10 rounded-full py-3 pl-5" type="number" />
+                            <input value="1" class="w-full border-black/10 rounded-full py-3 pl-5" :max="totalStock" type="number" />
                         </div>
                         <div class="lg:basis-[60%] w-full">
                             <p class="font-bold mb-2">Size</p>
-                            <select class="w-full border-black/10 rounded-full py-3 ">
-                                <option v-for="size in sizes"  :key="size">{{size}}</option>
+                            <select  v-model="selectedSize" class="w-full border-black/10 rounded-full py-3 ">
+                                <option v-for="size in sizes" :value="size" :key="size">{{size}}</option>
                             </select>
                         </div>
                     </div>
@@ -204,11 +204,22 @@ export default {
             type : Object
         }
     },
+    computed:{
+        currentProductDetail(){
+            return this.product?.product_details?.filter(detail => {
+                return detail?.size?.name == this.selectedSize;
+            })[0];
+        },
+        totalStock(){
+            return this.currentProductDetail?.stock_quantity;
+        }
+    },
     inject:['$formatNumber'],
     data(){
         return {
             images : this.product?.images.map(image => image?.url),
-            open:false
+            open:false,
+            selectedSize : this.sizes[0]
         }
     },
     mounted(){

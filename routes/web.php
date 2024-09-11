@@ -14,17 +14,20 @@ Route::get('/', function () {
     ]);
 })->name('home');
 Route::get('/products/{product:slug}', function (Product $product) {
-    $product = Product::with(['images', 'category', 'productDetails' => function ($query) {
-        return $query->selectRaw('product_id,size_id,SUM(stock_quantity) as total_stock')->groupBy('size_id', 'product_id');
-    }])->find($product->id);
+    $product = Product::with(['images', 'category', 'productDetails', 'productDetails.size'])->find($product->id);
+
     $productWithSize = Product::with(['productDetails' => function ($query) {
         return $query->with('size');
     }])->where('id', $product->id)->first();
+
     $sizes = $productWithSize->productDetails->map(function ($detail) {
         return $detail->size ? $detail->size->name : null; // Adjust 'name' to your actual size field
     })->filter()->unique();
+
     $latestProducts = Product::with(['images', 'category'])->latest()->limit(6)->get();
+
     $relatedProducts = Product::with('images')->where('category_id', $product->category->id)->limit(6)->get();
+
     return Inertia::render('ProductDetail', [
         'product' => $product,
         'sizes' => $sizes,
