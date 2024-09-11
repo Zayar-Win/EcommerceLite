@@ -17,14 +17,14 @@ export default function getSideNavLinks()
             url:'/admin/users',
             allowedRoles: ['admin','super_admin']
         },
-        // {
-        //     icon: 'fa-box',
-        //     path: route('admin.subscriptions.index'),
-        //     title: 'Subscriptions',
-        //     component: 'Admin/Subscriptions/Index',
-        //     url:'/admin/subscriptions',
-        //     allowedRoles: ['admin','super_admin','accounting']
-        // },
+        {
+            icon: 'fa-shopping-cart',
+            path: route('admin.products.index'),
+            title: 'Products',
+            component: 'Admin/Products/Index',
+            url:'/admin/products',
+            allowedRoles: ['admin','super_admin','accounting']
+        },
         // {
         //     icon: 'fa-receipt',
         //     path: route('admin.transactions.index'),

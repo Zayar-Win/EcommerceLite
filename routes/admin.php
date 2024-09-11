@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use Inertia\Inertia;
@@ -20,6 +22,11 @@ Route::prefix('/admin')
         // User
         Route::resource('users', UserController::class);
 
+        // Product
+        Route::get('/products', [ProductController::class,'index'])->name('products.index');
+        Route::get('/products/create', [ProductController::class,'create'])->name('products.create');
+        Route::get('/products/edit', [ProductController::class,'edit'])->name('products.edit');
+        Route::get('/products/destroy', [ProductController::class,'destroy'])->name('products.destroy');
 
 
     });
