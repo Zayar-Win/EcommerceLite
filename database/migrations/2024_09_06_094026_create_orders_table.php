@@ -16,7 +16,7 @@ return new class extends Migration
             $table->decimal('total_amount', 10, 2);
             $table->text('shipping_address')->nullable();
             $table->text('notes')->nullable();
-            $table->text('screenshort')->nullable();
+            $table->text('screenshot')->nullable();
             $table->string('shipping_recipient_name')->nullable();
             $table->string('shipping_ph_number')->nullable();
             $table->date('delivery_date')->nullable();

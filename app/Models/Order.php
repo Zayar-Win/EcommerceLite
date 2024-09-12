@@ -35,7 +35,7 @@ class Order extends Model
     public function productDetail()
     {
         return $this->belongsToMany(ProductDetail::class)
-        ->withPivot('quantity', 'price')
-        ->withTimestamps();;
+            ->withPivot('quantity', 'price')
+            ->withTimestamps();;
     }
 }
