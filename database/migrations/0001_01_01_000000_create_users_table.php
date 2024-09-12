@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('viber')->nullable();
             $table->string('fb_profile_link')->nullable();
             $table->text('address');
-            $table->date('dob')->nullable();
+            $table->dateTime('dob')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
