@@ -10,8 +10,7 @@
                     <Input label="Email" placeHolder="Enter your email address" type="email" />
                     <div class="md:col-span-2">
                         <select class="w-full border-[1px] border-black/20 focus:border-primary transition-all py-3 rounded-lg">
-                            <option>Yangon</option>
-                            <option>Bahan</option>
+                            <option v-for="city in yangonCities" :key="city.id">{{city.name_en}}</option>
                         </select>
                     </div>
                     <Input class="md:col-span-2" label="Account UserName" placeHolder="Username"  />
@@ -28,23 +27,14 @@
             <div class="mt-6 border-[1px] border-black/10  px-6 pt-8 pb-8">
                 <p class="font-semibold">Product</p>
                 <div class="mt-3 pb-7 flex flex-col text-sm gap-3 border-b-[1px] border-b-black/10">
-                    <div class="flex items-center gap-8">
+                    <div v-for="item in cartItems" :key="item?.product_detail?.id" class="flex items-center gap-8">
                         <div class="flex font-bold items-center justify-between grow">
-                            <p>Waffle Coral Velet Full Modle </p>
+                            <p>{{item?.product?.name}}</p>
                         </div>
                         <div class="font-bold flex gap-2 shrink-0">
-                            <p class="text-black/50">x 1</p>
-                            <p>4850 ks</p>
+                            <p class="text-black/50">x {{ item?.product?.quantity }}</p>
+                            <p class="">{{Math.floor(item?.product?.product_detail?.price - (((item?.product?.product_detail?.discount ?? 0) / 100) * item?.product?.product_detail?.price))}} MMK</p>
                         </div> 
-                    </div>
-                    <div class="flex items-center gap-8">
-                        <div class="flex font-bold items-center justify-between grow">
-                            <p>Waffle Coral Velet Full Modle </p>
-                        </div>
-                        <div class="font-bold flex gap-2 shrink-0">
-                            <p class="text-black/50">x 1</p>
-                            <p>4850 ks</p>
-                        </div>
                     </div>
                 </div>
                 <div class="mt-6 pb-8 border-b-[1px] border-b-black/10">
@@ -56,7 +46,7 @@
                 </div>
                 <div class="mt-8 pb-8 flex border-b-[1px] border-b-black/10 items-center justify-between">
                     <p class="font-semibold">Total</p>
-                    <p class="font-extrabold">8850 Ks</p>
+                    <p class="font-extrabold">{{totalPrice}} Ks</p>
                 </div>
                 <div class="mt-8 ">
                     <p class="font-semibold mb-3">Bank Transfer</p>
@@ -94,6 +84,8 @@
 </template>
 <script>
 import Input from '@/Components/Common/Input.vue';
+import { mapGetters } from 'vuex';
+import myanmarCity from '@bilions/myanmar-cities'
 
 export default {
     components:{
@@ -104,10 +96,27 @@ export default {
             type :Array
         }
     },
+    computed:{
+        ...mapGetters(['cartItems']),
+        totalPrice(){
+             return this.cartItems.reduce((prev,curr) => {
+                let itemTotalPrice = (Math.floor(curr?.product?.product_detail?.price - (((curr?.product?.product_detail?.discount ?? 0) / 100) * curr?.product?.product_detail?.price))) * curr?.product?.quantity;
+                prev += itemTotalPrice;
+                return prev;
+            },0)
+        }
+    },
     data(){
         return{
-            selectedPayment : this.payments[0]?.name ?? null
+            selectedPayment : this.payments[0]?.name ?? null,
+            yangonCities : []
         }
+    },
+    mounted(){
+        let allRegions = myanmarCity.getRegions();
+        let yangonIndex = allRegions.findIndex(region => region.name_en == 'Yangon');
+        let yangonCities = myanmarCity.getCities(yangonIndex + 1)
+        this.yangonCities = yangonCities
     }
 
 }

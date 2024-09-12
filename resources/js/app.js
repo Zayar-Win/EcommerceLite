@@ -8,6 +8,7 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import GuestLayout from './Layouts/GuestLayout.vue';
 import store from './store';
 import AdminLayout from './Layouts/AdminLayout.vue';
+import { formatNumber } from './Helpers/formatNumber';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -28,10 +29,11 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(store)
+            .provide('$formatNumber', formatNumber)
             .use(ZiggyVue)
             .mount(el);
     },
     progress: {
-        color: '#4B5563',
+        color: '#0285FF',
     },
 });

@@ -22,9 +22,14 @@ class ProductDetail extends Model
             ->withTimestamps();
     }
 
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
     public function size()
     {
-        return $this->belongsTo(Size::class,'size_id');
+        return $this->belongsTo(Size::class, 'size_id');
     }
 
     public function images()

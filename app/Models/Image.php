@@ -15,7 +15,7 @@ class Image extends Model
         'url',
     ];
 
-    public function image()
+    public function imageable()
     {
         return $this->morphTo();
     }

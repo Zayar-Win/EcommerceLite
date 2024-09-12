@@ -13,6 +13,7 @@ return new class extends Migration
             $table->foreignId('product_detail_id')->constrained()->onDelete('cascade');
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->string('name')->unique();
+            $table->string('price')->default('1000');
             $table->text('description')->nullable();
             $table->decimal('discount', 8, 2)->nullable();
             $table->integer('priority')->nullable();
@@ -21,7 +22,7 @@ return new class extends Migration
         });
     }
 
-   
+
     public function down(): void
     {
         Schema::dropIfExists('products');

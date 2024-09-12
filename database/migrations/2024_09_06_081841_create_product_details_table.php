@@ -10,6 +10,8 @@ return new class extends Migration
     {
         Schema::create('product_details', function (Blueprint $table) {
             $table->id();
+            $table->text('price');
+            $table->unsignedBigInteger("product_id");
             $table->foreignId('size_id')->constrained()->onDelete('cascade');
             $table->integer('stock_quantity');
             $table->decimal('discount', 8, 2)->nullable();
@@ -17,7 +19,7 @@ return new class extends Migration
         });
     }
 
-   
+
     public function down(): void
     {
         Schema::dropIfExists('product_details');
