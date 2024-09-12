@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Middleware\CelebrateMiddleware;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\User;
@@ -53,6 +55,12 @@ Route::get('/checkout', function () {
         'payments' => Payment::all()
     ]);
 })->name('checkout');
+
+Route::get('/celebrate', function () {
+    return Inertia::render('Celebrate');
+})->name('celebrate')->middleware(CelebrateMiddleware::class);
+
+Route::post('/orders', [OrderController::class, 'store'])->name('order.create');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

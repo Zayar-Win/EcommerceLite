@@ -4,7 +4,7 @@ import { router } from '@inertiajs/vue3';
 import { emitter } from '@/Helpers/emitter';
 import { useField, useForm } from 'vee-validate';
 
-export function useCRUDOperations(initialFormFields = {}, validationSchema = {}) {
+export function useCRUDOperations(initialFormFields = {}, validationSchema = {},preserveScroll = true) {
     // const toast = createToaster();
     const processing = ref(false);
     const backendErrors = ref(null);
@@ -35,7 +35,7 @@ export function useCRUDOperations(initialFormFields = {}, validationSchema = {})
 
     // Create Action
     const create = (model, url) => {
-        handleSubmit((values)=>{
+        return handleSubmit((values)=>{
             console.log(url);
             processing.value = true;
             router.post(url,
@@ -64,8 +64,7 @@ export function useCRUDOperations(initialFormFields = {}, validationSchema = {})
 
     // Edit Action
     const edit = (model, url, method = 'patch') => {
-        console.log(url);
-        handleSubmit(()=>{
+        return handleSubmit(()=>{
             // console.log(form);
             // console.log(values);
             processing.value = true;

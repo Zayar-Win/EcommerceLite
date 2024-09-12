@@ -138,7 +138,7 @@ export default {
                 onSuccess:(data) => {
                     this.products = data.props.productsData.data;
                     this.currentPage = 1;
-                    this.lastPage = data.props.productsData.lastPage
+                    this.lastPage = data.props.productsData.last_page
                 }
             })
             //we need to reset our products bcz if dont reset our products 
@@ -153,12 +153,13 @@ export default {
             this.observer = new IntersectionObserver(async(entries) => {
                 const [entry] = entries;
                 if(entry.isIntersecting){
+                console.log(this.currentPage,this.lastPage)
                     if(this.currentPage < this.lastPage && !this.isLoading){
                         this.isLoading = true;
-                    this.currentPage = this.currentPage + 1;
-                    const response = await axios.get(route('home',{page : this.currentPage , ...this.dynamicParams}));
-                    this.products = [...this.products,...response?.data?.productsData.data]
-                    this.isLoading = false;
+                        this.currentPage = this.currentPage + 1;
+                        const response = await axios.get(route('home',{page : this.currentPage , ...this.dynamicParams}));
+                        this.products = [...this.products,...response?.data?.productsData.data]
+                        this.isLoading = false;
                     }
                 }
             },options)
