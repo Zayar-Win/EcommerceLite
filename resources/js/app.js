@@ -9,6 +9,7 @@ import GuestLayout from './Layouts/GuestLayout.vue';
 import store from './store';
 import AdminLayout from './Layouts/AdminLayout.vue';
 import { formatNumber } from './Helpers/formatNumber';
+import { formatDate } from './Helpers/formatDate';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -30,6 +31,7 @@ createInertiaApp({
             .use(plugin)
             .use(store)
             .provide('$formatNumber', formatNumber)
+            .provide('$formatDate', formatDate)
             .use(ZiggyVue)
             .mount(el);
     },

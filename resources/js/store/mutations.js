@@ -20,4 +20,7 @@ export default{
     deleteItemFromCart(state,payload){
         state.cartItems = state.cartItems.filter((item,i) => i !== payload)
     },
+    clearAllItemsFromCart(state){
+        state.cartItems = []
+    }
 }

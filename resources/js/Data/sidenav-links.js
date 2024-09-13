@@ -49,28 +49,12 @@ export default function getSideNavLinks()
         //     url:'/admin/terms-and-conditions',
         //     allowedRoles: ['admin','super_admin','accounting','officer_access']
         // },
-
         {
-            icon: 'fa-tasks',
-            title: 'Manage Plan Details',
-            allowedRoles: ['admin','super_admin','accounting','officer_access'],
-            subPaths: [
-                {
-                    title: 'Orders',
-                    path: route('admin.orders.index'),
-                    component: 'Admin/PersonalPlan/Form',
-                    url:'/admin/orders',
-                    allowedRoles: ['admin','super_admin','accounting','officer_access']
-                },
-                {
-                    title: 'Subscribers',
-                    path: route('admin.subscriber.index'),
-                    component: 'Admin/BusinessPlan/Form',
-                    url:'/admin/subscribers',
-                    allowedRoles: ['admin','super_admin','accounting','officer_access']
-                },
-
-            ]
+            icon: 'fa-box-open',
+            path: route('admin.orders.index'),
+            title: 'Manage Order',
+            component: 'Admin/Orders/Index',
+            url:'/admin/orders',
         },
         // {
         //     icon: 'fa-star',
