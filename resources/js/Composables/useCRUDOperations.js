@@ -34,9 +34,8 @@ export function useCRUDOperations(initialFormFields = {}, validationSchema = {},
 
 
     // Create Action
-    const create = (model, url) => {
+    const create = (model, url,onSuccess = () => {}) => {
         return handleSubmit((values)=>{
-            console.log(url);
             processing.value = true;
             router.post(url,
                 {
@@ -52,6 +51,7 @@ export function useCRUDOperations(initialFormFields = {}, validationSchema = {},
                         // }else{
                         //     toast.success(`${model} created successfully.`);
                         // }
+                        onSuccess()
                     },
                     onFinish: () => (processing.value = false),
                     onError: (errors) => {
