@@ -27,6 +27,11 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function orderProductDetails()
+    {
+        return $this->hasMany(OrderProductDetail::class, 'order_id');
+    }
+
     public function payment()
     {
         return $this->belongsTo(Payment::class);
@@ -35,7 +40,7 @@ class Order extends Model
     public function productDetail()
     {
         return $this->belongsToMany(ProductDetail::class)
-        ->withPivot('quantity', 'price')
-        ->withTimestamps();;
+            ->withPivot('quantity', 'price')
+            ->withTimestamps();;
     }
 }
