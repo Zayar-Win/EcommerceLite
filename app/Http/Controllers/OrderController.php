@@ -74,6 +74,7 @@ class OrderController extends Controller
             'shipping_address' => $validatedData['shippingAddress'],
             'notes' => $validatedData['notes'],
             'screenshot' => $screenShotUrl,
+            'shipping_recipient_name' => $validatedData['name'],
             'shipping_ph_number' => $validatedData['phone']
         ]);
 
