@@ -2,15 +2,14 @@
 import Label from "@/Components/Atoms/Label.vue";
 import InputField from "@/Components/Atoms/InputField.vue";
 import Textarea from "@/Components/Atoms/Textarea.vue";
-import Datepicker from '@/Components/Atoms/Datepicker.vue';
 import ValidationError from "@/Components/Atoms/ValidationError.vue";
 import FormButton from "@/Components/Atoms/FormButton.vue";
 import { useCRUDOperations } from "@/Composables/useCRUDOperations";
 import { onMounted, computed } from "vue";
 import InertiaLinkButton from "@/Components/Atoms/InertiaLinkButton.vue";
-import SelectBox from '@/Components/Atoms/SelectBox.vue';
-import { userSchema } from '@/Schemas/userSchema';
-
+import SelectBox from "@/Components/Atoms/SelectBox.vue";
+import { productSchema } from "@/Schemas/productSchema";
+import FilePond from '@/Components/Atoms/FilePond.vue';
 
 const props = defineProps({
     mode: {
@@ -18,54 +17,65 @@ const props = defineProps({
         default: "create",
         validator: (value) => ["create", "edit"].includes(value),
     },
-    user: {
+    product: {
         type: Object,
         required: true,
     },
-    roles: {
+    categories: {
         type: Object,
         required: true,
+        default: () => ({})
     },
 });
+// console.log(props.product.images)
+// const handleImages=computed()=>{
 
+// }
 // const schema = computed(() => (props.mode === 'create' ? userCreateSchema : userEditSchema));
+const { form, create, edit, errors, processing } = useCRUDOperations(
+        {
+        name: props.product?.name || "",
+        description: props.product?.description || "",
+        price: props.product?.price || "",
+        discount: props.product?.discount || "",
+        category_id: props.product?.category_id || "",
+        images: props.product?.images ? props.product?.images.map(image => image.url) : [],
+    },
+    productSchema
+);
 
-const { form, create, edit, errors, processing } = useCRUDOperations({
-    name: "",
-    email: "",
-    telegram: "",
-    viber: "",
-    fb_profile_link: "",
-    password: "",
-    password_confirmation: "",
-    phone: "",
-    dob: "",
-    address: "",
-    role_id: "",
-},userSchema);
-
-onMounted(() => {
-    if (props.user && props.mode === "edit") {
-        form.name = props.user.name;
-        form.email = props.user.email;
-        form.password = "";
-        form.password_confirmation = "";
-        form.phone = props.user.phone;
-        form.dob = props.user.dob;
-        form.address = props.user.address;
-        form.viber = props.user.viber;
-        form.telegram = props.user.telegram;
-        form.fb_profile_link = props.user.fb_profile_link;
-        form.role_id = props.user.role_id;
-    }
-});
+    // if (props.product && props.mode === "edit") {
+    //     form.name = props.product.name;
+    //     form.description = props.product.description;
+    //     form.discount = props.product.discount;
+    //     form.price = props.product.price;
+    //     // form.prority = props.product.prority;
+    //     form.category_id = props.product.category_id;
+    //     form.images = props.product.images;
+    //     console.log("this is form.vue",form.images);
+        
+    // }
 
 const isFormValid = computed(() => {
-    const isCommonValid = form.name && form.email && form.phone && form.dob && form.address;
-    if (props.mode === "create") {
-        return isCommonValid && form.password && form.password_confirmation;
-    }
+    const isCommonValid = form.name && form.category_id;
     return isCommonValid;
+});
+
+const handleAvatar = (files) => {
+    if (files.length) {
+        console.log(files.map(file=>file))
+        form.images = files.map(file => file);  
+    } else {
+        form.images = [];
+    }
+};
+
+const categoryOptions = computed(() => 
+    Object.entries(props.categories).map(([key, value]) => ({ label: value, value: key }))
+);
+
+const selectedCategory = computed(() => {
+  return props.mode === "edit" ? form.category_id : null;
 });
 </script>
 
@@ -75,175 +85,109 @@ const isFormValid = computed(() => {
             class="space-y-4 md:space-y-6"
             @submit.prevent="
                 mode === 'create'
-                    ? create('User', route('admin.users.store'))
-                    : edit('User', route('admin.users.update', { user }))
+                    ? create('Product', route('admin.products.store'))
+                    : edit(
+                          'Product',
+                          route('admin.products.update', { product })
+                      )
             "
         >
+        <div class="">
+                <div class="image-wrapper">
+                    <FilePond
+                    mode="image"
+                        name="image"
+                        labelIdle="Click to choose image, or Drop files here..."
+                        :allowMultiple="true"
+                        :files="form.images"
+                        :acceptedFileTypes="['image/*']"
+                        :imageCropAspectRatio="'1:1'"
+                        :imagePreviewHeight="300"
+                        :imageResizeTargetWidth="300"
+                        :imageResizeTargetHeight="auto"
+                        :maxFiles=5
+                        @updateFile="handleAvatar"
+                        ></FilePond>
+                </div>
+                <ValidationError :message="errors?.image" />
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                    <Label label="Display Name" required />
+                    <Label label="Product Name" required />
 
                     <InputField
                         v-model="form.name"
                         type="text"
-                        name="display-name"
-                        placeholder="Enter display name"
+                        name="product-name"
+                        placeholder="Enter product name"
                         required
                     />
 
                     <ValidationError :message="errors?.name" />
                 </div>
 
-                <div>
-                    <Label label="Email" required />
-
-                    <InputField
-                        v-model="form.email"
-                        type="email"
-                        name="email-address"
-                        placeholder="Enter email address"
-                        required
-                    />
-
-                    <ValidationError :message="errors?.email" />
-                </div>
-
-                <div>
-                    <Label label="Phone" required />
-
-                    <InputField
-                        v-model="form.phone"
-                        type="tel"
-                        name="Phone Number"
-                        placeholder="Enter Phone Number"
-                        required
-                    />
-
-                    <ValidationError :message="errors?.phone" />
-                </div>
-
-                <div>
-                    <Label label="Telegram"  />
-
-                    <InputField
-                        v-model="form.telegram"
-                        type="text"
-                        name="telegram"
-                        placeholder="Enter Telegram Username"
-                        
-                    />
-
-                    <ValidationError :message="errors?.telegram" />
-                </div>
-
-                
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-                <div>
-                    <Label label="Viber"  />
-
-                    <InputField
-                        v-model="form.viber"
-                        type="text"
-                        name="viber"
-                        placeholder="Enter Viber Username"
-                        
-                    />
-
-                    <ValidationError :message="errors?.viber" />
-                </div>
-
-              
-
-                <div>
-                    <Label label="Date of birth" />
-
-                    <Datepicker v-model="form.dob" placeholder="Select date of birth" />
-
-                    <ValidationError :message="errors?.dob" />
-                </div>
-
-                
-                <div class="relative">
-                    <Label label="Role" required />
-
+                <div class="">
+                    <Label for="category" label="Category" required />
                     <SelectBox
-                        v-model="form.role_id"
-                        name="role"
-                        :options="roles"
-                        required
-                        :selected="mode==='edit' && form?.role_id"
-
+                        id="category"
+                        name="category"
+                        v-model="form.category_id"
+                        :options="categoryOptions"
+                        :selected="selectedCategory"
+                        placeholder="Select a category"
+                        class="p-2 border w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                     />
-
-                    <ValidationError :message="errors?.role_id" />
+                    <ValidationError
+                        class="mt-2"
+                        :message="errors?.category_id"
+                    />
                 </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
                 <div>
-                    <Label label="Facebook Profile Link"  />
+                    <Label label="Price" required />
 
-                    <Textarea
-                        v-model="form.fb_profile_link"
-                        placeholder="Enter Facebook Profile Link"
-                        
-                    />
-
-                    <ValidationError :message="errors?.fb_profile_link" />
-                </div>
-                <div>
-                    <Label label="Address" required />
-
-                    <Textarea
-                        v-model="form.address"
-                       
-                        placeholder="Enter Address"
+                    <InputField
+                        v-model="form.price"
+                        type="number"
+                        name="price"
+                        placeholder="Enter Price"
                         required
                     />
 
-                    <ValidationError :message="errors?.address" />
+                    <ValidationError :message="errors?.price" />
+                </div>
+
+                <div>
+                    <Label label="Discount" />
+
+                    <InputField
+                        v-model="form.discount"
+                        type="text"
+                        name="discount"
+                        placeholder="Enter Discount"
+                    />
+
+                    <ValidationError :message="errors?.discount" />
                 </div>
 
                 
             </div>
-
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
                 <div>
-                    <Label label="Password" :required="mode === 'create'" />
+                    <Label label="Description"  />
 
-                    <InputField
-                        v-model="form.password"
-                        type="password"
-                        name="password"
-                        placeholder="Enter password"
-                        :required="mode === 'create'"
+                    <Textarea
+                        v-model="form.description"
+                        placeholder="Enter Description"
+                        
                     />
 
-                    <ValidationError :message="errors?.password" />
-                </div>
-
-                <div>
-                    <Label
-                        label="Confirm Password"
-                        :required="mode === 'create'"
-                    />
-
-                    <InputField
-                        v-model="form.password_confirmation"
-                        type="password"
-                        name="confirm-password"
-                        placeholder="Re-type password"
-                        :required="mode === 'create'"
-                    />
+                    <ValidationError :message="errors?.description" />
                 </div>
             </div>
-
             <div class="flex items-center justify-end space-x-5">
                 <InertiaLinkButton
-                    :href="route('admin.users.index')"
+                    :href="route('admin.products.index')"
                     class="bg-gray-600 hover:bg-gray-700 text-white"
                 >
                     Cancel
@@ -260,3 +204,6 @@ const isFormValid = computed(() => {
         </form>
     </div>
 </template>
+<style>
+
+</style>

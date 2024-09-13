@@ -63,7 +63,7 @@ export function useCRUDOperations(initialFormFields = {}, validationSchema = {})
     };
 
     // Edit Action
-    const edit = (model, url, method = 'patch') => {
+    const edit = (model, url, method = 'put') => {
         console.log(url);
         handleSubmit(()=>{
             // console.log(form);

@@ -69,12 +69,20 @@ const props = defineProps({
         type: String,
         default: '1MB',
     },
-    image: {
-        type: String,
+    images: {
+        type: Array,
         default: '',
     },
+    maxFiles:{
+        type:Number,
+        default: 1,
+    },
+    files:{
+        type:Array,
+        default: '',
+    }
 });
-
+console.log("this is filepond.vue"+props.images)
 const emit = defineEmits(['updateFile']);
 
 // let myFiles = ref([]);
@@ -92,33 +100,52 @@ const pond = ref(null);
 //     },
 //   },
 // }));
+// const images = computed(() => {
+    
+//     if (props.images) {
+//         return [
+//             {
+//                 options: {
+//                     file: props.images,
+//                     metadata: {
+//                         poster: props.images,
+//                     },
+//                 },
+//             },
+//         ];
+//     }
 
-const images = computed(() => {
-    if (props.image) {
-        return [
-            {
-                options: {
-                    file: props.image,
-                    metadata: {
-                        poster: props.image,
-                    },
+//     return [];
+// });
+const images = ref([]);
+if (props.files && props.files.length > 0) {
+    images.value = props.files.map((file) => {
+        const filePath = `/storage/${file}`;  
+
+        return {
+            options: {
+                file: filePath,  
+                metadata: {
+                    poster: filePath,
                 },
             },
-        ];
-    }
+        };
+    });
+}
 
-    return [];
-});
 
+console.log(images.value)
 const filePondInitialized = () => {
     console.log('FilePond has initialized', pond.value);
 };
 
 const handleFilePondUpdate = (fileItems) => {
+    console.log('FilePond has updated', fileItems.file)
+    fileItems.map((fileItem) => console.log(fileItem.file))
     emit(
         'updateFile',
-        fileItems[0]?.file
-    // fileItems.map((fileItem) => fileItem.file)
+        // fileItems[0]?.file
+    fileItems.map((fileItem) => fileItem.file)
     );
 };
 </script>
@@ -144,6 +171,7 @@ const handleFilePondUpdate = (fileItems) => {
             :imagePreviewHeight="imagePreviewHeight"
             :imageResizeTargetWidth="imageResizeTargetWidth"
             :imageResizeTargetHeight="imageResizeTargetHeight"
+            :maxFiles="maxFiles"
             @updatefiles="handleFilePondUpdate"
             max-file-size="maxFileSize"
             @init="filePondInitialized"
@@ -208,7 +236,6 @@ const handleFilePondUpdate = (fileItems) => {
 .filepond--root .filepond--drop-label {
   background-color: #f9fafb;
 }
-
 
 @media (max-width: 640px) { /* Tailwind's sm breakpoint */
   .normal-upload {

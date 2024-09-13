@@ -3,16 +3,24 @@
         <div class="flex flex-col sm:flex-row items-center justify-between">
             <!-- Breadcrumb -->
             <Breadcrumb
-                icon="fa-shopping-cart"
-                label="Products"
-                :href="route('admin.products.index')"
+                icon="fa-box"
+                label="Product Details"
+                :href="
+                    route('admin.product-details.index', { id: product?.id })
+                "
             >
                 <BreadcrumbItem label="Lists" />
             </Breadcrumb>
 
             <!-- Create Button -->
             <div class="min-w-[270px] flex justify-end">
-                <InertiaLinkButton :href="route('admin.products.create')">
+                <InertiaLinkButton
+                    :href="
+                        route('admin.product-details.create', {
+                            id: product?.id,
+                        })
+                    "
+                >
                     <i class="fa-solid fa-file-circle-plus mr-1"></i>
                     Create
                 </InertiaLinkButton>
@@ -26,61 +34,76 @@
                 class="my-3 flex sm:flex-row space-y-5 sm:space-y-0 items-center justify-center sm:justify-between overflow-auto p-1"
             >
                 <DashboardTableDataSearchBox
-                    placeholder="Search by name or price"
-                    :href="route('admin.products.index')"
+                    placeholder="Search by price"
+                    :href="
+                        route('admin.product-details.index', {
+                            id: product?.id,
+                        })
+                    "
                 />
 
                 <div class="sm:block hidden">
-                    <ProductTableFilters :categories="{ categories }" />
+                    <ProductDetailTableFilters
+                        :sizes="{ sizes }"
+                        :id="product?.id"
+                    />
                 </div>
             </div>
             <TableContainer
-                :data-count="products?.data?.length"
-                :paginate-links="products.links"
+                :data-count="productDetails?.data?.length"
+                :paginate-links="productDetails.links"
             >
                 <template #table>
                     <div class="overflow-x-auto w-full">
-                        <Table :items="products.data">
+                        <Table :items="productDetails.data">
                             <template #table-header>
                                 <SortableTableHeaderCell
                                     class="min-w-[100px]"
                                     label="ID"
                                     sort="id"
-                                    :url="route('admin.products.index')"
+                                    :url="
+                                        route('admin.product-details.index', {
+                                            id: product?.id,
+                                        })
+                                    "
                                 />
 
-                                <TableHeaderCell label="Preview" />
-
                                 <SortableTableHeaderCell
-                                    label="Category"
-                                    sort="category_id"
-                                    :url="route('admin.products.index')"
-                                />
-                                <SortableTableHeaderCell
-                                    label="Name"
-                                    sort="name"
-                                    :url="route('admin.products.index')"
+                                    label="Size"
+                                    sort="size_id"
+                                    :url="
+                                        route('admin.product-details.index', {
+                                            id: product?.id,
+                                        })
+                                    "
                                 />
                                 <SortableTableHeaderCell
                                     label="Price"
                                     sort="price"
-                                    :url="route('admin.products.index')"
+                                    :url="
+                                        route('admin.product-details.index', {
+                                            id: product?.id,
+                                        })
+                                    "
+                                />
+                                <SortableTableHeaderCell
+                                    label="Stock Quantity"
+                                    sort="stock_quantity"
+                                    :url="
+                                        route('admin.product-details.index', {
+                                            id: product?.id,
+                                        })
+                                    "
                                 />
 
                                 <SortableTableHeaderCell
                                     label="Discount"
                                     sort="discount"
-                                    :url="route('admin.products.index')"
-                                />
-                                <SortableTableHeaderCell
-                                    label="Priority"
-                                    sort="priority"
-                                    :url="route('admin.products.index')"
-                                />
-                                <SortableTableHeaderCell
-                                    label="Description"
-                                    sort="description"
-                                    :url="route('admin.products.index')"
+                                    :url="
+                                        route('admin.product-details.index', {
+                                            id: product?.id,
+                                        })
+                                    "
                                 />
 
                                 <TableHeaderCell label="Actions" />
@@ -90,74 +113,39 @@
                                 <TableDataCell class="">
                                     {{ item.id }}
                                 </TableDataCell>
-                                <TableDataCell class="min-w-[200px]">
-                                    <div
-                                        v-if="
-                                            item.images &&
-                                            item.images.length > 0
-                                        "
-                                    >
-                                        <img
-                                             :src="getImageUrl(item.images[0].url)"
-                                            alt="Product Image"
-                                            class="w-32 h-32 object-cover"
-                                        />
+                                <!-- <TableDataCell class="min-w-[200px]">
+                                    <div class="flex items-center space-x-2">
+                                        <div>
+                                            <p>
+                                                {{ item.product_detail.stock_quantity }}
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div v-else>
-                                        <p>No image available</p>
-                                    </div>
-                                </TableDataCell>
+                                </TableDataCell> -->
 
                                 <TableDataCell class="min-w-[150px]">
-                                    {{ item.category?.name }}
-                                </TableDataCell>
-                                <TableDataCell class="min-w-[150px]">
-                                    {{ item.name }}
+                                    {{ item.size?.name }}
                                 </TableDataCell>
                                 <TableDataCell class="min-w-[150px]">
                                     {{ item.price }}
                                 </TableDataCell>
-                                <TableDataCell class="min-w-[100px]">
+                                <TableDataCell class="min-w-[150px]">
+                                    {{ item.stock_quantity }}
+                                </TableDataCell>
+                                <TableDataCell class="min-w-[150px]">
                                     {{ item.discount }}
-                                </TableDataCell>
-                                <TableDataCell class="min-w-[100px]">
-                                    {{ item.priority }}
-                                </TableDataCell>
-                                <TableDataCell class="min-w-[400px]">
-                                    {{ item.description }}
                                 </TableDataCell>
 
                                 <TableActionCell class="min-w-[350px]">
                                     <InertiaLinkButton
                                         :href="
                                             route(
-                                                'admin.product-details.index',
-                                                { id: item?.id }
+                                                'admin.product-details.edit',
+                                                {
+                                                    productId: product?.id,
+                                                    detailId: item?.id,
+                                                }
                                             )
-                                        "
-                                        class="bg-blue-600 h-[40px] !py-1 flex gap-1 items-center hover:bg-blue-700 text-white !text-xs !font-semibold"
-                                    >
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke-width="2"
-                                            stroke="currentColor"
-                                            class="w-4 h-4"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                d="M12 4v16m8-8H4"
-                                            />
-                                        </svg>
-                                        Product Detail
-                                    </InertiaLinkButton>
-                                    <InertiaLinkButton
-                                        :href="
-                                            route('admin.products.edit', {
-                                                product: item?.id,
-                                            })
                                         "
                                         class="bg-blue-600 !py-1 flex gap-1 items-center hover:bg-blue-700 text-white !text-xs !font-semibold"
                                     >
@@ -170,9 +158,10 @@
                                             destroy(
                                                 'Product',
                                                 route(
-                                                    'admin.products.destroy',
+                                                    'admin.product-details.destroy',
                                                     {
-                                                        product: item?.id,
+                                                        productId: product?.id,
+                                                        detailId: item?.id,
                                                     }
                                                 )
                                             )
@@ -188,6 +177,25 @@
                     </div>
                 </template>
             </TableContainer>
+            <InertiaLinkButton
+                class="flex items-center mt-5 bg-gray-600 hover:bg-gray-700 text-white"
+                :href="route('admin.products.index')"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 h-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="M15 18l-6-6 6-6" />
+                </svg>
+                Back
+                </InertiaLinkButton
+            >
         </div>
     </div>
 </template>
@@ -205,25 +213,25 @@ import TableContainer from "@/Components/Common/TableContainer.vue";
 import TableDataCell from "@/Components/Common/TableDataCell.vue";
 import TableHeaderCell from "@/Components/Common/TableHeaderCell.vue";
 import Breadcrumb from "@/Components/Molecules/Breadcrumb.vue";
-import ProductTableFilters from "@/Components/Organisms/ProductTableFilters.vue";
+import ProductDetailTableFilters from "@/Components/Organisms/ProductDetailTableFilters.vue";
 import { useCRUDOperations } from "@/Composables/useCRUDOperations";
 
 defineProps({
-    products: {
+    productDetails: {
         type: Object,
         default: null,
     },
-    categories: {
+    sizes: {
+        type: Object,
+        default: null,
+    },
+    product: {
         type: Object,
         default: null,
     },
 });
 
 const { destroy } = useCRUDOperations();
-
-const getImageUrl = (imagePath) => {
-    return `/storage/${imagePath}`;
-};
 </script>
 
 <style scoped></style>

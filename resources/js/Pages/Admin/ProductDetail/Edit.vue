@@ -5,11 +5,11 @@ import BreadcrumbItem from '@/Components/Atoms/BreadcrumbItem.vue';
 import Form from './Components/Form.vue';
 
 defineProps({
-    product: {
+    productDetail: {
         type: Object,
         required: true,
     },
-    categories: {
+    sizes: {
         type: Object,
         required: true,
     },
@@ -28,6 +28,6 @@ defineProps({
         </div>
 
         <!-- Form Start -->
-        <Form mode="edit"  :product="product" :categories="categories" />
+        <Form mode="edit"  :productDetail="productDetail" :sizes="sizes" />
     </div>
 </template>

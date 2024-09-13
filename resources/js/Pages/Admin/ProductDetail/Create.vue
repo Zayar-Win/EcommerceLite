@@ -9,25 +9,24 @@ defineProps({
         type: Object,
         required: true,
     },
-    categories: {
+    sizes: {
         type: Object,
         required: true,
     },
 });
-// console.log(category);
 </script>
 
 <template>
-    <Head title="Edit User" />
+    <Head title="Create User" />
     <div class="min-h-screen py-3 space-y-8">
         <div class="flex items-center justify-between">
             <!-- Breadcrumb -->
-            <Breadcrumb icon="fa-users" label="Users" :href="route('admin.products.index')">
-                <BreadcrumbItem label="Edit" />
+            <Breadcrumb icon="fa-shopping-cart" label="Products" :href="route('admin.products.index')">
+                <BreadcrumbItem label="Create" />
             </Breadcrumb>
         </div>
 
         <!-- Form Start -->
-        <Form mode="edit"  :product="product" :categories="categories" />
+        <Form mode="create" :product="product" :sizes="sizes" />
     </div>
 </template>

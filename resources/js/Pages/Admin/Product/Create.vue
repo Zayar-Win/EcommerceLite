@@ -5,7 +5,7 @@ import BreadcrumbItem from '@/Components/Atoms/BreadcrumbItem.vue';
 import Form from './Components/Form.vue';
 
 defineProps({
-    roles: {
+    categories: {
         type: Object,
         required: true,
     },
@@ -17,12 +17,12 @@ defineProps({
     <div class="min-h-screen py-3 space-y-8">
         <div class="flex items-center justify-between">
             <!-- Breadcrumb -->
-            <Breadcrumb icon="fa-users" label="Users" :href="route('admin.users.index')">
+            <Breadcrumb icon="fa-shopping-cart" label="Products" :href="route('admin.products.index')">
                 <BreadcrumbItem label="Create" />
             </Breadcrumb>
         </div>
 
         <!-- Form Start -->
-        <Form mode="create" :roles="roles" />
+        <Form mode="create" :categories="categories" />
     </div>
 </template>

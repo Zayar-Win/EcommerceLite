@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,8 +11,10 @@ class ProductDetail extends Model
     use HasFactory;
 
     protected $fillable = [
+        'product_id',
         'size_id',
         'stock_quantity',
+        'price',
         'discount',
     ];
 
@@ -35,5 +38,19 @@ class ProductDetail extends Model
     public function images()
     {
         return $this->morphMany(Image::class, 'image');
+    }
+
+    public function scopeFilterBy(Builder $query, ?array $filterBy): Builder
+    {
+        return $query->when(isset($filterBy['search']), function ($query) use ($filterBy) {
+            $search = $filterBy['search'];
+            $query->where(function ($query) use ($search) {
+                $query->where('price', 'like', '%' . $search . '%');
+            });
+        })->when(isset($filterBy['size']), function ($query) use ($filterBy) {
+            $query->whereHas('size', function($query) use ($filterBy) {
+                $query->where('name', 'like', '%' . $filterBy['size'] . '%');
+            });
+        });
     }
 }

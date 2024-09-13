@@ -28,7 +28,7 @@
                 class="my-3 flex sm:flex-row space-y-5 sm:space-y-0 items-center justify-center sm:justify-between overflow-auto p-1"
             >
                 <DashboardTableDataSearchBox
-                    placeholder="Search by id, name, email or phone"
+                    placeholder="Search by name, email or phone"
                     :href="route('admin.users.index')"
                 />
 
