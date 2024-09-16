@@ -128,7 +128,7 @@
                                 </TableDataCell>
 
                                 <TableActionCell class="min-w-[350px]">
-                                    <InertiaLinkButton
+                                    <InertiaLinkButton v-if="item.category?.name == 'Clothes'"
                                         :href="
                                             route(
                                                 'admin.product-details.index',

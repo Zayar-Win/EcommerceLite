@@ -102,9 +102,9 @@ const selectedCategory = computed(() => {
                         :files="form.images"
                         :acceptedFileTypes="['image/*']"
                         :imageCropAspectRatio="'1:1'"
-                        :imagePreviewHeight="300"
+                       :imagePreviewHeight="200"
                         :imageResizeTargetWidth="300"
-                        :imageResizeTargetHeight="auto"
+                        :imageResizeTargetHeight="300"
                         :maxFiles=5
                         @updateFile="handleAvatar"
                         ></FilePond>
@@ -126,7 +126,7 @@ const selectedCategory = computed(() => {
                     <ValidationError :message="errors?.name" />
                 </div>
 
-                <div class="">
+                <div class="" v-if="props.mode == 'create'">
                     <Label for="category" label="Category" required />
                     <SelectBox
                         id="category"
