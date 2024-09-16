@@ -165,13 +165,13 @@ const handleFilePondUpdate = (fileItems) => {
             :files="images"
             :allowMultiple="allowMultiple"
             :imagePreviewMaxHeight="250"
+            :FilePondPluginImageCrop="true"
             :acceptedFileTypes="acceptedFileTypes"
             :imageCropAspectRatio="imageCropAspectRatio"
             :imageValidateSizeMinWidth="300"
             :imageValidateSizeMinHeight="300"
             :imageValidateSizeMaxWidth="1500"
             :imageValidateSizeMaxHeight="1500"
-           
             :stylePanelLayout="mode === 'avatar' ? 'circle' : stylePanelLayout"
             :styleButtonRemoveItemPosition="
                 mode === 'avatar' ? 'bottom-center' : 'top-left'
