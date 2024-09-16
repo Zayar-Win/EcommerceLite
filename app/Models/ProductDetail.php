@@ -15,6 +15,10 @@ class ProductDetail extends Model
         'discount',
     ];
 
+    public function attributeOptions()
+    {
+        return $this->hasMany(AttributeOption::class);
+    }
     public function orders()
     {
         return $this->belongsToMany(Order::class)
