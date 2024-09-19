@@ -17,7 +17,7 @@ class ProductDetail extends Model
 
     public function attributeOptions()
     {
-        return $this->hasMany(AttributeOption::class);
+        return $this->belongsToMany(AttributeOption::class, 'attribute_option_product_detail', 'product_detail_id', 'attribute_option_id');
     }
     public function orders()
     {

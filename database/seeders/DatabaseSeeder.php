@@ -17,12 +17,16 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             UserSeeder::class,
             SizeSeeder::class,
-            ProductDetailSeeder::class,
+            // ProductDetailSeeder::class,
             PaymentSeeder::class,
             OrderSeeder::class,
             OrderProductDetailSeeder::class,
             ProductSeeder::class,
             AttributSeeder::class
+            // OrderSeeder::class,
+            // OrderProductDetailSeeder::class,
+            // ProductSeeder::class,
+            // AttributeOptionProductDetailSeeder::class
         ]);
 
         User::factory()->create([

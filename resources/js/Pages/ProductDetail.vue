@@ -20,26 +20,34 @@
                     <div class="inline-block px-3 py-1 bg-primary rounded-full text-white font-semibold text-sm">Hot</div>
                     <h1 class="text-2xl mt-3 font-medium">{{product?.name}}</h1>
                     <p class="mt-2 text-[16px] mb-5 text-black/70 font-medium">{{ product?.description }}</p>
-                    <p  v-if="currentProductDetail?.discount && currentProductDetail?.discount > 0"class="text-lg font-medium line-through text-black/60">{{ currentProductDetail?.price ?? '1000' }} MMK</p>
+                    <p  v-if="productDetail?.discount && productDetail?.discount > 0"class="text-lg font-medium line-through text-black/60">{{ productDetail?.price ?? '1000' }} MMK</p>
                     <div class="flex items-end mt-1 gap-2">
-                        <p class="font-bold text-2xl">{{Math.floor(currentProductDetail?.price - (((currentProductDetail?.discount ?? 0) / 100) * currentProductDetail?.price))}} MMK</p>
-                        <p v-if="currentProductDetail?.discount && Number(currentProductDetail?.discount) > 0" class="text-primary font-semibold">%{{ $formatNumber(currentProductDetail?.discount) }} Off</p>
+                        <p v-if="productDetail?.price" class="font-bold text-2xl">{{Math.floor(productDetail?.price - (((productDetail?.discount ?? 0) / 100) * productDetail?.price))}} MMK</p>
+                        <p v-else class="font-bold text-2xl">No product Yet</p>
+                        <p v-if="productDetail?.discount && Number(productDetail?.discount) > 0" class="text-primary font-semibold">%{{ $formatNumber(productDetail?.discount) }} Off</p>
                     </div>
                     <div class="my-8 h-[1px] w-full bg-black/20"></div>
                     <p class="font-semibold text-lg">Product information</p>
                     <div class="flex flex-col gap-2 mt-3">
                         <div class="flex items-center ">
-                            <p class="basis-[35%] font-semibold">Brand:</p>
+                            <p class="basis-[35%] font-semibold">Category:</p>
                             <p class="basis-[65%] text-black/70">{{product?.category?.name}}</p>
                         </div>
                         <div class="flex items-center ">
                             <p class="basis-[35%] font-semibold">Stock:</p>
                             <p :class="[totalStock ? '' : 'text-red-500']" class="basis-[65%] text-black/70">{{ totalStock ? totalStock : 'Out of stock' }}</p>
                         </div>
-                        <!-- <div class="flex items-center ">
-                            <p class="basis-[35%] font-semibold">Color:</p>
-                            <p class="basis-[65%] text-black/70">Gray</p>
-                        </div> -->
+                        <div class="flex items-end cursor-pointer" :key="optionKey" v-for="optionKey in Object.keys(product?.groupAttributeOptions)">
+                            <p class="basis-[35%] shrink-0 capitalize font-semibold">{{optionKey}}:</p>
+                            <div class="flex items-center flex-wrap gap-2 w-full">
+                                <p v-for="option in  product?.groupAttributeOptions[optionKey]"
+                                :class="[
+                                    params[optionKey] === option.value ? 'bg-primary text-white border-transparent' : ''
+                                ]"
+                                @click="handleGetProductDetail(optionKey,option.value)"
+                                :key="option.value" class="shrink-0 border-[1px] border-black/30 rounded-full px-4 py-1 text-black/70">{{ option.value }}</p>
+                            </div>
+                        </div>
                     </div>
                     <div class="my-8 h-[1px] w-full bg-black/20"></div>
                     <div class="flex lg:items-center lg:flex-row flex-col gap-3 mt-4 mb-2">
@@ -114,12 +122,13 @@
             <div class="lg:basis-[35%] md:basis-[40%]">
                 <div class="border-[1px] md:block hidden border-black/10 rounded-xl py-6 px-6">
                     <div class="inline-block px-3 py-1 bg-primary rounded-full text-white font-semibold text-sm">Hot</div>
-                    <h1 class="text-2xl mt-3 font-medium">{{product?.name}}</h1>
+                    <h1 class="text-2xl mt-3 font-medium">{{product?.name}} </h1>
                     <p class="mt-2 text-[16px] mb-5 text-black/70 line-clamp-3 font-medium">{{product?.description}}</p>
-                    <p v-if="currentProductDetail?.discount && currentProductDetail?.discount > 0" class="text-lg font-medium line-through text-black/60">{{ currentProductDetail?.price ?? '1000' }} MMK</p>
+                    <p v-if="productDetail?.discount && productDetail?.discount > 0" class="text-lg font-medium line-through text-black/60">{{ productDetail?.price ?? '1000' }} MMK</p>
                     <div class="flex items-end mt-1 gap-2">
-                        <p class="font-bold text-2xl">{{Math.floor(currentProductDetail?.price - (((currentProductDetail?.discount ?? 0) / 100) * currentProductDetail?.price))}} MMK</p>
-                        <p v-if="currentProductDetail?.discount && Number(currentProductDetail?.discount) > 0" class="text-primary font-semibold">%{{ $formatNumber(currentProductDetail?.discount) }} Off</p>
+                        <p v-if="productDetail?.price" class="font-bold text-2xl">{{Math.floor(productDetail?.price - (((productDetail?.discount ?? 0) / 100) * productDetail?.price))}} MMK</p>
+                        <p v-else class="font-bold text-2xl">No product Yet</p>
+                        <p v-if="productDetail?.discount && Number(productDetail?.discount) > 0" class="text-primary font-semibold">%{{ $formatNumber(productDetail?.discount) }} Off</p>
                     </div>
                     <div class="my-8 h-[1px] w-full bg-black/20"></div>
                     <p class="font-semibold text-lg">Product information</p>
@@ -132,10 +141,17 @@
                             <p class="basis-[35%] font-semibold">Stock:</p>
                             <p :class="[totalStock ? '' : 'text-red-500']" class="basis-[65%] text-black/70">{{totalStock ? totalStock : 'Out of stock'}}</p>
                         </div>
-                        <!-- <div class="flex items-center ">
-                            <p class="basis-[35%] font-semibold">Color:</p>
-                            <p class="basis-[65%] text-black/70">Gray</p>
-                        </div> -->
+                        <div class="flex items-end cursor-pointer" :key="optionKey" v-for="optionKey in Object.keys(product?.groupAttributeOptions)">
+                            <p class="basis-[35%] shrink-0 capitalize font-semibold">{{optionKey}}:</p>
+                            <div class="flex items-center flex-wrap gap-2 w-full">
+                                <p v-for="option in  product?.groupAttributeOptions[optionKey]"
+                                :class="[
+                                    params[optionKey] === option.value ? 'bg-primary text-white border-transparent' : ''
+                                ]"
+                                @click="handleGetProductDetail(optionKey,option.value)"
+                                :key="option.value" class="shrink-0 border-[1px] border-black/30 rounded-full px-4 py-1 text-black/70">{{ option.value }}</p>
+                            </div>
+                        </div>
                     </div>
                     <div class="my-8 h-[1px] w-full bg-black/20"></div>
                     <div class="flex lg:items-center lg:flex-row flex-col gap-3 mt-4 mb-2">
@@ -193,6 +209,9 @@ export default {
         product : {
             type : Object
         },
+        productDetail:{
+            type : Object
+        },
         sizes : {
             type :Object
         },
@@ -201,27 +220,14 @@ export default {
         },
         relatedProducts:{
             type : Object
+        },
+        filters : {
+            type : Object
         }
     },
     computed:{
-        isClothCategory(){
-            return this.product?.category?.name == 'Clothes'
-        },
-        currentProductDetail(){
-            if(this.isClothCategory){
-                return this.product?.product_details?.filter(detail => {
-                    return detail?.size?.name == this.selectedSize;
-                })[0];
-            }else{
-                return this.product?.product_details[0];
-            }
-        },
         totalStock(){
-            if(this.isClothCategory){
-                return this.currentProductDetail?.stock_quantity;
-            }else{
-                return this.product?.product_details[0]?.stock_quantity;
-            }
+                return this.productDetail?.stock_quantity;
         }
     },
     inject:['$formatNumber'],
@@ -230,7 +236,8 @@ export default {
             images : this.product?.images.map(image => image?.url),
             open:false,
             selectedSize : this.sizes[0],
-            quantity : this.totalStock ? 1 : 0
+            quantity : this.totalStock ? 1 : 0,
+            params : this.filters
         }
     },
     methods:{
@@ -239,18 +246,31 @@ export default {
             let item = {
                 product : {
                     ...this.product,
-                    //use product detail when showing item in card!!
-                    product_detail : this.currentProductDetail,
+                    product_detail : this.productDetail,
                     quantity : this.quantity
                 }
             };
 
             this.addItemToCart(item);
 
+        },
+        handleGetProductDetail(paramKey,value){
+            let params = {};
+            console.log(this.filters)
+            Object.keys(this.filters).forEach((key) => {
+                params[key] = this.filters[key]
+            });
+            if(paramKey){
+                params[paramKey] = value
+            }
+            console.log(params)
+            this.params = params;
+            this.$inertia.get(route('product-detail',{product : this.product,...this.params}))
         }
     },
     mounted(){
         this.quantity = this.totalStock ? 1 : 0
+        // this.handleGetProductDetail()
     }
 }
 </script>

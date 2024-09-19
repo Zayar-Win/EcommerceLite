@@ -5,8 +5,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\CelebrateMiddleware;
 use App\Models\Payment;
 use App\Models\Product;
-use App\Models\User;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -27,12 +25,44 @@ Route::get('/', function () {
         ]
     ]);
 })->name('home');
+
 Route::get('/products/{product:slug}', function (Product $product) {
-    $product = Product::with(['images', 'category', 'productDetails', 'productDetails.size'])->find($product->id);
+    $product = Product::with(['images', 'category', 'productDetails', 'productDetails.attributeOptions.attribute', 'productDetails.size'])->find($product->id);
+
+    $filters = request()->query();
+    $productDetail = null;
+    if (!count($filters)) {
+        $productDetail = $product->productDetails()->first();
+
+        $defaultAttribute = $productDetail->attributeOptions->groupBy('attribute.name')->map(function ($options) {
+            return $options->first()->value;
+        });
+
+        $filters = $defaultAttribute;
+    } else {
+        $productDetail = $product->productDetails()->where(function ($query) use ($filters) {
+            foreach ($filters as $key => $value) {
+                $query->whereHas('attributeOptions', function ($query) use ($filters, $key, $value) {
+                    $query->whereHas('attribute', function ($query) use ($filters, $key, $value) {
+                        return $query->where('name', $key)
+                            ->where('value', $value)
+                        ;
+                    });
+                });
+            }
+        })->first();
+    }
+
 
     $productWithSize = Product::with(['productDetails' => function ($query) {
         return $query->with('size');
     }])->where('id', $product->id)->first();
+    $groupedAttributeOptions = $product->productDetails->flatMap(function ($detail) {
+        return $detail->attributeOptions;
+    })->groupBy('attribute.name')->map(function ($group) {
+        return $group->unique('value');
+    });
+    $product->groupAttributeOptions = $groupedAttributeOptions;
 
     $sizes = $productWithSize->productDetails->map(function ($detail) {
         return $detail->size ? $detail->size->name : null; // Adjust 'name' to your actual size field
@@ -41,9 +71,10 @@ Route::get('/products/{product:slug}', function (Product $product) {
     $latestProducts = Product::with(['images', 'category'])->latest()->limit(6)->get();
 
     $relatedProducts = Product::with('images')->where('category_id', $product->category->id)->limit(6)->get();
-
     return Inertia::render('ProductDetail', [
         'product' => $product,
+        'filters' => $filters,
+        'productDetail' => $productDetail,
         'sizes' => $sizes,
         'latestProducts' => $latestProducts,
         'relatedProducts' => $relatedProducts
