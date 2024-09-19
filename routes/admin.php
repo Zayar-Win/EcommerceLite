@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\OrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
@@ -28,4 +29,7 @@ Route::prefix('/admin')
 
         // User
         Route::resource('users', UserController::class);
+
+        // Attribute
+        Route::resource('/attributes', AttributeController::class);
     });
