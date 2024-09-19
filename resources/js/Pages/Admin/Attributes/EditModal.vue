@@ -51,7 +51,7 @@
                     Cancel
                 </button>
                 <FormButton
-                    type="submit" :disabled="form.processing"
+                    type="submit" :processing="form.processing"
                     class="w-[150px] bg-primary text-white mt-10"
                 >
                     Save Changes
