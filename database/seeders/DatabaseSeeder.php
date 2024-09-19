@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             // ProductDetailSeeder::class,
             PaymentSeeder::class,
             OrderSeeder::class,
-            OrderProductDetailSeeder::class,
+            // OrderProductDetailSeeder::class,
             ProductSeeder::class,
             AttributSeeder::class
             // OrderSeeder::class,
