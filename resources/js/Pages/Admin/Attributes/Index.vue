@@ -1,34 +1,39 @@
-<template >
+<template>
     <div class="min-h-screen py-3 space-y-8">
         <div class="flex flex-col sm:flex-row items-center justify-between">
             <!-- Breadcrumb -->
             <Breadcrumb
-                icon="fa-box-open"
-                label="Orders"
-                :href="route('admin.orders.index')"
+                icon="fa-cogs"
+                label="Attributes"
+                :href="route('admin.attributes.index')"
             >
                 <BreadcrumbItem label="Lists" />
             </Breadcrumb>
 
             <!-- Create Button -->
             <div class="min-w-[270px] flex justify-end">
-                <!-- <DownloadReportDropdown type="users" /> -->
-
-                <InertiaLinkButton :href="route('admin.users.create')">
+                <!-- <DownloadReportDropdown type="attributes" /> -->
+                <button @click="showCreateModal = true" class="btn-create bg-primary hover:bg-blue-700 text-white px-4 py-3 text-sm rounded-lg">
                     <i class="fa-solid fa-file-circle-plus mr-1"></i>
                     Create
-                </InertiaLinkButton>
+                </button>
+                <!-- CreateModal Component -->
+                <!-- <CreateModal :href="route('admin.attributes.create')">
+                    <i class="fa-solid fa-file-circle-plus mr-1"></i>
+                    Create
+                </CreateModal> -->
             </div>
         </div>
         <div
             class="relative border border-gray-300 bg-white rounded-md shadow-sm shadow-gray-200 px-5 py-3"
         >
+            <!-- <Head title="attributes" /> -->
             <div
                 class="my-3 flex sm:flex-row space-y-5 sm:space-y-0 items-center justify-center sm:justify-between overflow-auto p-1"
             >
                 <DashboardTableDataSearchBox
-                    placeholder="Search by id, name, email or phone"
-                    :href="route('admin.orders.index')"
+                    placeholder="Search by name or value"
+                    :href="route('admin.attributes.index')"
                 />
 
                 <!-- <div class="sm:block hidden">
@@ -36,79 +41,76 @@
         </div> -->
             </div>
             <TableContainer
-                :data-count="orders?.data?.length"
-                :paginate-links="orders.links"
+                :data-count="attributes?.data?.length"
+                :paginate-links="attributes.links"
             >
                 <template #table>
                     <div class="overflow-x-auto w-full">
-                        <Table :items="orders.data">
+                        <Table :items="attributes.data">
                             <template #table-header>
                                 <SortableTableHeaderCell
                                     class="min-w-[100px]"
                                     label="ID"
                                     sort="id"
-                                    :url="route('admin.orders.index')"
+                                    :url="route('admin.attributes.index')"
                                 />
-                                <TableHeaderCell
-                                    label="Order User"
+
+                                <SortableTableHeaderCell
+                                    label="Name"
+                                    sort="name"
+                                    :url="route('admin.attributes.index')"
                                 />
-                                <TableHeaderCell
-                                    label="Pyament"
-                                />
-                                <TableHeaderCell
-                                label="Phone Number"
-                                />
-                                <TableHeaderCell
-                                    label="Status"
-                                />
-                                <TableHeaderCell
-                                class="min-w-[150px]"
-                                label="Total Amount"
-                                />
+
+                                <TableHeaderCell label="Values" />
+
                                 <TableHeaderCell label="Actions" />
                             </template>
 
                             <template #table-data="{ item }">
                                 <TableDataCell class="">
-                                    {{ item?.id }}
-                                </TableDataCell>
-                                <TableDataCell class="min-w-[150px]">
-                                    <p class="line-clamp-1">{{ item?.shipping_recipient_name }}</p>
-                                </TableDataCell>
-                                <TableDataCell class="min-w-[100px]">
-                                    {{ item?.payment?.name }}
-                                </TableDataCell>
-                                <TableDataCell class="min-w-[150px]">
-                                    {{ item.shipping_ph_number }}
-                                </TableDataCell>
-                                <TableDataCell class=" text-sm capitalize" > 
-                                    <div class="px-2 py-1 text-xs font-black rounded-full text-white" :class="statusStyle(item.status)">
-                                        {{ item.status }}
-                                    </div>
+                                    {{ item.id }}
                                 </TableDataCell>
                                 <TableDataCell class="min-w-[200px]">
-                                    {{ item.total_amount }} MMK
+                                    <div class="flex items-center space-x-2">
+                                        <div>
+                                            <p>
+                                                {{ item.name }}
+                                            </p>
+                                        </div>
+                                    </div>
                                 </TableDataCell>
-                                <TableActionCell class="min-w-[250px]">
-                                    <InertiaLinkButton
+
+                                 <TableDataCell>
+                                    {{ item.attribute_options.map(option => option.value).join(', ') }}
+                                </TableDataCell>
+                               
+                                <TableActionCell class="min-w-[350px]">
+                                    <!-- <InertiaLinkButton
                                         :href="
-                                            route('admin.orders.orderDetail', {
-                                                order: item?.id,
+                                            route('admin.attributes.edit', {
+                                                attribute: item?.id,
                                             })
                                         "
                                         class="bg-blue-600 !py-1 flex gap-1 items-center hover:bg-blue-700 text-white !text-xs !font-semibold"
                                     >
                                         <Edit class="w-[20px]" />
-                                        Order Detail
-                                    </InertiaLinkButton>
+                                        Edit
+                                    </InertiaLinkButton> -->
+                                    <button  @click="editAttribute(item)" class="btn-edit px-4 rounded-lg bg-blue-600 !py-1 flex gap-1 items-center hover:bg-blue-700 text-white !text-xs !font-semibold">
+                                        <Edit class="w-[20px]" />
+                                        Edit
+                                    </button>
                                     <NormalButton
                                         type="button"
                                         @click="
                                             destroy(
-                                                'User',
-                                                route('admin.users.destroy', {
-                                                    user: item?.id,
-                                                })
+                                                'Attribute',
+                                                route(
+                                                    'admin.attributes.destroy',
+                                                    {
+                                                        attribute: item?.id,
+                                                    }
+                                                )
                                             )
                                         "
                                         class="bg-red-600 flex items-center gap-1 !py-1 hover:bg-red-700 text-white !text-xs !font-semibold"
@@ -124,6 +126,15 @@
             </TableContainer>
         </div>
     </div>
+    <!-- CreateModal Component -->
+    <CreateModal
+            :open="showCreateModal"
+            @closeModal="closeCreateModal"
+            :href="route('admin.attributes.create')"
+        />
+    <EditModal  :open="showEditModal"
+    @closeModal="closeEditModal"
+    :attribute="selectedAttribute"/>
 </template>
 <script>
 import Delete from "@/assets/icons/Delete.vue";
@@ -139,7 +150,10 @@ import TableDataCell from "@/Components/Common/TableDataCell.vue";
 import TableHeaderCell from "@/Components/Common/TableHeaderCell.vue";
 import Breadcrumb from "@/Components/Molecules/Breadcrumb.vue";
 // import { Head } from '@inertiajs/vue3';
+import { ref } from "vue";
 import { useCRUDOperations } from "@/Composables/useCRUDOperations";
+import CreateModal from "./CreateModal.vue";
+import EditModal from "./EditModal.vue";
 export default {
     components: {
         TableContainer,
@@ -156,28 +170,42 @@ export default {
         // Head
         Breadcrumb,
         useCRUDOperations,
+        CreateModal,
+        EditModal
     },
-    props : {
-        orders : {
-            type : Object
-        }
+    props: {
+        attributes: {
+            type: Object,
+            required:true,
+        },
     },
-    methods:{
-        statusStyle(status){
-                if(status == 'pending')return  'bg-yellow-500';
-                if(status == 'cancel')return 'bg-red-500'
-                if(status == 'completed')return 'bg-green-500'
-        }
-    },  
-    setup() {
+    setup(props) {
         const { destroy } = useCRUDOperations();
-
+        const showCreateModal = ref(false);
+        const showEditModal = ref(false);
+        const selectedAttribute = ref(null);
+        function closeCreateModal() {
+            showCreateModal.value = false;
+        }
+        console.log(props.attributes);
+        function closeEditModal(){
+            showEditModal.value = false;
+        }
+        const editAttribute = (attribute) => {
+            selectedAttribute.value = attribute;
+            console.log(selectedAttribute.value);
+            showEditModal.value = true; 
+        };
         return {
             destroy,
+            showCreateModal,
+            showEditModal,
+            closeCreateModal,
+            closeEditModal,
+            selectedAttribute,
+            editAttribute 
         };
     },
-}
+};
 </script>
-<style lang="">
-    
-</style>
+<style lang=""></style>
