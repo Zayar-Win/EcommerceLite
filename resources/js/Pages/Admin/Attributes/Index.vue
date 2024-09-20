@@ -32,7 +32,7 @@
                 class="my-3 flex sm:flex-row space-y-5 sm:space-y-0 items-center justify-center sm:justify-between overflow-auto p-1"
             >
                 <DashboardTableDataSearchBox
-                    placeholder="Search by name"
+                    placeholder="Search by name or value"
                     :href="route('admin.attributes.index')"
                 />
 

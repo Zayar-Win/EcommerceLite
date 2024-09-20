@@ -28,7 +28,7 @@
             >
                 <DashboardTableDataSearchBox
                     placeholder="Search by id, name, email or phone"
-                    :href="route('admin.users.index')"
+                    :href="route('admin.orders.index')"
                 />
 
                 <!-- <div class="sm:block hidden">
