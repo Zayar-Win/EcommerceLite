@@ -127,6 +127,7 @@ const confirmDialog = () => {
 
 // Listen for 'open-confirmation-dialog' events
 emitter.on('open-confirmation-dialog', (options) => {
+    console.log('open confirmation dialog')
     Object.assign(dialogOptions, options);
     onConfirmCallback = options.onConfirm || null;
     isOpen.value = true;

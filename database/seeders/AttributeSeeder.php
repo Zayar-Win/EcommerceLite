@@ -68,9 +68,7 @@ class AttributeSeeder extends Seeder
                 ]);
 
                 foreach ([0, 1, 2, 3] as $i) {
-                    $productDetail = ProductDetail::factory()->create([
-                        'product_id' => $product->id
-                    ]);
+
                     $sizeAttribute = Attribute::where('name', 'size')->first();
                     $sizeOptions = AttributeOption::where('attribute_id', $sizeAttribute->id)->get();
 
@@ -85,6 +83,9 @@ class AttributeSeeder extends Seeder
 
                     if ($key == 'clothes') {
                         foreach ([0, 1, 2, 3] as $i) {
+                            $productDetail = ProductDetail::factory()->create([
+                                'product_id' => $product->id
+                            ]);
                             AttributeOptionProductDetail::factory()->create([
                                 'product_detail_id' => $productDetail->id,
                                 'attribute_option_id' => $sizeOptions[rand(0, count($sizeOptions) - 1)]->id
@@ -101,6 +102,9 @@ class AttributeSeeder extends Seeder
                     }
                     if ($key == 'phones') {
                         foreach ([0, 1, 2, 3] as $i) {
+                            $productDetail = ProductDetail::factory()->create([
+                                'product_id' => $product->id
+                            ]);
                             AttributeOptionProductDetail::factory()->create([
                                 'product_detail_id' => $productDetail->id,
                                 'attribute_option_id' => $colorOptions[rand(0, count($colorOptions) - 1)]->id
