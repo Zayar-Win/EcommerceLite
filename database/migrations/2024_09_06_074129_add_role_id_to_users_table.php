@@ -9,14 +9,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('role_id')->after('name')->default(null)->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('role_id')->after('name')->default(3);
         });
     }
 
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropColumn('role_id');
         });
     }
 };

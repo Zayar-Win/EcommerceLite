@@ -16,6 +16,11 @@ class OrderProductDetail extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function attributeOptions()
+    {
+        return $this->belongsToMany(AttributeOption::class, 'attribute_option_product_detail', 'product_detail_id', 'attribute_option_id');
+    }
+
     public function productDetail()
     {
         return $this->belongsTo(ProductDetail::class);

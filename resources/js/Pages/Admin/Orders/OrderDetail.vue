@@ -133,6 +133,46 @@
                         </tbody>
                     </table>
                 </div>
+                <h1 class="text-lg font-bold">Products</h1>
+                <div class="relative overflow-x-auto">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Product name
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Category
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Price
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Quantity
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr  v-for="productDetail in  order?.order_product_details" :key="productDetail?.id" class="bg-white border-b ">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                                    <div class="flex items-center gap-2"> 
+                                        <img class="w-[50px] h-[50px] shrink-0 object-cover" :src="productDetail?.product_detail?.product?.images[0].url" alt="">
+                                        <p>{{ productDetail?.product_detail?.product?.name }}</p>
+                                    </div>
+                                </th>
+                                <td class="px-6 py-4">
+                                    {{productDetail?.product_detail?.product?.category?.name}}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ productDetail?.price }} MMK
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ productDetail?.quantity }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <div class="my-10 flex gap-5 items-center ">
                     <p class="text-2xl font-bold">Total : </p>
                     <p class="text-lg font-bold">{{ order?.total_amount }} MMK</p>
