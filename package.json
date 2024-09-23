@@ -39,6 +39,7 @@
         "swiper": "^11.1.12",
         "vee-validate": "^4.13.2",
         "vue-filepond": "^7.0.4",
+        "vue-multiselect": "^3.1.0",
         "vuex": "^4.0.2",
         "yup": "^1.4.0"
     }

@@ -6,9 +6,10 @@ import FormButton from "@/Components/Atoms/FormButton.vue";
 import { useCRUDOperations } from "@/Composables/useCRUDOperations";
 import { onMounted, computed } from "vue";
 import InertiaLinkButton from "@/Components/Atoms/InertiaLinkButton.vue";
-import SelectBox from "@/Components/Atoms/SelectBox.vue";
+// import SelectBox from "@/Components/Atoms/SelectBox.vue";
 import { productDetailSchema } from "@/Schemas/productDetailSchema";
-
+import Multiselect from 'vue-multiselect';
+import 'vue-multiselect/dist/vue-multiselect.css';
 const props = defineProps({
     mode: {
         type: String,
@@ -38,7 +39,7 @@ const productId = () => {
 console.log(props.productDetail)
 const { form, create, edit, errors, processing } = useCRUDOperations(
     {
-        size_id: props.productDetail?.size_id || "",
+        sizes: props.productDetail?.sizes || [],
         discount: props.productDetail?.discount || "",
         price: props.productDetail?.price || "",
         stock_quantity: props.productDetail?.stock_quantity || "",
@@ -48,20 +49,35 @@ const { form, create, edit, errors, processing } = useCRUDOperations(
 );
 
 const isFormValid = computed(() => {
-    const isCommonValid = form.size_id && form.price && form.stock_quantity;
+    const isCommonValid = form.price && form.stock_quantity;
     return isCommonValid;
 });
 
-const sizesOptions = computed(() => 
-    Object.entries(props.sizes).map(([key, value]) => ({ label: value, value: key }))
-);
-
-const selectedSize = computed(() => {
-  return props.mode === "edit" ? form.size_id : null;
+const sizesOptions = computed(() => {
+  return Object.values(props.sizes).map(size => ({
+    id: size.id,
+    name: size.name,
+  }));
 });
+
+// const selectedSize = computed(() => {
+//   return props.mode === "edit" ? form.size_id : null;
+// });
 </script>
 
 <template>
+    <div class="border p-10 bg-white  rounded-md flex">
+        <div>
+            <img :src="`/storage/${product.images[0].url}`" alt="Product Image" class="w-[200px] h-auto">
+        </div>
+        <div class="mx-5 grid gap-2">
+            <p>Product Name : {{ product.name }}</p>
+            <p>Price : {{  product.price }}</p>
+            <p>Discount : {{  product.discount }}</p>
+            <p>Description : {{  product.description }}</p>
+           
+        </div>
+    </div>
     <div class="border p-10 bg-white rounded-md">
         <form
             class="space-y-4 md:space-y-6"
@@ -79,7 +95,7 @@ const selectedSize = computed(() => {
 
                 <div class="">
                     <Label for="sizes" label="Size" required />
-                    <SelectBox
+                    <!-- <SelectBox
                         id="sizes"
                         name="size"
                         v-model="form.size_id"
@@ -87,7 +103,16 @@ const selectedSize = computed(() => {
                         :selected="selectedSize"
                         placeholder="Select a category"
                         class="p-2 border w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
-                    />
+                    /> -->
+                    <Multiselect
+                    v-model="form.sizes"
+                    :options="sizesOptions"
+                    :multiple="true"
+                    track-by="id"
+                    label="name"
+                    placeholder="Select Attributes"
+                    class="block w-full p-0 rounded-md font-semibold text-sm text-black bg-gray-00 outline-none disabled:cursor-not-allowed transition-all focus:ring-2 focus:ring-slate-300 border border-gray-300 focus:border-slate-400': true"
+                />
                     <ValidationError
                         class="mt-2"
                         :message="errors?.size_id"

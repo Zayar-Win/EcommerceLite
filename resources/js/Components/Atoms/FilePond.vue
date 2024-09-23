@@ -57,15 +57,15 @@ const props = defineProps({
     },
     imagePreviewHeight: {
         type: Number,
-        default: 400,
+        default: 300,
     },
     imageResizeTargetWidth: {
         type: Number,
-        default: 200,
+        default: 300,
     },
     imageResizeTargetHeight: {
         type: Number,
-        default: 200,
+        default: 300,
     },
     maxFileSize: {
         type: String,
@@ -89,6 +89,10 @@ const emit = defineEmits(["updateFile"]);
 
 // let myFiles = ref([]);
 const pond = ref(null);
+const handleProcessFile = (file) => {
+  console.log('Processing file:', file);
+};
+
 
 // const serverConfig = computed(() => ({
 //   // Configure your server settings here
@@ -134,7 +138,25 @@ if (props.files && props.files.length > 0) {
         };
     });
 }
-
+// if (props.files && props.files.length > 0) {
+//     images.value = props.files.map((file) => {
+//         const filePath = `/storage/${file}`;
+//         return {
+//             source: filePath,
+//             options: {
+//                 type: 'local',
+//                 file: {
+//                     name: file,
+//                     size: 123456, 
+//                     type: 'image/jpeg', 
+//                 },
+//                 metadata: {
+//                     poster: filePath,
+//                 },
+//             },
+//         };
+//     });
+// }
 console.log(images.value);
 const filePondInitialized = () => {
     console.log("FilePond has initialized", pond.value);
@@ -172,6 +194,7 @@ const handleFilePondUpdate = (fileItems) => {
             :imageValidateSizeMinHeight="300"
             :imageValidateSizeMaxWidth="1500"
             :imageValidateSizeMaxHeight="1500"
+            :styleItemPanelAspectRatio="'1:1'"
             :stylePanelLayout="mode === 'avatar' ? 'circle' : stylePanelLayout"
             :styleButtonRemoveItemPosition="
                 mode === 'avatar' ? 'bottom-center' : 'top-left'
@@ -181,6 +204,7 @@ const handleFilePondUpdate = (fileItems) => {
             :imageResizeTargetHeight="imageResizeTargetHeight"
             :maxFiles="maxFiles"
             @updatefiles="handleFilePondUpdate"
+            @processfile="handleProcessFile"
             max-file-size="maxFileSize"
             @init="filePondInitialized"
         />
@@ -197,6 +221,15 @@ const handleFilePondUpdate = (fileItems) => {
     margin-bottom: 1em;
     /* overflow: hidden; */
     /* position: relative; */
+}
+.filepond--processing .filepond--item {
+  border: 2px solid #4caf50 !important; /* Green border when processing */
+  opacity: 0.8 !important;             /* Slight transparency */
+}
+
+.filepond--processing {
+  background-color: rgba(255, 255, 0, 0.1) !important; /* Light yellow background */
+  border: 2px dashed #ffa500 !important;            /* Orange dashed border */
 }
 </style>
 <!-- <style scoped>

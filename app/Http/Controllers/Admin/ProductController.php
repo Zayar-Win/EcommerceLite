@@ -69,8 +69,6 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        // dd($id);
-        // dd($request->all());
         $product = Product::findOrFail($id);
 
         $product->update([
@@ -86,7 +84,7 @@ class ProductController extends Controller
         $cleanedCurrentImagePaths = array_map(function($imagePath) {
             return str_replace('/storage/', '', $imagePath);
         }, $currentImage);
-
+        dd($currentImage);
         $newImages = array_filter($images, function($image) {
             return $image instanceof \Illuminate\Http\UploadedFile;
         });

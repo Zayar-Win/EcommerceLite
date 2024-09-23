@@ -90,7 +90,7 @@
                                 <TableDataCell class="">
                                     {{ item.id }}
                                 </TableDataCell>
-                                <TableDataCell class="min-w-[200px]">
+                                <TableDataCell >
                                     <div
                                         v-if="
                                             item.images &&
@@ -100,7 +100,7 @@
                                         <img
                                              :src="getImageUrl(item.images[0].url)"
                                             alt="Product Image"
-                                            class="w-32 h-32 object-cover"
+                                            class="w-16 h-16 object-cover"
                                         />
                                     </div>
                                     <div v-else>
@@ -128,7 +128,7 @@
                                 </TableDataCell>
 
                                 <TableActionCell class="min-w-[350px]">
-                                    <InertiaLinkButton v-if="item.category?.name == 'Clothes'"
+                                    <InertiaLinkButton
                                         :href="
                                             route(
                                                 'admin.product-details.index',

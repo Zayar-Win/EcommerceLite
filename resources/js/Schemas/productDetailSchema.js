@@ -14,7 +14,5 @@ export const productDetailSchema = yup.object({
         .number()
         .required("Stock quantity is required")
         .min(0, "Stock quantity must be a positive value"),
-    size_id: yup
-        .number()
-        .required("Size ID is required"),
+    size_id:yup.array().required('Attribute field is required'),
 });

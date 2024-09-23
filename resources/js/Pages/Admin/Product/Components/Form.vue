@@ -102,7 +102,7 @@ const selectedCategory = computed(() => {
                         :files="form.images"
                         :acceptedFileTypes="['image/*']"
                         :imageCropAspectRatio="'1:1'"
-                       :imagePreviewHeight="200"
+                        :imagePreviewHeight="200"
                         :imageResizeTargetWidth="300"
                         :imageResizeTargetHeight="300"
                         :maxFiles=5

@@ -15,7 +15,13 @@ class ProductDetailController extends Controller
     
     public function index($id)
     {
-        $query = ProductDetail::with('size')->where('product_id', $id)->filterBy(request(['search', 'size']))->orderBy(request('sort', 'id'), request('direction', 'desc'));
+        $query = ProductDetail::with(['size', 'images' => function ($query) {
+            $query->limit(1); 
+        }])
+        ->where('product_id', $id)
+        ->filterBy(request(['search', 'size']))
+        ->orderBy(request('sort', 'id'), request('direction', 'desc'));
+
         $sizes=Size::pluck('name','id');
         $product=Product::findOrFail($id);
         $productDetails = $query->paginate(request('per_page', 10))
@@ -29,8 +35,11 @@ class ProductDetailController extends Controller
 
     public function create($id)
     {
-        $product=Product::findOrFail($id);
-        $sizes=Size::pluck('name','id');
+        $product=Product::with(['images'=>function($query){
+            $query->limit(1);
+        }])->findOrFail($id);
+        // dd($product);
+        $sizes=Size::all();
         return inertia('Admin/ProductDetail/Create',compact(['product','sizes']));
     }
 
