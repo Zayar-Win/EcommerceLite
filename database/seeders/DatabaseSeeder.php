@@ -19,10 +19,13 @@ class DatabaseSeeder extends Seeder
             SizeSeeder::class,
             // ProductDetailSeeder::class,
             PaymentSeeder::class,
+            OrderSeeder::class,
+            // OrderProductDetailSeeder::class,
+            ProductSeeder::class,
+            AttributSeeder::class
             // OrderSeeder::class,
             // OrderProductDetailSeeder::class,
             // ProductSeeder::class,
-            AttributeSeeder::class,
             // AttributeOptionProductDetailSeeder::class
         ]);
 
