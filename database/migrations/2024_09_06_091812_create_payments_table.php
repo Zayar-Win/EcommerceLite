@@ -11,10 +11,11 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('ph_number'); 
-            $table->string('qr_code'); 
-            $table->string('icon'); 
-            $table->enum('status',['active','inactive'])->default('active'); 
+            $table->string('acc_number');
+            $table->string('qr_code');
+            $table->string('username');
+            $table->string('icon');
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->text('description')->nullable();
             $table->timestamps();
         });
