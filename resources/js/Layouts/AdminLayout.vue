@@ -1,10 +1,12 @@
 <script setup>
 
 import SideNav from '@/Components/Admin/SideNav.vue';
+import FlashMessage from '@/Components/Common/FlashMessage.vue';
 import ConfirmationDialog from '@/Components/Molecules/ConfirmationDialog.vue';
 </script>
 
 <template>
+    <FlashMessage />
     <div class="flex h-screen overflow-hidden font-roboto">
         <SideNav />
         <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">

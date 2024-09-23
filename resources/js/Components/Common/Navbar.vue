@@ -1,4 +1,4 @@
-<template lang="">
+<template >
     <div class="flex items-center justify-between xl:px-32 sm:px-5 px-2 bg-secondary">
         <Link :href="route('home')">
             <img src="/Logo.png" class="md:w-[150px] w-[100px] h-[80px] object-cover md:h-[12
@@ -18,14 +18,14 @@
                 </div>
                 <p>Your Cart</p>
             </div>
-            <UserDropDown />
+            <UserDropDown v-if="isAuthenticated" />
         </div>
     </div>
 </template>
 <script>
 import Bag from '@/assets/icons/Bag.vue';
 import Search from '@/assets/icons/Search.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import { mapGetters, mapMutations } from 'vuex';
 import UserDropDown from './UserDropDown.vue';
 
@@ -37,11 +37,14 @@ export default {
         UserDropDown
     },
     computed:{
-        ...mapGetters(['cartItems'])
+        ...mapGetters(['cartItems']),
+        isAuthenticated(){
+            return usePage().props?.auth?.user
+        }
     },
     methods:{
         ...mapMutations(['setIsCartOpen'])
-    }
+    },
 }
 </script>
 <style lang="">

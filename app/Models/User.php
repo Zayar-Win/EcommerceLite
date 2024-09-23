@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
+
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
@@ -25,11 +26,13 @@ class User extends Authenticatable
         'password',
         'role_id'
     ];
-    
+
     protected $hidden = [
         'password',
         'remember_token',
     ];
+
+    protected $with = ['role'];
 
     protected function casts(): array
     {
@@ -52,19 +55,19 @@ class User extends Authenticatable
     protected function dob(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value ? date('Y-m-d', strtotime($value)) : null,
+            get: fn($value) => $value ? date('Y-m-d', strtotime($value)) : null,
         );
     }
 
     public function scopeFilterBy(Builder $query, ?array $filterBy): Builder
     {
-        return $query->when(isset($filterBy['search']),function($query) use ($filterBy){
+        return $query->when(isset($filterBy['search']), function ($query) use ($filterBy) {
             $search = $filterBy['search'];
-                $query->where(function ($query) use ($search) {
-                    $query->where('name', 'like', '%' . $search . '%')
-                        ->orWhere('email', 'like', '%' . $search . '%')
-                        ->orWhere('phone', 'like', '%' . $search . '%');
-                });
+            $query->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('phone', 'like', '%' . $search . '%');
+            });
         });
     }
 }
