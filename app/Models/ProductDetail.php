@@ -18,6 +18,10 @@ class ProductDetail extends Model
         'discount',
     ];
 
+    public function attributeOptions()
+    {
+        return $this->belongsToMany(AttributeOption::class, 'attribute_option_product_detail', 'product_detail_id', 'attribute_option_id');
+    }
     public function orders()
     {
         return $this->belongsToMany(Order::class)

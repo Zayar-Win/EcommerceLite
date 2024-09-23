@@ -25,6 +25,7 @@ const emit = defineEmits(['close']);
 watch(
     () => props.show,
     () => {
+        console.log(props.show)
         if (props.show) {
             document.body.style.overflow = 'hidden';
         } else {

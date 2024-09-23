@@ -25,6 +25,14 @@ export default function getSideNavLinks()
             url:'/admin/products',
             allowedRoles: ['admin','super_admin','accounting']
         },
+        {
+            icon: 'fa-cogs',
+            path: route('admin.attributes.index'),
+            title: 'Attributes',
+            component: 'Admin/Attributes/Index',
+            url:'/admin/attributes',
+            allowedRoles: ['admin','super_admin','accounting']
+        }
         // {
         //     icon: 'fa-receipt',
         //     path: route('admin.transactions.index'),

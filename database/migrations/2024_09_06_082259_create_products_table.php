@@ -12,7 +12,8 @@ return new class extends Migration
             $table->id();
             // $table->foreignId('product_detail_id')->constrained()->onDelete('cascade');
             $table->unsignedBigInteger('product_detail_id')->nullable();;
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            // $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('category_id');
             $table->string('name')->unique();
             $table->string('price')->default('1000');
             $table->text('description')->nullable();

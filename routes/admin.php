@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductDetailController;
+use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\OrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
@@ -50,4 +51,6 @@ Route::prefix('/admin')
         // Route::resource('product-details', ProductDetailController::class)->except(['index']);
 
 
+        // Attribute
+        Route::resource('/attributes', AttributeController::class);
     });

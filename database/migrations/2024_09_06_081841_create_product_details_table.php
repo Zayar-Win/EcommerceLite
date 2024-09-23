@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->text('price');
             $table->unsignedBigInteger("product_id");
-            $table->foreignId('size_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('size_id');
             $table->integer('stock_quantity');
             $table->decimal('discount', 8, 2)->nullable();
             $table->timestamps();
