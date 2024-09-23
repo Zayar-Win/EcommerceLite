@@ -36,7 +36,7 @@ const dropdownItems = computed(() => {
     ];
 
 
-    if (user.value?.role?.name === 'admin') {
+    if (user.value?.role?.slug === 'admin') {
         items.unshift({
             text: 'Admin Dashboard',
             href: route('admin.dashboard'),

@@ -22,6 +22,7 @@ Route::prefix('/admin')
         })->name('orders.index');
 
         Route::get('/orders/{order}', [OrderController::class, 'orderDetail'])->name('orders.orderDetail');
+        Route::post('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
 
         Route::get('/subscribers', function () {
             return Inertia::render('Admin/Dashboard');

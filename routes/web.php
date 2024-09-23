@@ -191,7 +191,7 @@ Route::middleware('auth')->group(function () {
     })->name('settings.orders');
 
     Route::get('/settings/orders/{order}/detail', function (Order $order) {
-        $order = Order::where('id', $order->id)->with(['orderProductDetails', 'orderProductDetails.productDetail', 'orderProductDetails.productDetail.product.images', 'orderProductDetails.productDetail.attributeOptions', 'orderProductDetails.productDetail.attributeOptions.attribute'])->first();
+        $order = Order::where('id', $order->id)->with(['user', 'orderProductDetails', 'orderProductDetails.productDetail', 'orderProductDetails.productDetail.product.images', 'orderProductDetails.productDetail.attributeOptions', 'orderProductDetails.productDetail.attributeOptions.attribute'])->first();
         return Inertia::render('Private/Settings/OrderDetail', [
             'order' => $order
         ]);

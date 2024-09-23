@@ -65,7 +65,6 @@ class OrderController extends Controller
         }
 
         $screenShotUrl = $this->uploader->upload($validatedData['screenshot'], 'screenshot');
-
         $order = Order::create([
             'user_id' => $user->id,
             'payment_id' => $validatedData['payment_id'],

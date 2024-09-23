@@ -10,9 +10,26 @@ class OrderController extends Controller
 {
     public function orderDetail(Order $order)
     {
-        $order = Order::with('payment', 'orderProductDetails', 'orderProductDetails.productDetail', 'orderProductDetails.productDetail.product.images', 'orderProductDetails.productDetail.product.category')->where('id', $order->id)->with('orderProductDetails')->first();
+        $order = Order::with('user', 'payment', 'orderProductDetails', 'orderProductDetails.productDetail', 'orderProductDetails.productDetail.product.images', 'orderProductDetails.productDetail.product.category', 'orderProductDetails.productDetail.attributeOptions', 'orderProductDetails.productDetail.attributeOptions.attribute')->where('id', $order->id)->with('orderProductDetails')->first();
         return Inertia::render('Admin/Orders/OrderDetail', [
             'order' => $order
         ]);
+    }
+
+    public function update(Order $order)
+    {
+        if ($order->status == 'completed') {
+            return back()->with('success', 'Your order is already completed.');
+        }
+        $orderProductDetails = $order->orderProductDetails()->with('productDetail')->get();
+        $order->update([
+            'status' => 'completed'
+        ]);
+        foreach ($orderProductDetails as $orderProductDetail) {
+            $orderProductDetail->productDetail->update([
+                'stock_quantity' => $orderProductDetail->productDetail->stock_quantity - $orderProductDetail->quantity
+            ]);
+        }
+        return back()->with('success', 'Order update successful.');
     }
 }

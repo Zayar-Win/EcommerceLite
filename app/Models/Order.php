@@ -16,7 +16,7 @@ class Order extends Model
         'total_amount',
         'shipping_address',
         'notes',
-        'screenshort',
+        'screenshot',
         'shipping_recipient_name',
         'shipping_ph_number',
         'delivery_date',
