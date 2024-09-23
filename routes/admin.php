@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\PaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use App\Models\Order;
@@ -33,4 +34,6 @@ Route::prefix('/admin')
 
         // Attribute
         Route::resource('/attributes', AttributeController::class);
+
+        Route::resource('payments', PaymentController::class);
     });

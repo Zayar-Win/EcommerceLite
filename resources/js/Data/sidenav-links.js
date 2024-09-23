@@ -56,6 +56,13 @@ export default function getSideNavLinks()
             component: 'Admin/Orders/Index',
             url:'/admin/orders',
         },
+        {
+            icon: 'fa-credit-card',
+            path: route('admin.payments.index'),
+            title: 'Manage Payment',
+            component: 'Admin/Payments/Index',
+            url:'/admin/payments',
+        },
         // {
         //     icon: 'fa-star',
         //     path: route('admin.reviews.index'),

@@ -96,6 +96,12 @@
                             <h1 class="font-semibold text-lg">QR Code.</h1>
                             <img class="w-[300px] mx-auto h-auto" :src="payment?.qr_code" />
                         </div>
+                        <div v-if="payment?.description">
+                            <h1 class="font-semibold text-lg">Description</h1>
+                            <p class=" font-semibold text-black">{{payment?.description}}</p>
+
+                        </div>
+
                     </div>
                 </div>
                 <div class="flex items-center cursor-pointer gap-2">
