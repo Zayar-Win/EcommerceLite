@@ -12,6 +12,10 @@ defineProps({
         type: Array,
         default:()=> [],
     },
+    showPagination:{
+        type : Boolean,
+        default : true
+    }
 });
 </script>
 
@@ -25,12 +29,12 @@ defineProps({
 
         <!-- Pagination -->
         <div
-            v-if="paginateLinks?.length && dataCount > 0"
+            v-if="paginateLinks?.length && dataCount > 0 && showPagination"
             class="flex items-center justify-center py-5"
         >
             <Pagination :links="paginateLinks" />
         </div>
-        <div v-else>
+        <div v-if="!paginateLinks?.length && dataCount ==0">
             <NoTableDataCard />
         </div>
     </div>

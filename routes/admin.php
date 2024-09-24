@@ -8,6 +8,9 @@ use App\Http\Controllers\Admin\TicketController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\Ticket;
+use App\Models\User;
 use Inertia\Inertia;
 
 Route::prefix('/admin')
@@ -15,7 +18,20 @@ Route::prefix('/admin')
     ->group(function () {
 
         Route::get('dashboard', function () {
-            return Inertia::render('Admin/Dashboard');
+            $latestProducts = Product::with('images', 'category')->latest()->paginate(2);
+            $latestUsers = User::latest()->paginate(2);
+            $latestOrders = Order::with('user', 'payment')->latest()->paginate(2);
+            $latestTickets = Ticket::paginate(2);
+            return Inertia::render('Admin/Dashboard', [
+                'latestProducts' => $latestProducts,
+                'latestUsers' => $latestUsers,
+                'latestOrders' => $latestOrders,
+                'latestTickets' => $latestTickets,
+                'orderCount' => Order::count(),
+                'userCount' => User::count(),
+                'ticketCount' => Ticket::count(),
+                'totalAmount' => Order::sum('total_amount')
+            ]);
         })->name('dashboard');
         Route::get('/orders', function () {
             $orders = Order::with('payment')->latest()->paginate(10);

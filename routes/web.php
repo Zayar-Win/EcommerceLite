@@ -100,7 +100,9 @@ Route::get('/celebrate', function () {
 Route::post('/orders', [OrderController::class, 'store'])->name('order.create');
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return Inertia::render('Dashboard', [
+        // 'latestProducts' => $latestProducts
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
