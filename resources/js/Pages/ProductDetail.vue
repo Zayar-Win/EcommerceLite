@@ -246,6 +246,7 @@ export default {
             let item = {
                 product : {
                     ...this.product,
+                    product_details : [],
                     product_detail : this.productDetail,
                     quantity : this.quantity
                 }
@@ -263,7 +264,6 @@ export default {
             if(paramKey){
                 params[paramKey] = value
             }
-            console.log(params)
             this.params = params;
             this.$inertia.get(route('product-detail',{product : this.product,...this.params}))
         }

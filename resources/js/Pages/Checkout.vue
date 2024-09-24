@@ -3,7 +3,9 @@
         <div class="basis-[60%]">
             <h1 class="font-bold text-2xl ">Billing Details</h1>
             <div class="mt-6 border-[1px] border-black/10  px-6 pt-8 pb-8">
-                <form class="grid md:grid-cols-2 gap-4" @submit.prevent="create('Order',route('order.create'),onSuccessHandler)">
+                <form class="grid md:grid-cols-2 gap-4" @submit.prevent="() => {
+                    create('Order',route('order.create'),onSuccessHandler)
+                }">
                     <Input class="md:col-span-2" label="Name" v-model="form.name"  :errorMessage="errors.name" placeHolder="Enter your name" />
                     <Input label="Phone" placeHolder="Enter your mobile phone number" v-model="form.phone" :errorMessage="errors?.phone" />
                     <Input label="Email" placeHolder="Enter your email address" type="email" v-model="form.email" :errorMessage="errors?.email" />
