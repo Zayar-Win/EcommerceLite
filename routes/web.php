@@ -6,6 +6,7 @@ use App\Http\Middleware\CelebrateMiddleware;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -114,6 +115,29 @@ Route::get('/login', function () {
 Route::get('/register', function () {
     return Inertia::render('Register');
 })->name('show-register');
+
+
+Route::get('/support-ticket', function () {
+    return Inertia::render('SupportTicket');
+});
+Route::post('/support-ticket', function () {
+    $validatedData = request()->validate([
+        'name'  => ['required', 'min:3'],
+        'email'  => ['required', 'email'],
+        'phone' => ['required', 'min:6'],
+        'description' =>  ['required', 'min:10']
+    ]);
+
+    Ticket::create([
+        'name' => $validatedData['name'],
+        'email' => $validatedData['email'],
+        'status' => 'pending',
+        'phone' => $validatedData['phone'],
+        'message' => $validatedData['description']
+    ]);
+
+    return redirect(route('home'))->with('success', 'Ticket create successful.');
+})->name('ticket.store');
 
 Route::post('/register', function () {
     $validatedData = request()->validate([

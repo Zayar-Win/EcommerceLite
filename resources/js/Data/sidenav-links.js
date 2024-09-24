@@ -70,6 +70,13 @@ export default function getSideNavLinks()
             component: 'Admin/Categories/Index',
             url:'/admin/categories',
         },
+        {
+            icon: 'fa-ticket',
+            path: route('admin.tickets.index'),
+            title: 'Manage Tickets',
+            component: 'Admin/Tickets/Index',
+            url:'/admin/tickets',
+        },
         // {
         //     icon: 'fa-star',
         //     path: route('admin.reviews.index'),
