@@ -14,12 +14,11 @@ class Ticket extends Model
         'email',
         'message',
         'status',
-        'ph_number'
+        'phone'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
 }
