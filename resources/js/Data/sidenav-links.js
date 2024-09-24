@@ -63,6 +63,13 @@ export default function getSideNavLinks()
             component: 'Admin/Payments/Index',
             url:'/admin/payments',
         },
+        {
+            icon: 'fa-list',
+            path: route('admin.categories.index'),
+            title: 'Manage Category',
+            component: 'Admin/Categories/Index',
+            url:'/admin/categories',
+        },
         // {
         //     icon: 'fa-star',
         //     path: route('admin.reviews.index'),

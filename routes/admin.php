@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AttributeController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PaymentController;
 use Illuminate\Support\Facades\Route;
@@ -36,4 +37,6 @@ Route::prefix('/admin')
         Route::resource('/attributes', AttributeController::class);
 
         Route::resource('payments', PaymentController::class);
+
+        Route::resource('categories', CategoryController::class);
     });
