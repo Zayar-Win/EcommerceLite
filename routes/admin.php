@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\SubscriberController;
 use App\Http\Controllers\Admin\TicketController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
@@ -58,4 +59,5 @@ Route::prefix('/admin')
         Route::resource('categories', CategoryController::class);
 
         Route::resource('tickets', TicketController::class);
+        Route::resource('subscribers', SubscriberController::class);
     });

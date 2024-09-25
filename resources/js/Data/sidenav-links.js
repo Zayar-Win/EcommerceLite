@@ -77,6 +77,13 @@ export default function getSideNavLinks()
             component: 'Admin/Tickets/Index',
             url:'/admin/tickets',
         },
+        {
+            icon: 'fa-bell',
+            path: route('admin.subscribers.index'),
+            title: 'Manage Subscribers',
+            component: 'Admin/Subscribers/Index',
+            url:'/admin/subscribers',
+        },
         // {
         //     icon: 'fa-star',
         //     path: route('admin.reviews.index'),

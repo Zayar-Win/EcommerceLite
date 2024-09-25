@@ -34,7 +34,7 @@ defineProps({
         >
             <Pagination :links="paginateLinks" />
         </div>
-        <div v-if="!paginateLinks?.length && dataCount ==0">
+        <div v-if=" dataCount == 0">
             <NoTableDataCard />
         </div>
     </div>
