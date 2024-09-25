@@ -3,6 +3,7 @@
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\CelebrateMiddleware;
+use App\Models\Category;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
@@ -11,12 +12,11 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Unique;
 use Inertia\Inertia;
 
 Route::get('/', function () {
     $products = Product::with(['images', 'category'])->filter(request()->all())->paginate(20);
-
+    $categories = Category::all();
 
     if (request()->expectsJson()) {
         return response()->json([
@@ -25,6 +25,7 @@ Route::get('/', function () {
     }
     return Inertia::render('Home', [
         'productsData' => $products,
+        'categories' => $categories,
         'filters' => [
             'search' => request('search'),
             'category' => request('category')

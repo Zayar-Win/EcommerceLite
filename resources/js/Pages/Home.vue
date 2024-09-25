@@ -13,11 +13,18 @@
                 <div>
                     <p class="text mt-8 mb-3 font-bold">Product By Category</p>
                     <div>
-                        <div v-for="(c,i) in categories" :key="c.categroy" @click="category = c.category" class="flex items-center cursor-pointer gap-2 py-3 px-2  border-t-[1px] border-t-black/10" 
+                        <div   @click="category ='all'" class="flex  items-center cursor-pointer gap-2 py-3 px-2  border-t-[1px] border-t-black/10" 
+                        >
+                            <!-- <component :is="c.icon" class='w-[20px] h-[20px] text-primary' /> -->
+                            <p class="text-sm hover:text-primary transition-all">All</p>
+                        </div>
+                        <div v-for="(c,i) in categories" :key="c.name" @click="category = c.name" class="flex items-center cursor-pointer gap-2 py-3 px-2  border-t-[1px] border-t-black/10" 
                         :class="[i == categories.length -1 ? 'border-b-[1px] border-b-black/10' : '']"
                         >
-                            <component :is="c.icon" class='w-[20px] h-[20px] text-primary' />
-                            <p class="text-sm hover:text-primary transition-all">{{c.category}}</p>
+                            <!-- <component :is="c.icon" class='w-[20px] h-[20px] text-primary' /> -->
+                            <p :class="[c.name == category ? 'text-primary font-medium' : 
+                                ''
+                            ]" class="text-sm hover:text-primary transition-all">{{c.name}}</p>
                         </div>
                     </div>
                 </div>
@@ -78,6 +85,9 @@ export default {
         },
         filters : {
             type : Object
+        },
+        categories : {
+            type : Object
         }
     },
     data(){
@@ -89,35 +99,35 @@ export default {
             lastPage :this.productsData?.last_page,
             isLoading : false,
             observer : null,
-            categories : [
-                {
-                    icon : Cloth,
-                    category :  'Clothes'
-                },
-                {
-                    icon : Cosmetic,
-                    category :  'Cosmetic'
-                },
-                {
-                    icon : Electronic,
-                    category :  'Electronic'
-                },
-                {
-                    icon : Pot,
-                    category :  'Food'
-                },
-                {
-                    icon : Hammer,
-                    category : "Home Accessories"
-                }
-            ]
+            // categories : [
+            //     {
+            //         icon : Cloth,
+            //         category :  'Clothes'
+            //     },
+            //     {
+            //         icon : Cosmetic,
+            //         category :  'Cosmetic'
+            //     },
+            //     {
+            //         icon : Electronic,
+            //         category :  'Electronic'
+            //     },
+            //     {
+            //         icon : Pot,
+            //         category :  'Food'
+            //     },
+            //     {
+            //         icon : Hammer,
+            //         category : "Home Accessories"
+            //     }
+            // ]
         }
     },
     computed:{
         dynamicParams(){
             let params = {}
             if(this.search) params.search = this.search;
-            if(this.category) params.category = this.category;
+            if(this.category !== 'all') params.category = this.category;
             return params
         }   
     },  
