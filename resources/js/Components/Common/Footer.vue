@@ -1,80 +1,28 @@
-<template lang="">
-    <div class="bg-secondary xl:px-32 sm:px-5 px-2 grid gap-y-10 xl:grid-cols-5 md:grid-cols-3 py-20 text-white">
+<template>
+    <div class="bg-secondary xl:px-32 sm:px-5 px-2 grid gap-y-10 xl:grid-cols-5 gap-4 md:grid-cols-3 py-20 text-white">
         <div>
             <h1 class="text-lg font-bold">Menu</h1>
             <ul class="mt-6 gap-2 font-semibold flex flex-col">
                 <li>
                     <Link href="/">Home</Link>
                 </li>
-                <li>
-                    <Link href="/">About</Link>
-                </li>
-                <li>
-                    <Link href="/">Product</Link>
-                </li>
-                <li>
-                    <Link href="/">Contact</Link>
+                <li v-for="category in categories" :key="category.id">
+                    <Link :href="route('home',{category : category.name})">{{category.name}}</Link>
                 </li>
             </ul>
         </div>
         <div class="col-span-2">
             <h1 class="text-lg font-bold">Popular Products</h1>
             <div class="mt-6 grid md:grid-cols-2 gap-4">
-                <div class="flex gap-4 items-center">
-                    <div class="w-[80px] h-[80px] rounded-md overflow-hidden">
-                        <img class="w-full h-full object-cover" src="https://cdn.prod.website-files.com/62f51a90d298e6f454bbffca/62f677ae1f141b61a0ece159_image-3-footer-best-product-shopwave-template.webp" />
+                <div v-for="product in popularProducts" :key="product.id" class="flex gap-4 items-center">
+                    <div class="w-[80px] h-[80px] shrink-0 rounded-md overflow-hidden">
+                        <img class="w-full h-full object-cover" :src="product?.images[0].url" />
                     </div>
                     <div>
-                        <h1 class="font-bold">Product 1</h1>
-                        <p class="font-semibold">$19.99</p>
+                        <h1 class="font-bold">{{product?.name}}</h1>
+                        <p v-if="product?.price" class=" text-sm text-primary font-semibold">{{Math.floor(product?.price - (((product?.discount ?? 0) / 100) * product?.price))}} MMK</p>
                     </div>
                 </div>
-                <div class="flex gap-4 items-center">
-                    <div class="w-[80px] h-[80px] rounded-md overflow-hidden">
-                        <img class="w-full h-full object-cover" src="https://cdn.prod.website-files.com/62f51a90d298e6f454bbffca/62f677ae1f141b61a0ece159_image-3-footer-best-product-shopwave-template.webp" />
-                    </div>
-                    <div>
-                        <h1 class="font-bold">Product 1</h1>
-                        <p class="font-semibold">$19.99</p>
-                    </div>
-                </div>
-                <div class="flex gap-4 items-center">
-                    <div class="w-[80px] h-[80px] rounded-md overflow-hidden">
-                        <img class="w-full h-full object-cover" src="https://cdn.prod.website-files.com/62f51a90d298e6f454bbffca/62f677ae1f141b61a0ece159_image-3-footer-best-product-shopwave-template.webp" />
-                    </div>
-                    <div>
-                        <h1 class="font-bold">Product 1</h1>
-                        <p class="font-semibold">$19.99</p>
-                    </div>
-                </div>
-                <div class="flex gap-4 items-center">
-                    <div class="w-[80px] h-[80px] rounded-md overflow-hidden">
-                        <img class="w-full h-full object-cover" src="https://cdn.prod.website-files.com/62f51a90d298e6f454bbffca/62f677ae1f141b61a0ece159_image-3-footer-best-product-shopwave-template.webp" />
-                    </div>
-                    <div>
-                        <h1 class="font-bold">Product 1</h1>
-                        <p class="font-semibold">$19.99</p>
-                    </div>
-                </div>
-                <div class="flex gap-4 items-center">
-                    <div class="w-[80px] h-[80px] rounded-md overflow-hidden">
-                        <img class="w-full h-full object-cover" src="https://cdn.prod.website-files.com/62f51a90d298e6f454bbffca/62f677ae1f141b61a0ece159_image-3-footer-best-product-shopwave-template.webp" />
-                    </div>
-                    <div>
-                        <h1 class="font-bold">Product 1</h1>
-                        <p class="font-semibold">$19.99</p>
-                    </div>
-                </div>
-                <div class="flex gap-4 items-center">
-                    <div class="w-[80px] h-[80px] rounded-md overflow-hidden">
-                        <img class="w-full h-full object-cover" src="https://cdn.prod.website-files.com/62f51a90d298e6f454bbffca/62f677ae1f141b61a0ece159_image-3-footer-best-product-shopwave-template.webp" />
-                    </div>
-                    <div>
-                        <h1 class="font-bold">Product 1</h1>
-                        <p class="font-semibold">$19.99</p>
-                    </div>
-                </div>
-                
             </div>
         </div>
         <div class="xl:col-span-2 md:col-span-3">
@@ -90,11 +38,17 @@
     </div>
 </template>
 <script>
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 
 export default {
     components:{
         Link
+    },
+    data(){
+        return {
+            popularProducts : usePage().props?.popularProducts,
+            categories : usePage().props.categories
+        }
     }
 }
 </script>
