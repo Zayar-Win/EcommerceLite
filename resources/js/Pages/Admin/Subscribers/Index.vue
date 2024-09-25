@@ -3,7 +3,7 @@
         <div class="flex flex-col sm:flex-row items-center justify-between">
             <!-- Breadcrumb -->
             <Breadcrumb
-                icon="fa-list"
+                icon="fa-bell"
                 label="Subscribers"
                 :href="route('admin.subscribers.index')"
             >
