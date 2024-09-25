@@ -60,6 +60,7 @@
     import 'swiper/css/free-mode';
     import 'swiper/css/navigation';
     import 'swiper/css/thumbs';
+
     import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
     import Modal from './Modal.vue';
     export default {

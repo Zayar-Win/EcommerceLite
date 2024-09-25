@@ -2,7 +2,7 @@
     <ImageSliderModal :open="open" @close="open = false" :images="images" />
     <SectionContainer>
         <div class="mt-10 flex md:flex-row flex-col xl:gap-10 gap-5">
-            <div class="lg:basis-[65%] md:basis-[60%]">
+            <div class="lg:basis-[65%] md:basis-[60%] overflow-hidden">
                 <div class="flex lg:flex-row flex-col-reverse gap-5">
                     <div class="basis-[10%] flex lg:flex-col flex-row gap-4">
                         <div @click="open = true" v-for="image in images" :key="image" class="w-full h-auto rounded-lg overflow-hidden group cursor-pointer">
@@ -66,9 +66,29 @@
                 </div>
                 <div class="md:mt-0 mt-10">
                     <h1 class="text-2xl font-semibold">Latest Products</h1>
-                    <div class="grid lg:grid-cols-3 mb-10 mt-7 gap-3">
+                        <div class="w-full mt-5">
+                            <swiper
+                                :slidesPerView="3"
+                                :spaceBetween="10"
+                                class="mySwiper"
+                                :autoplay="{
+                                    delay:1500,
+                                    disableOnInteraction: false,
+                                }"
+                                :modules="[Autoplay]"
+                                style="padding:30px 0px"
+                            >
+                                <swiper-slide
+                                v-for="product in latestProducts"
+                                :key="product.id"
+                                >
+                                    <ProductCard :product="product" />
+                                </swiper-slide>
+                            </swiper>
+                        </div>
+                    <!-- <div class="grid lg:grid-cols-3 mb-10 mt-7 gap-3">
                         <ProductCard v-for="product in latestProducts" :product="product" :key="product?.id"/>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="w-full h-[1px] bg-black/10 my-16"></div>
                 <div>
@@ -197,13 +217,21 @@ import ProductCard from '@/Components/Common/ProductCard.vue';
 import SectionContainer from '@/Components/Common/SectionContainer.vue';
 import ImageSliderModal from '@/Components/ImageSliderModal.vue';
 import { mapMutations } from 'vuex';
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/free-mode';
+import 'swiper/css/navigation';
+import 'swiper/css/thumbs';
 
 export default {
     components:{
         SectionContainer,
         ProductCard,
         RelatedProductCard,
-        ImageSliderModal
+        ImageSliderModal,
+        Swiper,
+        SwiperSlide
     },
     props:{
         product : {
@@ -237,7 +265,8 @@ export default {
             open:false,
             selectedSize : this.sizes[0],
             quantity : this.totalStock ? 1 : 0,
-            params : this.filters
+            params : this.filters,
+            Autoplay : Autoplay
         }
     },
     methods:{
