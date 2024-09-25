@@ -14,15 +14,17 @@
         <div class="col-span-2">
             <h1 class="text-lg font-bold">Popular Products</h1>
             <div class="mt-6 grid md:grid-cols-2 gap-4">
-                <div v-for="product in popularProducts" :key="product.id" class="flex gap-4 items-center">
-                    <div class="w-[80px] h-[80px] shrink-0 rounded-md overflow-hidden">
-                        <img class="w-full h-full object-cover" :src="product?.images[0].url" />
+                <Link v-for="product in popularProducts" :key="product.id" :href="route('product-detail',{product : product?.slug})">
+                    <div  class="flex gap-4 items-center">
+                        <div class="w-[80px] h-[80px] shrink-0 rounded-md overflow-hidden">
+                            <img class="w-full h-full object-cover" :src="product?.images[0].url" />
+                        </div>
+                        <div>
+                            <h1 class="font-bold">{{product?.name}}</h1>
+                            <p v-if="product?.price" class=" text-sm text-primary font-semibold">{{Math.floor(product?.price - (((product?.discount ?? 0) / 100) * product?.price))}} MMK</p>
+                        </div>
                     </div>
-                    <div>
-                        <h1 class="font-bold">{{product?.name}}</h1>
-                        <p v-if="product?.price" class=" text-sm text-primary font-semibold">{{Math.floor(product?.price - (((product?.discount ?? 0) / 100) * product?.price))}} MMK</p>
-                    </div>
-                </div>
+                </Link>
             </div>
         </div>
         <div class="xl:col-span-2 md:col-span-3">
