@@ -20,7 +20,7 @@
                     <div class="inline-block px-3 py-1 bg-primary rounded-full text-white font-semibold text-sm">Hot</div>
                     <h1 class="text-2xl mt-3 font-medium">{{product?.name}}</h1>
                     <a href="#description" class="mt-2 text-[16px] mb-5 line-clamp-3 text-black/70 font-medium">{{ product?.description }}</a>
-                    <p  v-if="productDetail?.discount && productDetail?.discount > 0"class="text-lg font-medium line-through text-black/60">{{ productDetail?.price ?? '1000' }} MMK</p>
+                    <p  v-if="productDetail?.discount && productDetail?.discount > 0"class="text-lg font-medium line-through text-black/60">{{ productDetail?.price + ' MMK' ?? 'Out of Stock' }} </p>
                     <div class="flex items-end mt-1 gap-2">
                         <p v-if="productDetail?.price" class="font-bold text-2xl">{{Math.floor(productDetail?.price - (((productDetail?.discount ?? 0) / 100) * productDetail?.price))}} MMK</p>
                         <p v-else class="font-bold text-2xl">No product Yet</p>
@@ -147,7 +147,7 @@
                     <div class="inline-block px-3 py-1 bg-primary rounded-full text-white font-semibold text-sm">Hot</div>
                     <h1 class="text-2xl mt-3 font-medium">{{product?.name}} </h1>
                     <a href="#description" class="mt-2 text-[16px] mb-5 text-black/70 line-clamp-3 font-medium">{{product?.description}}</a>
-                    <p v-if="productDetail?.discount && productDetail?.discount > 0" class="text-lg font-medium line-through text-black/60">{{ productDetail?.price ?? '1000' }} MMK</p>
+                    <p v-if="productDetail?.discount && productDetail?.discount > 0" class="text-lg font-medium line-through text-black/60">{{ productDetail?.price + ' MMK' ?? 'Not Product Yet' }} </p>
                     <div class="flex items-end mt-1 gap-2">
                         <p v-if="productDetail?.price" class="font-bold text-2xl">{{Math.floor(productDetail?.price - (((productDetail?.discount ?? 0) / 100) * productDetail?.price))}} MMK</p>
                         <p v-else class="font-bold text-2xl">No product Yet</p>

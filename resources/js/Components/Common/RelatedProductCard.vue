@@ -1,5 +1,5 @@
 <template>
-    <Link :href="route('products.detail',{product : product.slug})">
+    <Link :href="route('product-detail',{product : product.slug})">
         <div class="flex items-center gap-5 group cursor-pointer">
             <div class="basis-[30%] h-auto rounded-xl overflow-hidden">
                 <img class="w-full h-full group-hover:scale-[1.1] transition-all duration-200 object-cover" :src="product?.images[0].url" />
