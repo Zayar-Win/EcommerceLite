@@ -16,7 +16,10 @@
                                 <p class="text-lg font-semibold">{{item?.product?.name}}</p>
                             <p class="text-black/60">{{Math.floor(item?.product?.product_detail?.price - (((item?.product?.product_detail?.discount ?? 0) / 100) * item?.product?.product_detail?.price))}} MMK</p>
                                 <!-- <p class="text-black/60">color : Gray</p> -->
-                                <p @click="deleteItemFromCart(index)" class="mt-3 text-lg cursor-pointer font-medium underline text-primary">Remove</p>
+                                 <div class="text-red-500 flex items-center mt-3 border-b-[1px] border-red-500 gap-2 w-max">
+                                     <p @click="deleteItemFromCart(index)" class=" text-lg cursor-pointer font-medium leading-[1] text-red-500">Remove</p>
+                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M5 21V6H4V4h5V3h6v1h5v2h-1v15zm2-2h10V6H7zm2-2h2V8H9zm4 0h2V8h-2zM7 6v13z"/></svg>
+                                 </div>
                             </div>
                         </div>
                         <div class="shrink-0 md:basis-[20%] basis-[30%]">
