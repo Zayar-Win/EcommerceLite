@@ -25,7 +25,7 @@
                     </div>
                     <Input class="md:col-span-2" label="Shipping Address" placeHolder="Enter your shipping address" v-model="form.shippingAddress" :errorMessage="errors?.shippingAddress"  />
                     <!-- <Input class="md:col-span-2" label="Account UserName" placeHolder="Username"  /> -->
-                    <Input class="md:col-span-2" label="Create Account Password" placeHolder="Password" type="password" v-model="form.password" :errorMessage="errors?.password" />
+                    <Input v-if="!user" class="md:col-span-2" label="Create Account Password" placeHolder="Password" type="password" v-model="form.password" :errorMessage="errors?.password" />
                     <Input label="Viber" placeHolder="Enter your viber Phone no or name" v-model="form.viber" />
                     <Input label="Telegram" placeHolder="Enter your telegram Phone no or name" v-model="form.telegram" />
                     <Input class="md:col-span-2" label="Fb Profile link" v-model="form.fb_profile_link" placeHolder="Paste your Fackbook Profile link" />
@@ -101,7 +101,6 @@
                         <div v-if="payment?.description">
                             <h1 class="font-semibold text-lg">Description</h1>
                             <p class=" font-semibold text-black">{{payment?.description}}</p>
-
                         </div>
 
                     </div>
@@ -119,7 +118,7 @@ import Input from '@/Components/Common/Input.vue';
 import { mapGetters, mapMutations } from 'vuex';
 import myanmarCity from '@bilions/myanmar-cities'
 import * as yup from 'yup'
-import { router } from '@inertiajs/vue3';
+import { router, usePage } from '@inertiajs/vue3';
 import { useCRUDOperations } from '@/Composables/useCRUDOperations';
 import ValidationError from '@/Components/Atoms/ValidationError.vue';
 import FilePond from '@/Components/Atoms/FilePond.vue';
@@ -159,13 +158,14 @@ export default {
         }
     },
     setup(){ 
+        let user = usePage().props?.auth?.user;
         const schema = yup.object({
             name : yup.string().required().min(2),
             phone : yup.string().required(),
             email : yup.string().email().required('Email is required').matches(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/, 'Please enter correct email.'),
             town : yup.string().required(),
             shippingAddress : yup.string().required(),
-            password : yup.string().required().min('6'),
+            password : user ? yup.mixed().nullable() : yup.string().required().min('6'),
             screenshot : yup.mixed()
                             .required("File is required")
                             .test(
@@ -176,15 +176,15 @@ export default {
         });
 
         const {form,errors,create} = useCRUDOperations({
-            name : '',
-            phone : '',
-            email : '',
-            town : '',
-            shippingAddress : '',
+            name :user?.name ?? '',
+            phone :user?.phone ?? '',
+            email :user?.email ?? '',
+            town :user?.town ?? '',
+            shippingAddress :user?.address ?? '',
             password : '',
-            viber : '',
-            telegram : '',
-            fb_profile_link : '',
+            viber : user?.viber ?? '',
+            telegram :user?.telegram ?? '',
+            fb_profile_link : user?.fb_profile_link ?? '',
             notes : '',
             screenshot : null,
             orderItems : [],
@@ -195,7 +195,8 @@ export default {
         return {
             errors,
             form,
-            create
+            create,
+            user
         }
 
     },

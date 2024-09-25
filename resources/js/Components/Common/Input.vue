@@ -1,7 +1,7 @@
 <template lang="">
     <div class="flex flex-col">
         <label class="font-semibold text-sm">{{label}}</label>
-        <input @input="handleInput" class="outline-none focus:ring-0 border-[1px] border-black/10 py-4 rounded-lg focus:border-primary transition-all mt-2" :type='type' :placeholder="placeHolder" />
+        <input @input="handleInput" :value="modelValue" class="outline-none focus:ring-0 border-[1px] border-black/10 py-4 rounded-lg focus:border-primary transition-all mt-2" :type='type' :placeholder="placeHolder" />
         <ValidationError :message="errorMessage" />
     </div>
 </template>

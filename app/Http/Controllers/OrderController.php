@@ -26,7 +26,7 @@ class OrderController extends Controller
             'email' => ['required', 'email'],
             'town' => ['required'],
             'shippingAddress' => ['required'],
-            'password' => ['required', 'min:6'],
+            'password' => [auth()->check() ? 'nullable' : 'required', 'min:6'],
             'viber' => ['nullable'],
             'telegram' => ['nullable'],
             'fb_profile_link' => ['nullable'],
@@ -39,30 +39,33 @@ class OrderController extends Controller
 
         $user = User::where('email', $validatedData['email'])->first();
 
-        if ($user) {
-            $isPasswordCorrect = Hash::check($validatedData['password'], $user->password);
-            if (!$isPasswordCorrect) {
-                return back()->withErrors([
-                    'password' => 'Your password is incorrect'
-                ]);
+        if (!auth()->check()) {
+            if ($user) {
+                $isPasswordCorrect = Hash::check($validatedData['password'], $user->password);
+                if (!$isPasswordCorrect) {
+                    return back()->withErrors([
+                        'password' => 'Your password is incorrect'
+                    ]);
+                } else {
+                    Auth::login($user);
+                }
             } else {
+                $hashedPassword = Hash::make($validatedData['password']);
+                $user = User::create([
+                    'name' => $validatedData['name'],
+                    'email' => $validatedData['email'],
+                    'role_id' => 3,
+                    'phone' => $validatedData['phone'],
+                    'telegram' => $validatedData['telegram'],
+                    'viber' => $validatedData['viber'],
+                    'fb_profile_link' => $validatedData['fb_profile_link'],
+                    'address' => $validatedData['shippingAddress'],
+                    'password' => $hashedPassword
+                ]);
                 Auth::login($user);
             }
-        } else {
-            $hashedPassword = Hash::make($validatedData['password']);
-            $user = User::create([
-                'name' => $validatedData['name'],
-                'email' => $validatedData['email'],
-                'role_id' => 3,
-                'phone' => $validatedData['phone'],
-                'telegram' => $validatedData['telegram'],
-                'viber' => $validatedData['viber'],
-                'fb_profile_link' => $validatedData['fb_profile_link'],
-                'address' => $validatedData['shippingAddress'],
-                'password' => $hashedPassword
-            ]);
-            Auth::login($user);
         }
+
 
         $screenShotUrl = $this->uploader->upload($validatedData['screenshot'], 'screenshot');
         $order = Order::create([
