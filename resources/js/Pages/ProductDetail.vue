@@ -19,7 +19,7 @@
                 <div class="border-[1px] md:hidden block border-black/10 rounded-xl py-6 px-6">
                     <div class="inline-block px-3 py-1 bg-primary rounded-full text-white font-semibold text-sm">Hot</div>
                     <h1 class="text-2xl mt-3 font-medium">{{product?.name}}</h1>
-                    <p class="mt-2 text-[16px] mb-5 text-black/70 font-medium">{{ product?.description }}</p>
+                    <a href="#description" class="mt-2 text-[16px] mb-5 line-clamp-3 text-black/70 font-medium">{{ product?.description }}</a>
                     <p  v-if="productDetail?.discount && productDetail?.discount > 0"class="text-lg font-medium line-through text-black/60">{{ productDetail?.price ?? '1000' }} MMK</p>
                     <div class="flex items-end mt-1 gap-2">
                         <p v-if="productDetail?.price" class="font-bold text-2xl">{{Math.floor(productDetail?.price - (((productDetail?.discount ?? 0) / 100) * productDetail?.price))}} MMK</p>
@@ -73,7 +73,7 @@
                 <div class="w-full h-[1px] bg-black/10 my-16"></div>
                 <div>
                     <h1 class="text-2xl font-semibold">Product information</h1>
-                    <div class="mt-4">
+                    <div class="mt-4" id="description">
                         <p class="text-lg text-black/50">
                         {{ product?.description }}
                         </p>
@@ -123,7 +123,7 @@
                 <div class="border-[1px] md:block hidden border-black/10 rounded-xl py-6 px-6">
                     <div class="inline-block px-3 py-1 bg-primary rounded-full text-white font-semibold text-sm">Hot</div>
                     <h1 class="text-2xl mt-3 font-medium">{{product?.name}} </h1>
-                    <p class="mt-2 text-[16px] mb-5 text-black/70 line-clamp-3 font-medium">{{product?.description}}</p>
+                    <a href="#description" class="mt-2 text-[16px] mb-5 text-black/70 line-clamp-3 font-medium">{{product?.description}}</a>
                     <p v-if="productDetail?.discount && productDetail?.discount > 0" class="text-lg font-medium line-through text-black/60">{{ productDetail?.price ?? '1000' }} MMK</p>
                     <div class="flex items-end mt-1 gap-2">
                         <p v-if="productDetail?.price" class="font-bold text-2xl">{{Math.floor(productDetail?.price - (((productDetail?.discount ?? 0) / 100) * productDetail?.price))}} MMK</p>
