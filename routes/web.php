@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\Subscriber;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -32,6 +33,23 @@ Route::get('/', function () {
         ]
     ]);
 })->name('home');
+
+Route::post('/subscribers', function () {
+    $validatedData  = request()->validate([
+        'email' => ['required', 'email']
+    ]);
+
+    $isAlreadySubscribe = Subscriber::where('email', $validatedData['email'])->exists();
+
+    if ($isAlreadySubscribe) {
+        return back()->with('warning', 'Your email is already subscribed.');
+    } else {
+        Subscriber::create([
+            'email' => $validatedData['email']
+        ]);
+        return back()->with('success', 'Subscribed successful.');
+    }
+})->name('subscribe');
 
 Route::get('/products/{product:slug}', function (Product $product) {
     $product = Product::with(['images', 'category', 'productDetails', 'productDetails.attributeOptions.attribute', 'productDetails.size'])->find($product->id);

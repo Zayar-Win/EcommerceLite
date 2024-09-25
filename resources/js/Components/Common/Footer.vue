@@ -32,24 +32,47 @@
                 <h1 class="text-lg font-extrabold mb-2">Get 10% OFF of your first purchase
                 </h1>
                 <div class="xl:w-full md:w-[50%] w-full h-[55px] bg-white rounded-full">
-                    <input class="w-full h-full text-black text-sm pl-6 bg-transparent border-none outline-none focus:ring-0 " placeholder="Enter your email address" />
+                    <input v-model="form.email" class="w-full h-full text-black text-sm pl-6 bg-transparent border-none outline-none focus:ring-0 " placeholder="Enter your email address" />
                 </div>
-                <button class="xl:w-full md:w-[50%] w-full h-full bg-primary rounded-full py-4 font-bold mt-3">Subscribe</button>
+                <ValidationError :message="errors.email" />
+                <button @click="subscribe" class="xl:w-full md:w-[50%] w-full h-full bg-primary rounded-full py-4 font-bold mt-3">Subscribe</button>
             </div>
         </div>
     </div>
 </template>
 <script>
-import { Link, usePage } from '@inertiajs/vue3';
+import { Link, router, usePage } from '@inertiajs/vue3';
+import * as yup from 'yup'
+import ValidationError from '../Atoms/ValidationError.vue';
+import { useCRUDOperations } from '@/Composables/useCRUDOperations';
 
 export default {
     components:{
-        Link
+        Link,
+        ValidationError
     },
     data(){
         return {
             popularProducts : usePage().props?.popularProducts,
-            categories : usePage().props.categories
+            categories : usePage().props.categories,
+        }
+    },
+    setup(){
+        let subscribeSchema = yup.object({
+            'email' : yup.string().required().email()
+        });
+        const {create,errors,form,resetForm} = useCRUDOperations({
+            email : ''
+        },subscribeSchema,true)
+        return {
+            create,errors,form,resetForm
+        }
+    },
+    methods : {
+        subscribe(){
+            this.create('Subscriber',route('subscribe'),function(){
+                this.resetForm()
+            }.bind(this))
         }
     }
 }

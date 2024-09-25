@@ -15,7 +15,7 @@ export function useCRUDOperations(initialFormFields = {}, validationSchema = {},
     };
 
     // Initialize Form and Fields For Frontend Validation
-    const { handleSubmit, errors:frontendErrors } = useForm({
+    const { handleSubmit, errors:frontendErrors,resetForm } = useForm({
         validationSchema: validationSchema ?? undefined,
         initialValues: initialFormFields,
     });
@@ -145,6 +145,7 @@ export function useCRUDOperations(initialFormFields = {}, validationSchema = {},
         edit,
         destroy,
         restore,
-        isFormValid
+        isFormValid,
+        resetForm
     };
 }
