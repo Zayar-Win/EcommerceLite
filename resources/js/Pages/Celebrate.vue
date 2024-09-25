@@ -6,15 +6,45 @@
             </div>
             <h1 class="text-2xl mt-5 font-bold">Thanks For Your Order 🤩</h1>
             <p class="w-[70%] text-center mt-4">We will check your order and later we will contact you about that your order is confirmed or not.</p>
-            <button @click="$inertia.get(route('home'))" class="text-white bg-primary rounded-full py-4 px-8  font-bold mt-6">Continue Shopping</button>
+            <div class="flex items-center gap-4">
+                <button @click="$inertia.get(route('home'))" class="text-white bg-primary rounded-full py-4 px-8  font-bold mt-6">Continue Shopping</button>
+                <button
+                    data-cy="go-to-settings-btn"
+                    type="button"
+                    @click="goToOrders"
+                    class="text-white bg-primary rounded-full py-4 px-8  font-bold mt-6"
+                >
+                    Go To Orders ( {{ countdown }} )
+                    <i class="fa-solid fa-arrow-right ml-1.5"></i>
+                </button>
+            </div>
         </div>
     </div>
 </template>
 <script>
 import confetti from 'canvas-confetti';
-
+import { router } from '@inertiajs/vue3';
 export default {
+    data(){
+        return {
+            countdown : 10,
+            countdownInterval : null
+        }
+    },
     methods: {
+        startCountdown(){
+            this.countdownInterval = setInterval(() => {
+                if (this.countdown > 0) {
+                    this.countdown -= 1;
+                } else {
+                    this.goToOrders();
+                }
+            }, 1000);
+        },
+        goToOrders(){
+            clearInterval(this.countdownInterval);
+            router.get(route('settings.orders'));
+        },
         triggerConfetti() {
         confetti({
             particleCount: 300, // Number of confetti particles
@@ -54,6 +84,7 @@ export default {
         },
     },
     mounted(){
+        this.startCountdown()
         this.triggerConfetti()
     }
 }
