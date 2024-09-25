@@ -65,7 +65,10 @@
                     <button @click="handleAddItemToCart" :disabled="!totalStock" class="w-full h-full disabled:opacity-45 disabled:cursor-not-allowed text-white bg-primary rounded-full py-4 font-bold mt-3">Add to Cart</button>
                 </div>
                 <div class="md:mt-0 mt-10">
-                    <h1 class="text-2xl font-semibold">Latest Products</h1>
+                    <div class="flex items-center justify-between">
+                        <h1 class="text-2xl font-semibold">Latest Products</h1>
+                        <Link :href="route('home')" class="text-sm text-primary underline">View all</Link>
+                    </div>
                         <div class="w-full mt-5">
                             <swiper
                                 :slidesPerView="3"
@@ -189,7 +192,10 @@
                     <button @click="handleAddItemToCart" :disabled="!totalStock" class="w-full h-full disabled:opacity-45 disabled:cursor-not-allowed text-white bg-primary rounded-full py-4 font-bold mt-3">Add to Cart</button>
                 </div>
                 <div class="mt-12">
-                    <h1 class="text-2xl font-medium mb-7">Related Product</h1>
+                    <div class="flex items-center justify-between mb-7">
+                        <h1 class="text-2xl font-medium ">Related Product</h1>
+                        <Link :href="route('home')" class="text-sm text-primary underline">View all</Link>
+                    </div>
                     <div class="flex flex-col gap-7">
                         <RelatedProductCard v-for="product in relatedProducts" :key="product?.id" :product="product" />
                     </div>
@@ -223,6 +229,7 @@ import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
+import { Link } from '@inertiajs/vue3';
 
 export default {
     components:{
@@ -231,7 +238,8 @@ export default {
         RelatedProductCard,
         ImageSliderModal,
         Swiper,
-        SwiperSlide
+        SwiperSlide,
+        Link
     },
     props:{
         product : {
