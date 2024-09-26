@@ -90,7 +90,7 @@ const handleLogout=()=>{
                 </div>
 
                 <svg
-                    class="hidden fill-current sm:block"
+                    class="hidden fill-current text-white sm:block"
                     :class="dropDownOpen && 'rotate-180'"
                     width="12"
                     height="8"

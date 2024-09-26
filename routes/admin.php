@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\SubscriberController;
 use App\Http\Controllers\Admin\TicketController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Middleware\AdminMiddleware;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Ticket;
@@ -15,6 +16,7 @@ use App\Models\User;
 use Inertia\Inertia;
 
 Route::prefix('/admin')
+    ->middleware(['auth', AdminMiddleware::class])
     ->name('admin.')
     ->group(function () {
 
