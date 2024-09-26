@@ -11,7 +11,7 @@ class SubscriberController extends Controller
     public function index()
     {
         return Inertia::render('Admin/Subscribers/Index', [
-            'subscribers' => Subscriber::paginate(10)
+            'subscribers' => Subscriber::filterBy(request()->all())->paginate(10)
         ]);
     }
 

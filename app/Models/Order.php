@@ -37,6 +37,16 @@ class Order extends Model
         return $this->belongsTo(Payment::class);
     }
 
+    public function scopeFilterBy($query, $filters)
+    {
+        $query->when($filters['search'] ?? null, function ($query) use ($filters) {
+            $search = $filters['search'];
+            $query->whereHas('user', function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%' . $search . '%')->orWhere("phone", 'LIKE', '%' . $search . '%');
+            });
+        });
+    }
+
     public function productDetails()
     {
         return $this->belongsToMany(ProductDetail::class)

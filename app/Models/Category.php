@@ -24,6 +24,13 @@ class Category extends Model
         ];
     }
 
+    public function scopeFilterBy($query, $filters)
+    {
+        return $query->when($filters['search'] ?? null, function ($query) use ($filters) {
+            $query->where('name', 'LIKE', '%' . $filters['search'] . '%');
+        });
+    }
+
     public function products()
     {
         return $this->hasMany(Product::class);

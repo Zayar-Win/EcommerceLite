@@ -12,7 +12,7 @@ class TicketController extends Controller
 
     public function index()
     {
-        $tickets = Ticket::paginate(10);
+        $tickets = Ticket::filterBy(request()->all())->paginate(10);
         return Inertia::render('Admin/Tickets/Index', [
             'tickets' => $tickets
         ]);

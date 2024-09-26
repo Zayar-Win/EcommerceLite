@@ -35,7 +35,7 @@ Route::prefix('/admin')
             ]);
         })->name('dashboard');
         Route::get('/orders', function () {
-            $orders = Order::with('payment')->latest()->paginate(10);
+            $orders = Order::with('payment')->filterBy(request()->all())->latest()->paginate(10);
             return Inertia::render('Admin/Orders/Index', [
                 'orders' => $orders
             ]);
