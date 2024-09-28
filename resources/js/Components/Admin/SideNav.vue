@@ -13,9 +13,9 @@ const store = useStore();
 
 const isSideNavOpen = computed(() => store.state.isSideNavOpen);
 
-onClickOutside(target, () => {
-    store.commit('toggleSideNav',false);
-});
+// onClickOutside(target, () => {
+//     store.commit('toggleSideNav',false);
+// });
 const handleLogout=()=>{
     emitter.emit('open-confirmation-dialog', {
         title:'Account Logout',

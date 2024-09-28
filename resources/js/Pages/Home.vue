@@ -31,7 +31,7 @@
             </div>
             <div class="lg:w-[75%] md:w-[65%] md:mt-0 mt-10 w-full mb-12 md:pl-[8%]">
                 <div v-if="products?.length > 0" class="grid lg:grid-cols-4 md:grid-cols-2 mb-14 gap-x-5 gap-y-10">
-                    <div  v-for="product in products" class="cursor-pointer">
+                    <div  v-for="product in products" :key="product.id" class="cursor-pointer">
                         <Link :href="route('product-detail',{product})">
                             <div class="w-full h-auto group rounded-xl overflow-hidden">
                                 <img class="w-full group-hover:scale-[1.1] transition-all duration-200 h-full" :src="product.images[0].url" />

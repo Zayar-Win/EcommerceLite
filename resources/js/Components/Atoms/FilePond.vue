@@ -1,17 +1,18 @@
 <script setup>
-import { ref, computed } from 'vue';
-import vueFilePond from 'vue-filepond';
-import 'filepond/dist/filepond.min.css';
-import FilePondPluginFilePoster from 'filepond-plugin-file-poster';
-import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
-import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
-import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
-import FilePondPluginImageResize from 'filepond-plugin-image-resize';
-import 'filepond/dist/filepond.min.css';
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
-import 'filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css';
+import { ref, computed } from "vue";
+import vueFilePond from "vue-filepond";
+import "filepond/dist/filepond.min.css";
+import FilePondPluginFilePoster from "filepond-plugin-file-poster";
+import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+import FilePondPluginFileValidateSize from "filepond-plugin-file-validate-size";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import FilePondPluginImageCrop from "filepond-plugin-image-crop";
+import FilePondPluginImageTransform from "filepond-plugin-image-transform";
+import FilePondPluginImageResize from "filepond-plugin-image-resize";
+import FilePondPluginImageValidateSize from "filepond-plugin-image-validate-size";
+import "filepond/dist/filepond.min.css";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
+import "filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css";
 
 const FilePond = vueFilePond(
     FilePondPluginFileValidateType,
@@ -20,22 +21,23 @@ const FilePond = vueFilePond(
     FilePondPluginImageCrop,
     FilePondPluginImageTransform,
     FilePondPluginImageResize,
-    FilePondPluginFilePoster
+    FilePondPluginFilePoster,
+    FilePondPluginImageValidateSize
 );
 
 const props = defineProps({
     mode: {
         type: String,
-        default: 'image',
-        validator: (value) => ['avatar', 'image'].includes(value),
+        default: "image",
+        validator: (value) => ["avatar", "image"].includes(value),
     },
     name: {
         type: String,
-        default: 'filepond',
+        default: "filepond",
     },
     labelIdle: {
         type: String,
-        default: 'Click to choose image, or Drop files here...',
+        default: "Click to choose image, or Drop files here...",
     },
     allowMultiple: {
         type: Boolean,
@@ -43,42 +45,54 @@ const props = defineProps({
     },
     acceptedFileTypes: {
         type: Array,
-        default: () => ['image/*'],
+        default: () => ["image/*"],
     },
     imageCropAspectRatio: {
         type: String,
-        default: '1:1',
+        default: "1:1",
     },
     stylePanelLayout: {
         type: String,
-        default: 'compact',
+        default: "compact",
     },
     imagePreviewHeight: {
         type: Number,
-        default: 170,
+        default: 300,
     },
     imageResizeTargetWidth: {
         type: Number,
-        default: 170,
+        default: 300,
     },
     imageResizeTargetHeight: {
         type: Number,
-        default: 170,
+        default: 300,
     },
     maxFileSize: {
         type: String,
-        default: '1MB',
+        default: "1MB",
     },
-    image: {
-        type: String,
-        default: '',
+    images: {
+        type: Array,
+        default: "",
+    },
+    maxFiles: {
+        type: Number,
+        default: 1,
+    },
+    files: {
+        type: Array,
+        default: "",
     },
 });
-
-const emit = defineEmits(['updateFile']);
+console.log("this is filepond.vue" + props.images);
+const emit = defineEmits(["updateFile"]);
 
 // let myFiles = ref([]);
 const pond = ref(null);
+const handleProcessFile = (file) => {
+  console.log('Processing file:', file);
+};
+
 
 // const serverConfig = computed(() => ({
 //   // Configure your server settings here
@@ -92,33 +106,69 @@ const pond = ref(null);
 //     },
 //   },
 // }));
+// const images = computed(() => {
 
-const images = computed(() => {
-    if (props.image) {
-        return [
-            {
-                options: {
-                    file: props.image,
-                    metadata: {
-                        poster: props.image,
-                    },
+//     if (props.images) {
+//         return [
+//             {
+//                 options: {
+//                     file: props.images,
+//                     metadata: {
+//                         poster: props.images,
+//                     },
+//                 },
+//             },
+//         ];
+//     }
+
+//     return [];
+// });
+const images = ref([]);
+if (props.files && props.files.length > 0) {
+    images.value = props.files.map((file) => {
+        const filePath = `/storage/${file}`;
+
+        return {
+            options: {
+                file: filePath,
+                metadata: {
+                    poster: filePath,
                 },
             },
-        ];
-    }
-
-    return [];
-});
-
+        };
+    });
+}
+// if (props.files && props.files.length > 0) {
+//     images.value = props.files.map((file) => {
+//         const filePath = `/storage/${file}`;
+//         return {
+//             source: filePath,
+//             options: {
+//                 type: 'local',
+//                 file: {
+//                     name: file,
+//                     size: 123456, 
+//                     type: 'image/jpeg', 
+//                 },
+//                 metadata: {
+//                     poster: filePath,
+//                 },
+//             },
+//         };
+//     });
+// }
+console.log(images.value);
 const filePondInitialized = () => {
-    console.log('FilePond has initialized', pond.value);
+    console.log("FilePond has initialized", pond.value);
 };
 
 const handleFilePondUpdate = (fileItems) => {
+    console.log("FilePond has updated", fileItems.file);
+    fileItems.map((fileItem) => console.log(fileItem.file));
     emit(
-        'updateFile',
-        fileItems[0]?.file
-    // fileItems.map((fileItem) => fileItem.file)
+        "updateFile",
+        // fileItems[0]?.file
+        fileItems.map((fileItem) => fileItem.file)
     );
 };
 </script>
@@ -128,7 +178,6 @@ const handleFilePondUpdate = (fileItems) => {
         :class="{
             'avatar-upload border border-gray-300 shadow-sm': mode === 'avatar',
             'normal-upload': images.length > 0 && mode === 'image',
-
         }"
     >
         <FilePond
@@ -137,24 +186,53 @@ const handleFilePondUpdate = (fileItems) => {
             :label-idle="labelIdle"
             :files="images"
             :allowMultiple="allowMultiple"
+            :imagePreviewMaxHeight="250"
+            :FilePondPluginImageCrop="true"
             :acceptedFileTypes="acceptedFileTypes"
             :imageCropAspectRatio="imageCropAspectRatio"
+            :imageValidateSizeMinWidth="300"
+            :imageValidateSizeMinHeight="300"
+            :imageValidateSizeMaxWidth="1500"
+            :imageValidateSizeMaxHeight="1500"
+            :styleItemPanelAspectRatio="'1:1'"
             :stylePanelLayout="mode === 'avatar' ? 'circle' : stylePanelLayout"
-            :styleButtonRemoveItemPosition="mode === 'avatar' ? 'bottom-center' : 'top-left'"
+            :styleButtonRemoveItemPosition="
+                mode === 'avatar' ? 'bottom-center' : 'top-left'
+            "
             :imagePreviewHeight="imagePreviewHeight"
             :imageResizeTargetWidth="imageResizeTargetWidth"
             :imageResizeTargetHeight="imageResizeTargetHeight"
+            :maxFiles="maxFiles"
             @updatefiles="handleFilePondUpdate"
+            @processfile="handleProcessFile"
             max-file-size="maxFileSize"
             @init="filePondInitialized"
-
         />
-    <!-- @processfile="handleProcessFile" -->
-    <!-- :server="serverConfig" -->
+        <!-- :styleItemPanelAspectRatio="'1:1'" -->
+        <!-- @processfile="handleProcessFile" -->
+        <!-- :server="serverConfig" -->
     </div>
 </template>
+<style>
+.filepond--item {
+    width: calc(20% - 0.5em);
+    /* min-height: 200px;  */
+    min-height: 300px !important;
+    margin-bottom: 1em;
+    /* overflow: hidden; */
+    /* position: relative; */
+}
+.filepond--processing .filepond--item {
+  border: 2px solid #4caf50 !important; /* Green border when processing */
+  opacity: 0.8 !important;             /* Slight transparency */
+}
 
-<style scoped>
+.filepond--processing {
+  background-color: rgba(255, 255, 0, 0.1) !important; /* Light yellow background */
+  border: 2px dashed #ffa500 !important;            /* Orange dashed border */
+}
+</style>
+<!-- <style scoped>
 @import "filepond/dist/filepond.min.css";
 @import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
 
@@ -209,11 +287,10 @@ const handleFilePondUpdate = (fileItems) => {
   background-color: #f9fafb;
 }
 
-
 @media (max-width: 640px) { /* Tailwind's sm breakpoint */
   .normal-upload {
     width: 100%; /* Full width on small screens */
     max-width: 100%;
   }
 }
-</style>
+</style> -->

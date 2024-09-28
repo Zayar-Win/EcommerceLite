@@ -18,6 +18,14 @@ export default function getSideNavLinks()
             allowedRoles: ['admin','super_admin']
         },
         {
+            icon: 'fa-shopping-cart',
+            path: route('admin.products.index'),
+            title: 'Products',
+            component: 'Admin/Products/Index',
+            url:'/admin/products',
+            allowedRoles: ['admin','super_admin','accounting']
+        },
+        {
             icon: 'fa-cogs',
             path: route('admin.attributes.index'),
             title: 'Attributes',
