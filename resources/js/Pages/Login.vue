@@ -11,6 +11,7 @@
                 <Input label="Email" v-model="form.email" :errorMessage="errors.email" placeholder="Enter your email"  />
                 <Input label="Password" v-model="form.password" :errorMessage="errors.password" placeholder="Enter your password"  />
                 <button type="submit" class="w-full py-4 text-white font-bold text-xl rounded-full bg-primary block">Login</button>
+                <p class="text-sm text-center font-semibold">Don't have account? Register <Link class="text-primary underline" :href="route('register')">here.</Link></p>
             </form>
         </div>
     </div>
@@ -18,10 +19,12 @@
 <script>
 import Input from '@/Components/Common/Input.vue';
 import { useCRUDOperations } from '@/Composables/useCRUDOperations';
+import { Link } from '@inertiajs/vue3';
 import * as yup from 'yup'
 export default {
     components : {
-        Input
+        Input,
+        Link
     },
     setup(){
         const schema = yup.object({

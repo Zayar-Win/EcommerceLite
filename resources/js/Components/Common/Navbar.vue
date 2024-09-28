@@ -19,6 +19,10 @@
                 <p>Your Cart</p>
             </div>
             <UserDropDown v-if="isAuthenticated" />
+            <div v-else class="flex items-center gap-3">
+                <Button text="Login" class="!py-2" :href="route('login')"></Button>
+                <Button text="Register" class="!py-2" :href="route('register')" :outline="true"></Button>
+            </div>
         </div>
     </div>
 </template>
@@ -28,13 +32,15 @@ import Search from '@/assets/icons/Search.vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import { mapGetters, mapMutations } from 'vuex';
 import UserDropDown from './UserDropDown.vue';
+import Button from '../Atoms/Button.vue';
 
 export default {
     components:{
         Search,
         Bag,
         Link,
-        UserDropDown
+        UserDropDown,
+        Button
     },
     computed:{
         ...mapGetters(['cartItems']),

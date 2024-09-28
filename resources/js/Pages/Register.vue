@@ -1,6 +1,6 @@
 <template >
     <div class="my-10 flex items-center">
-        <div class="border-[1px] border-black/20 rounded-lg w-[40%] mx-auto py-[60px] px-[40px]">
+        <div class="border-[1px] border-black/20 rounded-lg w-[40%] mx-auto py-[40px] px-[40px]">
             <div class="flex items-end gap-2 mb-8">
                 <h1 class="text-[50px] leading-[0.8] text-primary font-bold">Register</h1>
                 <div class="w-[10px] h-[10px] bg-primary rounded-full"></div>
@@ -13,6 +13,8 @@
                 <Input label="Phone" v-model="form.phone" :errorMessage="errors.phone" placeholder="Enter your phone number"  />
                 <Input label="Password" type="password" v-model="form.password" :errorMessage="errors.password" placeholder="Enter your password"  />
                 <button type="submit" class="w-full py-4 text-white font-bold text-xl rounded-full bg-primary block">Register</button>
+                <p class="text-sm text-center font-semibold">Already have an account? Login <Link class="text-primary underline" :href="route('login')">here.</Link></p>
+
             </form>
         </div>
     </div>
@@ -20,10 +22,12 @@
 <script>
 import Input from '@/Components/Common/Input.vue';
 import { useCRUDOperations } from '@/Composables/useCRUDOperations';
+import { Link } from '@inertiajs/vue3';
 import * as yup from 'yup'
 export default {
     components : {
-        Input
+        Input,
+        Link
     },
     setup(){
         const schema = yup.object({
