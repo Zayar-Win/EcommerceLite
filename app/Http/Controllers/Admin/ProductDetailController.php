@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductDetailRequest;
+use App\Models\Attribute;
 use App\Models\Product;
 use App\Models\ProductDetail;
 use App\Models\Size;
@@ -39,12 +40,19 @@ class ProductDetailController extends Controller
             $query->limit(1);
         }])->findOrFail($id);
         // dd($product);
-        $sizes=Size::all();
-        return inertia('Admin/ProductDetail/Create',compact(['product','sizes']));
+        $attributes = Attribute::with('attributeOptions')->get()->toArray();
+        // dd($attributes);
+        return Inertia::render('Admin/ProductDetail/Create', [
+            'attributes'=>$attributes,
+            'product' => $product,
+        ]);
+       
     }
 
-    public function store(ProductDetailRequest $request)
+    public function store(Request $request)
     {
+        // dd("Gekki");
+        dd($request->all());
         ProductDetail::create($request->all());
         return to_route('admin.product-details.index',$request->product_id);
     }

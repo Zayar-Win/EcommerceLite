@@ -32,7 +32,7 @@ export default function getSideNavLinks()
             component: 'Admin/Attributes/Index',
             url:'/admin/attributes',
             allowedRoles: ['admin','super_admin','accounting']
-        }
+        },
         // {
         //     icon: 'fa-receipt',
         //     path: route('admin.transactions.index'),

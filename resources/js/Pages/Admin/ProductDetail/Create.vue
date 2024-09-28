@@ -9,8 +9,8 @@ defineProps({
         type: Object,
         required: true,
     },
-    sizes: {
-        type: Object,
+    attributes: {
+        type: Array,
         required: true,
     },
 });
@@ -27,6 +27,6 @@ defineProps({
         </div>
 
         <!-- Form Start -->
-        <Form mode="create" :product="product" :sizes="sizes" />
+        <Form mode="create" :product="product" :attributes="attributes" />
     </div>
 </template>
