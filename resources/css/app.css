@@ -7,3 +7,22 @@
 html {
     scroll-behavior: smooth;
 }
+
+.shake {
+    animation: shake 0.3s linear;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0px);
+    }
+    40% {
+        transform: translateX(16px);
+    }
+    70% {
+        transform: translateX(-16px);
+    }
+    100% {
+        transform: translateX(0px);
+    }
+}

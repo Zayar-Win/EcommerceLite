@@ -69,7 +69,7 @@ const props = defineProps({
     },
     maxFileSize: {
         type: String,
-        default: "1MB",
+        default: "10MB",
     },
     images: {
         type: Array,
@@ -84,7 +84,6 @@ const props = defineProps({
         default: "",
     },
 });
-console.log("this is filepond.vue" + props.images);
 const emit = defineEmits(["updateFile"]);
 
 // let myFiles = ref([]);
@@ -163,13 +162,16 @@ const filePondInitialized = () => {
 };
 
 const handleFilePondUpdate = (fileItems) => {
-    console.log("FilePond has updated", fileItems.file);
     fileItems.map((fileItem) => console.log(fileItem.file));
-    emit(
-        "updateFile",
-        // fileItems[0]?.file
-        fileItems.map((fileItem) => fileItem.file)
-    );
+    if(props.allowMultiple){
+        emit(
+            "updateFile",
+            // fileItems[0]?.file
+            fileItems.map((fileItem) => fileItem.file)
+        );
+    }else{
+        emit('updateFile',fileItems[0].file)
+    }
 };
 </script>
 
@@ -186,15 +188,9 @@ const handleFilePondUpdate = (fileItems) => {
             :label-idle="labelIdle"
             :files="images"
             :allowMultiple="allowMultiple"
-            :imagePreviewMaxHeight="250"
             :FilePondPluginImageCrop="true"
             :acceptedFileTypes="acceptedFileTypes"
             :imageCropAspectRatio="imageCropAspectRatio"
-            :imageValidateSizeMinWidth="300"
-            :imageValidateSizeMinHeight="300"
-            :imageValidateSizeMaxWidth="1500"
-            :imageValidateSizeMaxHeight="1500"
-            :styleItemPanelAspectRatio="'1:1'"
             :stylePanelLayout="mode === 'avatar' ? 'circle' : stylePanelLayout"
             :styleButtonRemoveItemPosition="
                 mode === 'avatar' ? 'bottom-center' : 'top-left'
@@ -214,14 +210,6 @@ const handleFilePondUpdate = (fileItems) => {
     </div>
 </template>
 <style>
-.filepond--item {
-    width: calc(20% - 0.5em);
-    /* min-height: 200px;  */
-    min-height: 300px !important;
-    margin-bottom: 1em;
-    /* overflow: hidden; */
-    /* position: relative; */
-}
 .filepond--processing .filepond--item {
   border: 2px solid #4caf50 !important; /* Green border when processing */
   opacity: 0.8 !important;             /* Slight transparency */

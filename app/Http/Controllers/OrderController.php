@@ -37,6 +37,7 @@ class OrderController extends Controller
             'payment_id' => ['required']
         ]);
 
+
         $user = User::where('email', $validatedData['email'])->first();
 
         if (!auth()->check()) {

@@ -13,22 +13,20 @@ use Inertia\Inertia;
 
 class ProductDetailController extends Controller
 {
-    
-    public function index($id)
-    {
-        $query = ProductDetail::with(['size', 'images' => function ($query) {
-            $query->limit(1); 
-        }])
-        ->where('product_id', $id)
-        ->filterBy(request(['search', 'size']))
-        ->orderBy(request('sort', 'id'), request('direction', 'desc'));
 
-        $sizes=Size::pluck('name','id');
-        $product=Product::findOrFail($id);
+    public function index(Product $product)
+    {
+        $query = Product::with(['images', 'productDetails' => function ($query) {
+            return $query->filterBy(request(['search', 'size']))
+                ->orderBy(request('sort', 'id'), request('direction', 'desc'));
+        }]);
+
+        $sizes = Size::pluck('name', 'id');
+        $product = Product::where('id', $product->id)->first();
         $productDetails = $query->paginate(request('per_page', 10))
             ->withQueryString();
         return Inertia::render('Admin/ProductDetail/Index', [
-            'productDetails'=>$productDetails,
+            'productDetails' => $productDetails,
             'product' => $product,
             'sizes' => $sizes
         ]);
@@ -36,28 +34,25 @@ class ProductDetailController extends Controller
 
     public function create($id)
     {
-        $product=Product::with(['images'=>function($query){
+        $product = Product::with(['images' => function ($query) {
             $query->limit(1);
         }])->findOrFail($id);
         // dd($product);
         $attributes = Attribute::with('attributeOptions')->get()->toArray();
         // dd($attributes);
         return Inertia::render('Admin/ProductDetail/Create', [
-            'attributes'=>$attributes,
+            'attributes' => $attributes,
             'product' => $product,
         ]);
-       
     }
 
     public function store(Request $request)
     {
-        // dd("Gekki");
         dd($request->all());
-        ProductDetail::create($request->all());
-        return to_route('admin.product-details.index',$request->product_id);
+        return to_route('admin.product-details.index', $request->product_id);
     }
 
-    public function edit(string $productId,string $detailId)
+    public function edit(string $productId, string $detailId)
     {
         $productDetail = ProductDetail::findOrFail($detailId);
         $sizes = Size::pluck('name', 'id');
@@ -65,10 +60,10 @@ class ProductDetailController extends Controller
     }
 
 
-    public function update(ProductDetailRequest $request,string $productId,string $detailId)
+    public function update(ProductDetailRequest $request, string $productId, string $detailId)
     {
         $productDetail = ProductDetail::findOrFail($detailId);
-        
+
         $productDetail->update([
             'size_id' => $request->input('size_id'),
             'discount' => $request->input('discount'),
@@ -76,15 +71,15 @@ class ProductDetailController extends Controller
             'stock_quantity' => $request->input('stock_quantity'),
             'product_id' => $request->input('product_id'),
         ]);
-        return to_route('admin.product-details.index',$request->product_id);
+        return to_route('admin.product-details.index', $request->product_id);
     }
 
     public function destroy($productId, $detailId)
     {
         $productDetail = ProductDetail::where('product_id', $productId)
-        ->where('id', $detailId)
-        ->first();
-    $productDetail->delete();
-    return back();
+            ->where('id', $detailId)
+            ->first();
+        $productDetail->delete();
+        return back();
     }
 }

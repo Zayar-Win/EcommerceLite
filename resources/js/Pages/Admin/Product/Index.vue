@@ -132,7 +132,7 @@
                                         :href="
                                             route(
                                                 'admin.product-details.index',
-                                                { id: item?.id }
+                                                { product: item?.id }
                                             )
                                         "
                                         class="bg-blue-600 h-[40px] !py-1 flex gap-1 items-center hover:bg-blue-700 text-white !text-xs !font-semibold"

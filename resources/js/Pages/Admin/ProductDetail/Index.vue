@@ -1,3 +1,39 @@
+<script setup>
+import Delete from "@/assets/icons/Delete.vue";
+import Edit from "@/assets/icons/Edit.vue";
+import DashboardTableDataSearchBox from "@/Components/Admin/DashboardTableDataSearchBox.vue";
+import InertiaLinkButton from "@/Components/Admin/InertiaLinkButton.vue";
+import NormalButton from "@/Components/Admin/NormalButton.vue";
+import TableActionCell from "@/Components/Admin/TableActionCell.vue";
+import SortableTableHeaderCell from "@/Components/Common/SortableTableHeaderCell.vue";
+import Table from "@/Components/Common/Table.vue";
+import TableContainer from "@/Components/Common/TableContainer.vue";
+import TableDataCell from "@/Components/Common/TableDataCell.vue";
+import TableHeaderCell from "@/Components/Common/TableHeaderCell.vue";
+import Breadcrumb from "@/Components/Molecules/Breadcrumb.vue";
+import ProductDetailTableFilters from "@/Components/Organisms/ProductDetailTableFilters.vue";
+import { useCRUDOperations } from "@/Composables/useCRUDOperations";
+
+const props = defineProps({
+    productDetails: {
+        type: Object,
+        default: null,
+    },
+    sizes: {
+        type: Object,
+        default: null,
+    },
+    product: {
+        type: Object,
+        default: null,
+    },
+});
+
+
+
+const { destroy } = useCRUDOperations();
+</script>
+
 <template>
     <div class="min-h-screen py-3 space-y-8">
         <div class="flex flex-col sm:flex-row items-center justify-between">
@@ -6,7 +42,7 @@
                 icon="fa-box"
                 label="Product Details"
                 :href="
-                    route('admin.product-details.index', { id: product?.id })
+                    route('admin.product-details.index', { product: product?.id })
                 "
             >
                 <BreadcrumbItem label="Lists" />
@@ -37,7 +73,7 @@
                     placeholder="Search by price"
                     :href="
                         route('admin.product-details.index', {
-                            id: product?.id,
+                            product: product?.id,
                         })
                     "
                 />
@@ -63,7 +99,7 @@
                                     sort="id"
                                     :url="
                                         route('admin.product-details.index', {
-                                            id: product?.id,
+                                            product: product?.id,
                                         })
                                     "
                                 />
@@ -73,7 +109,7 @@
                                     sort="size_id"
                                     :url="
                                         route('admin.product-details.index', {
-                                            id: product?.id,
+                                            product: product?.id,
                                         })
                                     "
                                 />
@@ -82,7 +118,7 @@
                                     sort="price"
                                     :url="
                                         route('admin.product-details.index', {
-                                            id: product?.id,
+                                            product: product?.id,
                                         })
                                     "
                                 />
@@ -91,7 +127,7 @@
                                     sort="stock_quantity"
                                     :url="
                                         route('admin.product-details.index', {
-                                            id: product?.id,
+                                            product: product?.id,
                                         })
                                     "
                                 />
@@ -101,7 +137,7 @@
                                     sort="discount"
                                     :url="
                                         route('admin.product-details.index', {
-                                            id: product?.id,
+                                            product: product?.id,
                                         })
                                     "
                                 />
@@ -200,38 +236,6 @@
     </div>
 </template>
 
-<script setup>
-import Delete from "@/assets/icons/Delete.vue";
-import Edit from "@/assets/icons/Edit.vue";
-import DashboardTableDataSearchBox from "@/Components/Admin/DashboardTableDataSearchBox.vue";
-import InertiaLinkButton from "@/Components/Admin/InertiaLinkButton.vue";
-import NormalButton from "@/Components/Admin/NormalButton.vue";
-import TableActionCell from "@/Components/Admin/TableActionCell.vue";
-import SortableTableHeaderCell from "@/Components/Common/SortableTableHeaderCell.vue";
-import Table from "@/Components/Common/Table.vue";
-import TableContainer from "@/Components/Common/TableContainer.vue";
-import TableDataCell from "@/Components/Common/TableDataCell.vue";
-import TableHeaderCell from "@/Components/Common/TableHeaderCell.vue";
-import Breadcrumb from "@/Components/Molecules/Breadcrumb.vue";
-import ProductDetailTableFilters from "@/Components/Organisms/ProductDetailTableFilters.vue";
-import { useCRUDOperations } from "@/Composables/useCRUDOperations";
 
-defineProps({
-    productDetails: {
-        type: Object,
-        default: null,
-    },
-    sizes: {
-        type: Object,
-        default: null,
-    },
-    product: {
-        type: Object,
-        default: null,
-    },
-});
-
-const { destroy } = useCRUDOperations();
-</script>
 
 <style scoped></style>

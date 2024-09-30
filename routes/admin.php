@@ -56,17 +56,17 @@ Route::prefix('/admin')
         Route::resource('users', UserController::class);
 
         // Product
-        Route::get('/products', [ProductController::class,'index'])->name('products.index');
-        Route::get('/products/create', [ProductController::class,'create'])->name('products.create');
-        Route::post('/products/store', [ProductController::class,'store'])->name('products.store');
-        Route::get('/products/edit/{product}', [ProductController::class,'edit'])->name('products.edit');
-        Route::put('/products/edit/{product}', [ProductController::class,'update'])->name('products.update');
-        Route::delete('/products/{product}', [ProductController::class,'destroy'])->name('products.destroy');
+        Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+        Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+        Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
+        Route::get('/products/edit/{product}', [ProductController::class, 'edit'])->name('products.edit');
+        Route::put('/products/edit/{product}', [ProductController::class, 'update'])->name('products.update');
+        Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 
         // Product Detail
-        Route::get('/product/{id}/product-details', [ProductDetailController::class, 'index'])->name('product-details.index');
-        Route::get('/product/{id}/product-details/create', [ProductDetailController::class, 'create'])->name('product-details.create');
-        Route::post('/product/{id}/product-details', [ProductDetailController::class, 'store'])->name('product-details.store');
+        Route::get('/product/{product}/product-details', [ProductDetailController::class, 'index'])->name('product-details.index');
+        Route::get('/product/{product}/product-details/create', [ProductDetailController::class, 'create'])->name('product-details.create');
+        Route::post('/product/{product}/product-details', [ProductDetailController::class, 'store'])->name('product-details.store');
         Route::get('/product/{productId}/product-details/{detailId}/edit', [ProductDetailController::class, 'edit'])->name('product-details.edit');
         Route::put('/product/{productId}/product-details/{detailId}', [ProductDetailController::class, 'update'])->name('product-details.update');
         Route::delete('/product/{productId}/product-details/{detailId}', [ProductDetailController::class, 'destroy'])->name('product-details.destroy');

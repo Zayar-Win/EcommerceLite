@@ -10,6 +10,8 @@ import SelectBox from "@/Components/Atoms/SelectBox.vue";
 import { productDetailSchema } from "@/Schemas/productDetailSchema";
 import Multiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.css";
+import { createToaster } from "@meforma/vue-toaster";
+import { router } from "@inertiajs/vue3";
 const props = defineProps({
     mode: {
         type: String,
@@ -57,19 +59,13 @@ const attributesOptions = computed(() => {
           }))
         : [];
 });
-// console.log(attributesOptions.value.attribute_options);
-attributesOptions.value.forEach((options) => {
-    console.log(options);
-});
 
 const tableColumns = ref(["Qty", "Price", "Discount Price","Action"]);
 const variants = ref([{ qty: "", price: "", discount_price: "", attributes: {} }]);
-const { form, create, edit, errors, processing } = useCRUDOperations(
+let alreadyHasVariants = ref([]);
+const { form, edit, errors, processing } = useCRUDOperations(
     {
         attributes: props.productDetail?.attributes || [],
-        // discount: props.productDetail?.discount || "",
-        // price: props.productDetail?.price || "",
-        // stock_quantity: props.productDetail?.stock_quantity || "",
         variants: variants.value,
         product_id: productId(),
     },
@@ -78,18 +74,97 @@ watch(
     () => form.attributes,
     (newAttributes) => {
         let newColumns = ["Qty", "Price", "Discount Price","Action"];
-
         newAttributes.forEach((attribute) => {
             newColumns.splice(newColumns.length - 4, 0, attribute.name);
         });
 
+        variants.value = variants.value.map(variant => {
+            let attributes = {};
+            newAttributes.forEach(attribute => {
+                if(Object.keys(variant.attributes).includes(attribute.name)){
+                    attributes[attribute.name] = variant.attributes[attribute.name]
+                }else{
+                    attributes[attribute.name] = ''
+                }
+            })
+            return {
+                ...variant,
+                attributes
+            }
+        })
+
         tableColumns.value = newColumns;
+
     },
     { deep: true }
 );
 
+const areAttributeValuesEqual = (mainAttributes,checkAttributes)  => {
+    let mainKeys = Object.keys(mainAttributes);
+    for(let key of mainKeys){
+        if(mainAttributes[key] && checkAttributes[key]){
+            if(mainAttributes[key] !== checkAttributes[key]){
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
+    return true;
+}
+
+watch(
+    () => variants,
+    (newVariants) => {
+        let variantAttributes = newVariants.value.map(variant => variant.attributes)
+        let shouldGiveDefaultValue = true;
+        alreadyHasVariants.value = []
+        for(let i = 0 ; i < variantAttributes.length ; i++){
+            for (let j = i + 1 ; j < variantAttributes.length ; j++){
+                if(variantAttributes[i] && variantAttributes[j]){
+                    if(areAttributeValuesEqual(variantAttributes[i],variantAttributes[j])){
+                        shouldGiveDefaultValue  = false;
+                        alreadyHasVariants.value.push(i)
+                        alreadyHasVariants.value.push(j);
+                    }
+                }
+            }
+        }
+        if(shouldGiveDefaultValue){
+            alreadyHasVariants.value = []
+        }
+
+    } ,{
+        deep:true
+    }
+)
+
+watch(
+    () => alreadyHasVariants,
+    (newValue) => {
+        console.log('hit')
+        if(newValue.value.length){
+            const toaster = createToaster({
+                position: 'bottom-right',
+                useDefaultCss: true,
+                maxToasts: 1,
+            })
+            toaster.clear()
+            toaster.error('You have duplicated varient.Please check again.')
+        }
+    },
+    {
+        deep:true
+    }
+)
+
+
 const addNewVariant = () => {
-    variants.value.push({ qty: "", price: "", discount_price: "", attributes: [] });
+    let attributes = {}
+    form.attributes.forEach((attribute) => {
+        attributes[attribute.name] = ''
+    })
+    variants.value.push({ qty: "", price: "", discount_price: "", attributes  });
 };
 const removeVariant = (index) => {
     variants.value.splice(index, 1);
@@ -118,8 +193,7 @@ const removeVariant = (index) => {
             class="space-y-4 md:space-y-6"
             @submit.prevent="
                 mode === 'create'
-                    ? create(
-                          'Product Detail',
+                    ? router.post(
                           route('admin.product-details.store', {
                               id: props.product.id,
                           })
@@ -136,83 +210,38 @@ const removeVariant = (index) => {
             <div class="grid grid-cols-1  gap-5">
                 <div class="">
                     <Label for="" label="Attributes" required />
-                    <!-- <SelectBox
-                        id="sizes"
-                        name="size"
-                        v-model="form.size_id"
-                        :options="sizesOptions"
-                        :selected="selectedSize"
-                        placeholder="Select a category"
-                        class="p-2 border w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
-                    /> -->
                     <Multiselect
                         v-model="form.attributes"
                         :options="attributesOptions"
                         :multiple="true"
                         track-by="id"
+                        :show-labels="false"
                         label="name"
+                        :hide-selected="true"
                         placeholder="Select Attributes"
-                        class="block w-full p-0 rounded-md font-semibold text-sm text-black bg-gray-00 outline-none disabled:cursor-not-allowed transition-all focus:ring-2 focus:ring-slate-300 border border-gray-300 focus:border-slate-400': true"
+                        class="block w-full p-0  rounded-md font-semibold text-sm text-primary bg-gray-00 outline-none disabled:cursor-not-allowed transition-all focus:ring-2 focus:ring-slate-300 border border-gray-300 focus:border-slate-400': true"
                     />
                     <ValidationError
                         class="mt-2"
                         :message="errors?.attributes"
                     />
                 </div>
-                <!-- <div>
-                    <Label label="Price" required />
-
-                    <InputField
-                        v-model="form.price"
-                        type="number"
-                        name="price"
-                        placeholder="Enter Price"
-                        required
-                    />
-
-                    <ValidationError :message="errors?.price" />
-                </div>
-                <div>
-                    <Label label="Stock Quantity" required />
-
-                    <InputField
-                        v-model="form.stock_quantity"
-                        type="number"
-                        name="stock-quantity"
-                        placeholder="Enter Stock Quantity"
-                        required
-                    />
-
-                    <ValidationError :message="errors?.stock_quantity" />
-                </div>
-                <div>
-                    <Label label="Discount" />
-
-                    <InputField
-                        v-model="form.discount"
-                        type="text"
-                        name="discount"
-                        placeholder="Enter Discount"
-                    />
-
-                    <ValidationError :message="errors?.discount" />
-                </div> -->
             </div>
             <div>
                 <div class="text-primary flex justify-end font-bold">
                     <p @click="addNewVariant" class="cursor-pointer">+ Add New Product Variant</p>
                 </div>
             </div>
-            <div>
+            <div class="w-full overflow-x-auto">
                 <table
                     class="min-w-full table-auto bg-white shadow-sm rounded-lg overflow-hidden border-collapse"
                 >
-                    <thead class="bg-secondary text-white rounded-lg">
+                    <thead class="bg-primary text-white rounded-lg">
                         <tr>
                             <th
                                 v-for="(column, index) in tableColumns"
                                 :key="index"
-                                class="px-4 py-5 text-left"
+                                class="px-4 py-5 text-left min-w-[200px]"
                             >
                                 {{ column }}
                             </th>
@@ -223,9 +252,10 @@ const removeVariant = (index) => {
                             v-for="(variant, index) in variants"
                             :key="index"
                             class="border-b hover:bg-gray-100"
+                            :class="[alreadyHasVariants.includes(index) ? 'shake' : '']"
                         >
                             <td
-                                v-for="(attribute, idx) in form.attributes"
+                                v-for="(attributeKey, idx) in Object.keys(variant.attributes)"
                                 :key="idx"
                                 class="px-4 py-2"
                             >
@@ -236,13 +266,14 @@ const removeVariant = (index) => {
                                     class="border p-2 rounded-md w-full"
                                 /> -->
                                 <SelectBox
-                                    v-model="variant[attribute.name]"
+                                    v-model="variant.attributes[attributeKey]"
                                     :options="
                                         attributesOptions.find(
-                                            (attr) => attr.id === attribute.id
+                                            (attr) => attr.name === attributeKey
                                         )?.options || []
                                     "
-                                    class="p-2 border w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                                    class="p-2 border w-full  rounded-md shadow-sm"
+                                    :class="[alreadyHasVariants.includes(index) ? 'border-red-500 focus focus:border-red-500 focus:ring-red-500'  : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500']"
                                 />
                             </td>
                             <td class="px-4 py-2">
@@ -271,6 +302,7 @@ const removeVariant = (index) => {
                             </td>
                             <td class="px-4 py-2 text-center">
                         <button
+                        type="button"
                             @click="removeVariant(index)"
                             class="text-red-600 hover:text-red-800"
                         >
@@ -297,7 +329,7 @@ const removeVariant = (index) => {
                 <FormButton
                     type="submit"
                     :processing="processing"
-                    :disabled="processing "
+                    :disabled="processing || alreadyHasVariants.length"
                 >
                     {{ mode === "create" ? "Create" : "Save Changes" }}
                 </FormButton>
@@ -305,4 +337,18 @@ const removeVariant = (index) => {
         </form>
     </div>
 </template>
-<style></style>
+<style>
+.multiselect__tag {
+  background-color: #0285FF; /* Your desired color */
+}
+
+
+/* Change background color when option is highlighted (hovered) */
+.multiselect__option--highlight {
+  background-color: #0285FF; /* Your desired highlight color */
+}
+
+.multiselect__option--selected.multiselect__option--highlight[data-deselect="Selected"] { background:#f3f3f3; color:unset;
+  &:after { background:unset; color:unset; }
+}
+</style>

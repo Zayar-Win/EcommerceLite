@@ -19,7 +19,7 @@
                 <p>Your Cart</p>
             </div>
             <UserDropDown v-if="isAuthenticated" />
-            <div v-else class="flex items-center gap-3">
+            <div v-else class="md:flex hidden items-center gap-3">
                 <Button text="Login" class="!py-2" :href="route('login')"></Button>
                 <Button text="Register" class="!py-2" :href="route('register')" :outline="true"></Button>
             </div>
