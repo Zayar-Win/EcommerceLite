@@ -51,10 +51,6 @@ class ProductDetail extends Model
             $query->where(function ($query) use ($search) {
                 $query->where('price', 'like', '%' . $search . '%');
             });
-        })->when(isset($filterBy['size']), function ($query) use ($filterBy) {
-            $query->whereHas('size', function($query) use ($filterBy) {
-                $query->where('name', 'like', '%' . $filterBy['size'] . '%');
-            });
         });
     }
 }

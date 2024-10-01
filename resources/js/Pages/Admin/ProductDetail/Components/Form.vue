@@ -30,6 +30,9 @@ const props = defineProps({
     productDetail: {
         type: Object,
     },
+    previousAttributes : {
+        type : Array
+    }
 });
 const productId = () => {
     if (props.mode == "create") {
@@ -38,8 +41,6 @@ const productId = () => {
         return props.productDetail?.product_id;
     }
 };
-console.log("this is attributes from props " + props.attributes);
-
 
 // const isFormValid = computed(() => {
 //     const isCommonValid = form.price && form.stock_quantity;
@@ -60,16 +61,51 @@ const attributesOptions = computed(() => {
         : [];
 });
 
-const tableColumns = ref(["Qty", "Price", "Discount Price","Action"]);
-const variants = ref([{ qty: "", price: "", discount_price: "", attributes: {} }]);
+console.log(attributesOptions.value)
+
+let generateTableColumns = () => {
+    let columns = ["Qty", "Price", "Discount Price","Action"];
+
+    props.previousAttributes.forEach(attribute => {
+        columns.unshift(attribute);
+    })
+    return columns;
+}
+
+const tableColumns = ref(generateTableColumns());
+
+
+let generateVariantAttributes = () => {
+    let attributes = {};
+    props.previousAttributes.forEach(attribute => {
+        if(props.productDetail){
+            attributes[attribute] = props.productDetail?.attribute_options.filter(option => attribute == option?.attribute?.name)[0].id
+        }else{
+            attributes[attribute] = ''
+        }
+    })
+    return attributes;
+}
+
+const generateDefaultAttributes = () => {
+    let attributes = [];
+    props.previousAttributes.forEach(attribute => {
+        attributes.push(attributesOptions.value.filter(attributeOption => attributeOption?.name == attribute)[0])
+    })
+    return attributes
+}
+
+
+const variants = ref([{ qty:props.productDetail ? props.productDetail?.stock_quantity : "", price: props.productDetail ? props.productDetail?.price : "", discount_price:props.productDetail ? props.productDetail?.discount :  "", attributes: generateVariantAttributes() }]);
 let alreadyHasVariants = ref([]);
-const { form, edit, errors, processing } = useCRUDOperations(
+const { form, edit,create, errors, processing } = useCRUDOperations(
     {
-        attributes: props.productDetail?.attributes || [],
+        attributes: generateDefaultAttributes(),
         variants: variants.value,
         product_id: productId(),
     },
 );
+
 watch(
     () => form.attributes,
     (newAttributes) => {
@@ -78,7 +114,7 @@ watch(
             newColumns.splice(newColumns.length - 4, 0, attribute.name);
         });
 
-        variants.value = variants.value.map(variant => {
+        form.variants = form.variants.map(variant => {
             let attributes = {};
             newAttributes.forEach(attribute => {
                 if(Object.keys(variant.attributes).includes(attribute.name)){
@@ -114,9 +150,9 @@ const areAttributeValuesEqual = (mainAttributes,checkAttributes)  => {
 }
 
 watch(
-    () => variants,
+    () => form.variants,
     (newVariants) => {
-        let variantAttributes = newVariants.value.map(variant => variant.attributes)
+        let variantAttributes = newVariants.map(variant => variant.attributes)
         let shouldGiveDefaultValue = true;
         alreadyHasVariants.value = []
         for(let i = 0 ; i < variantAttributes.length ; i++){
@@ -142,7 +178,6 @@ watch(
 watch(
     () => alreadyHasVariants,
     (newValue) => {
-        console.log('hit')
         if(newValue.value.length){
             const toaster = createToaster({
                 position: 'bottom-right',
@@ -164,10 +199,10 @@ const addNewVariant = () => {
     form.attributes.forEach((attribute) => {
         attributes[attribute.name] = ''
     })
-    variants.value.push({ qty: "", price: "", discount_price: "", attributes  });
+    form.variants.push({ qty: "", price: "", discount_price: "", attributes  });
 };
 const removeVariant = (index) => {
-    variants.value.splice(index, 1);
+    form.variants.splice(index, 1);
 };
 
 </script>
@@ -176,7 +211,7 @@ const removeVariant = (index) => {
     <div class="border p-10 bg-white rounded-md flex">
         <div>
             <img
-                :src="`/storage/${product.images[0].url}`"
+                :src="product.images[0].url"
                 alt="Product Image"
                 class="w-[200px] h-auto"
             />
@@ -193,7 +228,7 @@ const removeVariant = (index) => {
             class="space-y-4 md:space-y-6"
             @submit.prevent="
                 mode === 'create'
-                    ? router.post(
+                    ? create('Product Detail',
                           route('admin.product-details.store', {
                               id: props.product.id,
                           })
@@ -201,13 +236,13 @@ const removeVariant = (index) => {
                     : edit(
                           'Product Detail',
                           route('admin.product-details.update', {
-                              productId: productId(),
+                              productId: productId(), 
                               detailId: productDetail?.id,
                           })
                       )
             "
         >
-            <div class="grid grid-cols-1  gap-5">
+            <div v-if="!previousAttributes.length &&  mode == 'create'" class="grid grid-cols-1  gap-5">
                 <div class="">
                     <Label for="" label="Attributes" required />
                     <Multiselect
@@ -227,7 +262,7 @@ const removeVariant = (index) => {
                     />
                 </div>
             </div>
-            <div>
+            <div v-if="mode == 'create'">
                 <div class="text-primary flex justify-end font-bold">
                     <p @click="addNewVariant" class="cursor-pointer">+ Add New Product Variant</p>
                 </div>
@@ -249,7 +284,7 @@ const removeVariant = (index) => {
                     </thead>
                     <tbody>
                         <tr
-                            v-for="(variant, index) in variants"
+                            v-for="(variant, index) in form.variants"
                             :key="index"
                             class="border-b hover:bg-gray-100"
                             :class="[alreadyHasVariants.includes(index) ? 'shake' : '']"
@@ -267,6 +302,7 @@ const removeVariant = (index) => {
                                 /> -->
                                 <SelectBox
                                     v-model="variant.attributes[attributeKey]"
+                                    :selected="mode == 'create' ? null : variant.attributes[attributeKey]"
                                     :options="
                                         attributesOptions.find(
                                             (attr) => attr.name === attributeKey
@@ -304,7 +340,9 @@ const removeVariant = (index) => {
                         <button
                         type="button"
                             @click="removeVariant(index)"
+                            :disabled="mode == 'edit'"
                             class="text-red-600 hover:text-red-800"
+                            :class="[mode == 'edit' ? 'cursor-not-allowed pointer-events-none' : 'pointer-events-auto']"
                         >
                             <i class="fas fa-trash"></i> 
                         </button>

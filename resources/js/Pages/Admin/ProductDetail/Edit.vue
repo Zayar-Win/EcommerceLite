@@ -13,6 +13,15 @@ defineProps({
         type: Object,
         required: true,
     },
+    previousAttributes : {
+        type : Array
+    },
+    product : {
+        type : Object
+    },
+    attributes : {
+        type : Object
+    }
 });
 // console.log(category);
 </script>
@@ -28,6 +37,6 @@ defineProps({
         </div>
 
         <!-- Form Start -->
-        <Form mode="edit"  :productDetail="productDetail" :sizes="sizes" />
+        <Form mode="edit" :previousAttributes="previousAttributes" :product="product" :attributes="attributes"  :productDetail="productDetail" :sizes="sizes" />
     </div>
 </template>

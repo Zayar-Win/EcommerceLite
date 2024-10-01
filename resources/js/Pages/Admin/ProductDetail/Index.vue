@@ -11,7 +11,6 @@ import TableContainer from "@/Components/Common/TableContainer.vue";
 import TableDataCell from "@/Components/Common/TableDataCell.vue";
 import TableHeaderCell from "@/Components/Common/TableHeaderCell.vue";
 import Breadcrumb from "@/Components/Molecules/Breadcrumb.vue";
-import ProductDetailTableFilters from "@/Components/Organisms/ProductDetailTableFilters.vue";
 import { useCRUDOperations } from "@/Composables/useCRUDOperations";
 
 const props = defineProps({
@@ -27,7 +26,12 @@ const props = defineProps({
         type: Object,
         default: null,
     },
+    attributeOptions : {
+        type : Array ,
+    }
 });
+
+console.log(props.productDetails)
 
 
 
@@ -78,12 +82,6 @@ const { destroy } = useCRUDOperations();
                     "
                 />
 
-                <div class="sm:block hidden">
-                    <ProductDetailTableFilters
-                        :sizes="{ sizes }"
-                        :id="product?.id"
-                    />
-                </div>
             </div>
             <TableContainer
                 :data-count="productDetails?.data?.length"
@@ -103,16 +101,12 @@ const { destroy } = useCRUDOperations();
                                         })
                                     "
                                 />
-
-                                <SortableTableHeaderCell
-                                    label="Size"
-                                    sort="size_id"
-                                    :url="
-                                        route('admin.product-details.index', {
-                                            product: product?.id,
-                                        })
-                                    "
+                                <TableHeaderCell
+                                label="Name"
                                 />
+
+                                <TableHeaderCell v-for="attribute in attributeOptions" :label="attribute" :key="attribute" />
+
                                 <SortableTableHeaderCell
                                     label="Price"
                                     sort="price"
@@ -122,6 +116,7 @@ const { destroy } = useCRUDOperations();
                                         })
                                     "
                                 />
+                                
                                 <SortableTableHeaderCell
                                     label="Stock Quantity"
                                     sort="stock_quantity"
@@ -149,6 +144,14 @@ const { destroy } = useCRUDOperations();
                                 <TableDataCell class="">
                                     {{ item.id }}
                                 </TableDataCell>
+                                <TableDataCell class="min-w-[200px]">
+                                    <div class="flex items-center gap-2">
+                                        <img class="w-[40px] h-[40px] object-cover" :src="product?.images[0].url" />
+                                        <p>
+                                            {{ product?.name }}
+                                        </p>
+                                    </div>
+                                </TableDataCell>
                                 <!-- <TableDataCell class="min-w-[200px]">
                                     <div class="flex items-center space-x-2">
                                         <div>
@@ -158,9 +161,9 @@ const { destroy } = useCRUDOperations();
                                         </div>
                                     </div>
                                 </TableDataCell> -->
-
-                                <TableDataCell class="min-w-[150px]">
-                                    {{ item.size?.name }}
+                                
+                                <TableDataCell v-for="attribute in attributeOptions" :key="attribute" class="min-w-[200px]">
+                                    {{ item.attribute_options.filter(option => option?.attribute?.name == attribute)[0]?.value }}
                                 </TableDataCell>
                                 <TableDataCell class="min-w-[150px]">
                                     {{ item.price }}

@@ -294,11 +294,15 @@ export default {
         },
         handleGetProductDetail(paramKey,value){
             let params = {};
-            console.log(this.filters)
             Object.keys(this.filters).forEach((key) => {
                 params[key] = this.filters[key]
             });
             if(paramKey){
+                // if(params[paramKey] != value){
+                //     params[paramKey] = value
+                // }else{
+                //     delete params[paramKey]
+                // }
                 params[paramKey] = value
             }
             this.params = params;

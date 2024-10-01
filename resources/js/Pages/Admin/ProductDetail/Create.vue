@@ -13,6 +13,9 @@ defineProps({
         type: Array,
         required: true,
     },
+    previousAttributes : {
+        type : Array
+    }
 });
 </script>
 
@@ -27,6 +30,6 @@ defineProps({
         </div>
 
         <!-- Form Start -->
-        <Form mode="create" :product="product" :attributes="attributes" />
+        <Form mode="create" :previousAttributes="previousAttributes" :product="product" :attributes="attributes" />
     </div>
 </template>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\Uploader;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Models\Category;
@@ -12,18 +13,21 @@ use Inertia\Inertia;
 
 class ProductController extends Controller
 {
+
+    public function __construct(public Uploader $uploader) {}
+
     public function index()
     {
         $query = Product::with(['category', 'productDetails', 'images' => function ($query) {
-            $query->limit(1); 
+            $query->limit(1);
         }])->filterBy(request(['search', 'category']))->orderBy(request('sort', 'id'), request('direction', 'desc'));
-        
+
         $categories = Category::pluck('name', 'id');
         $products = $query->paginate(request('per_page', 10))
             ->withQueryString();
         return Inertia::render('Admin/Product/Index', [
             'products' => $products,
-            'categories'=>$categories
+            'categories' => $categories
         ]);
     }
 
@@ -49,7 +53,7 @@ class ProductController extends Controller
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
-                $path = $file->store('images');
+                $path = $this->uploader->upload($file, 'images');
 
                 $product->images()->create([
                     'url' => $path,
@@ -81,23 +85,23 @@ class ProductController extends Controller
 
         $images = $request->images;
         $currentImage = array_filter($images, 'is_string');
-        $cleanedCurrentImagePaths = array_map(function($imagePath) {
+        $cleanedCurrentImagePaths = array_map(function ($imagePath) {
             return str_replace('/storage/', '', $imagePath);
         }, $currentImage);
         dd($currentImage);
-        $newImages = array_filter($images, function($image) {
+        $newImages = array_filter($images, function ($image) {
             return $image instanceof \Illuminate\Http\UploadedFile;
         });
 
         $oldImagePaths = $product->images->pluck('url')->toArray();
-        $imagesToRemove = array_filter($oldImagePaths, function($oldImage) use ($cleanedCurrentImagePaths) {
+        $imagesToRemove = array_filter($oldImagePaths, function ($oldImage) use ($cleanedCurrentImagePaths) {
             return !in_array($oldImage, $cleanedCurrentImagePaths);
         });
-        
+
         if ($imagesToRemove) {
             $product->images()->whereIn('url', $imagesToRemove)->delete();
         }
-    
+
         foreach ($newImages as $image) {
             $path = $image->store('images');
 

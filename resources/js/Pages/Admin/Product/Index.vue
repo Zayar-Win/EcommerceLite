@@ -98,7 +98,7 @@
                                         "
                                     >
                                         <img
-                                             :src="getImageUrl(item.images[0].url)"
+                                             :src="item.images[0].url"
                                             alt="Product Image"
                                             class="w-16 h-16 object-cover"
                                         />
@@ -221,9 +221,6 @@ defineProps({
 
 const { destroy } = useCRUDOperations();
 
-const getImageUrl = (imagePath) => {
-    return `/storage/${imagePath}`;
-};
 </script>
 
 <style scoped></style>
