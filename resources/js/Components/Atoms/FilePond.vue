@@ -125,7 +125,7 @@ const handleProcessFile = (file) => {
 const images = ref([]);
 if (props.files && props.files.length > 0) {
     images.value = props.files.map((file) => {
-        const filePath = `/storage/${file}`;
+        const filePath = `${file}`;
 
         return {
             options: {
@@ -210,6 +210,8 @@ const handleFilePondUpdate = (fileItems) => {
     </div>
 </template>
 <style>
+    @import "filepond/dist/filepond.min.css";
+    @import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
 .filepond--processing .filepond--item {
   border: 2px solid #4caf50 !important; /* Green border when processing */
   opacity: 0.8 !important;             /* Slight transparency */
@@ -221,8 +223,6 @@ const handleFilePondUpdate = (fileItems) => {
 }
 </style>
 <!-- <style scoped>
-@import "filepond/dist/filepond.min.css";
-@import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
 
 .avatar-upload {
   width: 160px;

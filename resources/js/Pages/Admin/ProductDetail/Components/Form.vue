@@ -12,6 +12,7 @@ import Multiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.css";
 import { createToaster } from "@meforma/vue-toaster";
 import { router } from "@inertiajs/vue3";
+import CreateModal from "../../Attributes/CreateModal.vue";
 const props = defineProps({
     mode: {
         type: String,
@@ -64,7 +65,7 @@ const attributesOptions = computed(() => {
 console.log(attributesOptions.value)
 
 let generateTableColumns = () => {
-    let columns = ["Qty", "Price", "Discount Price","Action"];
+    let columns = ["Qty", "Price", "Action"];
 
     props.previousAttributes.forEach(attribute => {
         columns.unshift(attribute);
@@ -96,6 +97,12 @@ const generateDefaultAttributes = () => {
 }
 
 
+const showCreateModal = ref(false);
+
+const closeCreateModal = () => {
+    showCreateModal.value = false
+}
+
 const variants = ref([{ qty:props.productDetail ? props.productDetail?.stock_quantity : "", price: props.productDetail ? props.productDetail?.price : "", discount_price:props.productDetail ? props.productDetail?.discount :  "", attributes: generateVariantAttributes() }]);
 let alreadyHasVariants = ref([]);
 const { form, edit,create, errors, processing } = useCRUDOperations(
@@ -109,9 +116,9 @@ const { form, edit,create, errors, processing } = useCRUDOperations(
 watch(
     () => form.attributes,
     (newAttributes) => {
-        let newColumns = ["Qty", "Price", "Discount Price","Action"];
+        let newColumns = ["Qty", "Price", "Action"];
         newAttributes.forEach((attribute) => {
-            newColumns.splice(newColumns.length - 4, 0, attribute.name);
+            newColumns.splice(newColumns.length - 3, 0, attribute.name);
         });
 
         form.variants = form.variants.map(variant => {
@@ -208,7 +215,7 @@ const removeVariant = (index) => {
 </script>
 
 <template>
-    <div class="border p-10 bg-white rounded-md flex">
+    <!-- <div class="border p-10 bg-white rounded-md flex">
         <div>
             <img
                 :src="product.images[0].url"
@@ -216,13 +223,11 @@ const removeVariant = (index) => {
                 class="w-[200px] h-auto"
             />
         </div>
-        <div class="mx-5 grid gap-2">
+        <div class="mx-5  gap-2">
             <p>Product Name : {{ product.name }}</p>
-            <p>Price : {{ product.price }}</p>
-            <p>Discount : {{ product.discount }}</p>
             <p>Description : {{ product.description }}</p>
         </div>
-    </div>
+    </div> -->
     <div class="border p-10 bg-white rounded-md">
         <form
             class="space-y-4 md:space-y-6"
@@ -243,8 +248,13 @@ const removeVariant = (index) => {
             "
         >
             <div v-if="!previousAttributes.length &&  mode == 'create'" class="grid grid-cols-1  gap-5">
-                <div class="">
-                    <Label for="" label="Attributes" required />
+                    <div class="">
+                        <div class="flex items-center justify-between">
+                        <Label class="w-max " for="" label="Attributes" required />
+                            <p @click="showCreateModal = true" class="cursor-pointer text-sm font-semibold">
+                                Add New Attribute
+                            </p>
+                    </div>
                     <Multiselect
                         v-model="form.attributes"
                         :options="attributesOptions"
@@ -312,7 +322,7 @@ const removeVariant = (index) => {
                                     :class="[alreadyHasVariants.includes(index) ? 'border-red-500 focus focus:border-red-500 focus:ring-red-500'  : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500']"
                                 />
                             </td>
-                            <td class="px-4 py-2">
+                            <td class="px-4 py-2">      
                                 <input
                                     v-model="variant.qty"
                                     type="number"
@@ -328,15 +338,15 @@ const removeVariant = (index) => {
                                     class="border p-2 rounded-md w-full"
                                 />
                             </td>
-                            <td class="px-4 py-2">
+                            <!-- <td class="px-4 py-2">
                                 <input
                                     v-model="variant.discount_price"
                                     type="number"
                                     placeholder="Discount Price"
                                     class="border p-2 rounded-md w-full"
                                 />
-                            </td>
-                            <td class="px-4 py-2 text-center">
+                            </td> -->
+                            <td class="px-4 py-2 ">
                         <button
                         type="button"
                             @click="removeVariant(index)"
@@ -373,6 +383,11 @@ const removeVariant = (index) => {
                 </FormButton>
             </div>
         </form>
+        <CreateModal 
+            :open="showCreateModal"
+            @closeModal="closeCreateModal"
+            :href="route('admin.attributes.create')"
+        />
     </div>
 </template>
 <style>

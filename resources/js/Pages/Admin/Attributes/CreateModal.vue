@@ -1,6 +1,10 @@
 <template>
     <Modal :open="open" @closeModal="closeModal" can-close-backdrop>
-        <form class="text-black space-y-2 p-4" @submit.prevent="submit">
+        <form class="text-black space-y-2 p-4" @keydown="e => {
+            if(e.key == 'Enter'){
+                e.preventDefault();
+            }
+        }" @submit.prevent="submit">
             <h1 class="text-xl font-bold mb-5">Create Attribute</h1>
             <div class="mt-10">
                 <Label label="Display Name" required />

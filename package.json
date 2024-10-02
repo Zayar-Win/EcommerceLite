@@ -37,10 +37,12 @@
         "lodash": "^4.17.21",
         "mitt": "^3.0.1",
         "moment": "^2.30.1",
+        "react-dnd-html5-backend": "^16.0.1",
         "swiper": "^11.1.12",
         "vee-validate": "^4.13.2",
         "vue-filepond": "^7.0.4",
         "vue-multiselect": "^3.1.0",
+        "vue3-dnd": "^2.1.0",
         "vuex": "^4.0.2",
         "yup": "^1.4.0"
     }

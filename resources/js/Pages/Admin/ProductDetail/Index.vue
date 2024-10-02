@@ -127,7 +127,7 @@ const { destroy } = useCRUDOperations();
                                     "
                                 />
 
-                                <SortableTableHeaderCell
+                                <!-- <SortableTableHeaderCell
                                     label="Discount"
                                     sort="discount"
                                     :url="
@@ -135,7 +135,7 @@ const { destroy } = useCRUDOperations();
                                             product: product?.id,
                                         })
                                     "
-                                />
+                                /> -->
 
                                 <TableHeaderCell label="Actions" />
                             </template>
@@ -171,9 +171,9 @@ const { destroy } = useCRUDOperations();
                                 <TableDataCell class="min-w-[150px]">
                                     {{ item.stock_quantity }}
                                 </TableDataCell>
-                                <TableDataCell class="min-w-[150px]">
+                                <!-- <TableDataCell class="min-w-[150px]">
                                     {{ item.discount }}
-                                </TableDataCell>
+                                </TableDataCell> -->
 
                                 <TableActionCell class="min-w-[350px]">
                                     <InertiaLinkButton

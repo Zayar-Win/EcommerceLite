@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\ProductDetail;
 use App\Models\Size;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class ProductDetailController extends Controller
@@ -57,6 +58,18 @@ class ProductDetailController extends Controller
     public function store(Request $request)
     {
 
+        $validator = Validator::make(request()->all(), [
+            'variants' => 'required',
+            'variants.*.qty' => 'required',
+            'vairants.*.price' => 'required',
+            'variants.*.discount_price' => 'nullable',
+            'variants.*.attributes.*' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return back()->with('error', 'Please fill the all field.');
+        }
+
         $variants = request('variants');
 
         foreach ($variants as $variant) {
@@ -94,8 +107,18 @@ class ProductDetailController extends Controller
 
     public function update(ProductDetailRequest $request, string $productId, string $detailId)
     {
-        $productDetail = ProductDetail::findOrFail($detailId);
+        $validator = Validator::make(request()->all(), [
+            'variants' => 'required',
+            'variants.*.qty' => 'required',
+            'vairants.*.price' => 'required',
+            'variants.*.discount_price' => 'nullable',
+            'variants.*.attributes.*' => 'required'
+        ]);
 
+        if ($validator->fails()) {
+            return back()->with('error', 'Please fill the all field.');
+        }
+        $productDetail = ProductDetail::findOrFail($detailId);
 
         $productDetailWithThisVariantsQuery = ProductDetail::where('product_id', $productId);
 
@@ -138,6 +161,7 @@ class ProductDetailController extends Controller
         $productDetail = ProductDetail::where('product_id', $productId)
             ->where('id', $detailId)
             ->first();
+        $productDetail->attributeOptions()->delete();
         $productDetail->delete();
         return back();
     }

@@ -67,11 +67,11 @@
                                     :url="route('admin.products.index')"
                                 />
 
-                                <SortableTableHeaderCell
+                                <!-- <SortableTableHeaderCell
                                     label="Discount"
                                     sort="discount"
                                     :url="route('admin.products.index')"
-                                />
+                                /> -->
                                 <SortableTableHeaderCell
                                     label="Priority"
                                     sort="priority"
@@ -117,9 +117,9 @@
                                 <TableDataCell class="min-w-[150px]">
                                     {{ item.price }}
                                 </TableDataCell>
-                                <TableDataCell class="min-w-[100px]">
+                                <!-- <TableDataCell class="min-w-[100px]">
                                     {{ item.discount }}
-                                </TableDataCell>
+                                </TableDataCell> -->
                                 <TableDataCell class="min-w-[100px]">
                                     {{ item.priority }}
                                 </TableDataCell>
@@ -189,6 +189,7 @@
                 </template>
             </TableContainer>
         </div>
+        <DragAndDrop />
     </div>
 </template>
 
@@ -207,6 +208,7 @@ import TableHeaderCell from "@/Components/Common/TableHeaderCell.vue";
 import Breadcrumb from "@/Components/Molecules/Breadcrumb.vue";
 import ProductTableFilters from "@/Components/Organisms/ProductTableFilters.vue";
 import { useCRUDOperations } from "@/Composables/useCRUDOperations";
+import DragAndDrop from "./DragAndDrop.vue";
 
 defineProps({
     products: {
