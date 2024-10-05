@@ -20,17 +20,46 @@ class Uploader
         return false;
     }
 
+    // public function upload($file, $imgContainer, $customName = null)
+    // {
+    //     if ($this->isLink($file)) {
+    //         return $file;
+    //     }
+    //     $path = ($customName) ? $file->storeAs($imgContainer, $customName) : $file->store($imgContainer);
+    //     $url = Storage::url($path);
+
+    //     return $url;
+    // }
+
     public function upload($file, $imgContainer, $customName = null)
     {
+        if ($file instanceof \Intervention\Image\Image) {
+            $customName = $customName ?? uniqid() . '.jpg'; 
+
+            $imageContent = (string) $file->encode(); 
+
+            $tempFilePath = tempnam(sys_get_temp_dir(), 'img_');
+            file_put_contents($tempFilePath, $imageContent);
+
+            $uploadedFile = new \Illuminate\Http\UploadedFile($tempFilePath, $customName, null, null, true);
+
+            $path = $uploadedFile->storeAs($imgContainer, $customName);
+            $url = Storage::url($path);
+
+            unlink($tempFilePath); 
+
+            return $url;
+        }
+
         if ($this->isLink($file)) {
             return $file;
         }
+
         $path = ($customName) ? $file->storeAs($imgContainer, $customName) : $file->store($imgContainer);
         $url = Storage::url($path);
 
         return $url;
     }
-
     public function remove($url)
     {
         $path = $this->changeUrlToPath($url);

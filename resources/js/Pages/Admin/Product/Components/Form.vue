@@ -63,7 +63,6 @@ const isFormValid = computed(() => {
 
 const handleAvatar = (files) => {
     if (files.length) {
-        console.log(files.map(file=>file))
         form.images = files.map(file => file);  
     } else {
         form.images = [];
@@ -102,7 +101,7 @@ const selectedCategory = computed(() => {
                         :files="form.images"
                         :acceptedFileTypes="['image/*']"
                         :imageCropAspectRatio="'1:1'"
-                        :imagePreviewHeight="200"
+                        :imagePreviewHeight="300"
                         :imageResizeTargetWidth="300"
                         :imageResizeTargetHeight="300"
                         :maxFiles=5
@@ -205,5 +204,7 @@ const selectedCategory = computed(() => {
     </div>
 </template>
 <style>
-
+    .filepond--item {
+    width: calc(20% - 0.5em);
+}
 </style>

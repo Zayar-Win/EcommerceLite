@@ -68,16 +68,19 @@ onMounted(() => {
                     : edit('User', route('admin.payments.update', { payment }))
             "
         >
-            <div>
+        <div class="flex space-x-4"> 
+            <div class="w-6/12">
                 <Label label="Payment Qr Photo" required />
                 <FilePond :image="form?.qr_code" @updateFile="(file) => form.qr_code = file" />
                 <ValidationError :message="errors?.qr_code" />
             </div>
-            <div>
+            <div class="w-6/12">
                 <Label label="Payment Icon" required />
-                <FilePond :image="form?.icon" @updateFile="(file) => form.icon = file" />
+                <FilePond  :image="form?.icon" @updateFile="(file) => form.icon = file" />
                 <ValidationError :message="errors?.icon" />
             </div>
+        </div>
+           
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
                     <Label label="Payment Name" required />
@@ -137,7 +140,7 @@ onMounted(() => {
 
             <div class="flex items-center justify-end space-x-5">
                 <InertiaLinkButton
-                    :href="route('admin.users.index')"
+                    :href="route('admin.payments.index')"
                     class="bg-gray-600 hover:bg-gray-700 text-white"
                 >
                     Cancel
