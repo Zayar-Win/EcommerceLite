@@ -11,8 +11,12 @@
             </Breadcrumb>
 
             <!-- Create Button -->
-            <div class="min-w-[270px] flex justify-end">
-                <InertiaLinkButton :href="route('admin.products.create')">
+            <div class="flex items-center gap-3  mr-10">
+                <InertiaLinkButton class="shrink-0 flex items-center gap-1"  :href="route('admin.products.sort')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 8H6m0 0l4.125-4M6 8l4.125 4M6 16h12m0 0l-4.125-4M18 16l-4.125 4"/></svg>
+                    Order Products
+                </InertiaLinkButton>
+                <InertiaLinkButton class="shrink-0"  :href="route('admin.products.create')">
                     <i class="fa-solid fa-file-circle-plus mr-1"></i>
                     Create
                 </InertiaLinkButton>
@@ -189,7 +193,6 @@
                 </template>
             </TableContainer>
         </div>
-        <DragAndDrop />
     </div>
 </template>
 
@@ -208,7 +211,6 @@ import TableHeaderCell from "@/Components/Common/TableHeaderCell.vue";
 import Breadcrumb from "@/Components/Molecules/Breadcrumb.vue";
 import ProductTableFilters from "@/Components/Organisms/ProductTableFilters.vue";
 import { useCRUDOperations } from "@/Composables/useCRUDOperations";
-import DragAndDrop from "./DragAndDrop.vue";
 
 defineProps({
     products: {

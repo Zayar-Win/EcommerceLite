@@ -113,6 +113,11 @@ class ProductController extends Controller
         return to_route('admin.products.index');
     }
 
+    public function sort()
+    {
+        return Inertia::render('Admin/Product/OrderProduct');
+    }
+
     public function destroy(Product $product)
     {
         $product->productDetails()->delete();

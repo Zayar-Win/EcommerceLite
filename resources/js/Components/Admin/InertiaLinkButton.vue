@@ -10,7 +10,7 @@ const props = defineProps({
 
     class: {
         type: String,
-        default: 'text-white bg-primary hover:bg-blue-900'
+        default: ''
     },
 
     method: {
@@ -47,7 +47,7 @@ const computedClasses = computed(() => props.class);
         :method="method"
         :href="href"
         :data="data"
-        class="text-sm px-4 shadow-md py-3 font-semibold rounded-md transition-all active:animate-press"
+        class="text-sm px-4 shadow-md py-3 text-white bg-primary hover:bg-blue-900 font-semibold rounded-md transition-all active:animate-press"
         :class="computedClasses"
         :preserve-state="preserveState"
         :preserve-scroll="preserveScroll"
