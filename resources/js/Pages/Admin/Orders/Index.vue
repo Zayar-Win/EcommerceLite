@@ -14,10 +14,10 @@
             <div class="min-w-[270px] flex justify-end">
                 <!-- <DownloadReportDropdown type="users" /> -->
 
-                <InertiaLinkButton :href="route('admin.users.create')">
+                <!-- <InertiaLinkButton :href="route('admin.users.create')">
                     <i class="fa-solid fa-file-circle-plus mr-1"></i>
                     Create
-                </InertiaLinkButton>
+                </InertiaLinkButton> -->
             </div>
         </div>
         <div
@@ -27,7 +27,7 @@
                 class="my-3 flex sm:flex-row space-y-5 sm:space-y-0 items-center justify-center sm:justify-between overflow-auto p-1"
             >
                 <DashboardTableDataSearchBox
-                    placeholder="Search by id, name, email or phone"
+                    placeholder="Search by  name or phone"
                     :href="route('admin.orders.index')"
                 />
 

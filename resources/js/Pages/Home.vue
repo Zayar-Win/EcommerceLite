@@ -34,7 +34,7 @@
                     <div  v-for="product in products" :key="product.id" class="cursor-pointer">
                         <Link :href="route('product-detail',{product})">
                             <div class="w-full h-auto group rounded-xl overflow-hidden">
-                                <img class="w-full group-hover:scale-[1.1] transition-all duration-200 h-full" :src="product.images[0].url" />
+                                <img class="w-full group-hover:scale-[1.1] transition-all duration-200 h-full" :src="product.images[0]?.url" />
                             </div>
                             <p class="mt-3 font-semibold">{{product?.name}}</p>
                             <div class="flex gap-2 text-sm items-center font-semibold mt-1">

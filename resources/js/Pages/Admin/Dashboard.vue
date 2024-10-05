@@ -66,7 +66,7 @@
                                                 </div>
                                             </TableDataCell>
                                             <TableDataCell class="w-[100px]">
-                                                <img :src="item.images[0].url" class="w-[50px] h-[40px] object-cover" />
+                                                <img :src="item.images[0]?.url" class="w-[50px] h-[40px] object-cover" />
                                             </TableDataCell>
                                             <TableDataCell class="w-[100px]">
                                                 <p>{{ item.category.name }}</p>

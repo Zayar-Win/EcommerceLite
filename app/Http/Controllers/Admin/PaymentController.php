@@ -46,6 +46,7 @@ class PaymentController extends Controller
 
     public function edit(Payment $payment)
     {
+        // dd($payment);
         return Inertia::render('Admin/Payments/Edit', [
             'payment' => $payment
         ]);

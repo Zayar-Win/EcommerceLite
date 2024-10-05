@@ -92,7 +92,6 @@ const handleProcessFile = (file) => {
   console.log('Processing file:', file);
 };
 
-
 // const serverConfig = computed(() => ({
 //   // Configure your server settings here
 //   process: {
@@ -127,11 +126,22 @@ if (props.files && props.files.length > 0) {
     images.value = props.files.map((file) => {
         const filePath = `${file}`;
 
+        // return {
+        //     options: {
+        //         file: filePath,
+        //         metadata: {
+        //             poster: filePath,
+        //         },
+        //     },
+        // };
         return {
+            source: filePath,  // The source of the file (from the DB)
             options: {
-                file: filePath,
+                type: 'local',  // Indicates that the file is a local file (already uploaded)
+                file: file,  // The file name
+                
                 metadata: {
-                    poster: filePath,
+                    poster: filePath,  // Preview image path
                 },
             },
         };
@@ -190,12 +200,11 @@ const handleFilePondUpdate = (fileItems) => {
             :allowMultiple="allowMultiple"
             :FilePondPluginImageCrop="true"
             :acceptedFileTypes="acceptedFileTypes"
-            :imageCropAspectRatio="imageCropAspectRatio"
             :stylePanelLayout="mode === 'avatar' ? 'circle' : stylePanelLayout"
             :styleButtonRemoveItemPosition="
                 mode === 'avatar' ? 'bottom-center' : 'top-left'
             "
-            :imagePreviewHeight="imagePreviewHeight"
+            :imageCropAspectRatio="imageCropAspectRatio"
             :imageResizeTargetWidth="imageResizeTargetWidth"
             :imageResizeTargetHeight="imageResizeTargetHeight"
             :maxFiles="maxFiles"
@@ -204,6 +213,8 @@ const handleFilePondUpdate = (fileItems) => {
             max-file-size="maxFileSize"
             @init="filePondInitialized"
         />
+        <!-- :imageCropAspectRatio="imageCropAspectRatio" -->
+
         <!-- :styleItemPanelAspectRatio="'1:1'" -->
         <!-- @processfile="handleProcessFile" -->
         <!-- :server="serverConfig" -->
@@ -212,15 +223,14 @@ const handleFilePondUpdate = (fileItems) => {
 <style>
     @import "filepond/dist/filepond.min.css";
     @import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
-.filepond--processing .filepond--item {
-  border: 2px solid #4caf50 !important; /* Green border when processing */
-  opacity: 0.8 !important;             /* Slight transparency */
-}
 
-.filepond--processing {
-  background-color: rgba(255, 255, 0, 0.1) !important; /* Light yellow background */
-  border: 2px dashed #ffa500 !important;            /* Orange dashed border */
-}
+
+.filepond--item {
+        height: 230px; 
+    }
+
+    /* Make sure the images inside the FilePond item fit the container */
+
 </style>
 <!-- <style scoped>
 

@@ -90,7 +90,7 @@ const handleLogout=()=>{
 
         </div>
         <div
-            class="w-full px-3 font-roboto transition-all  duration-150  absolute left-0 bottom-2 bg-black"
+            class="w-full px-3 font-roboto transition-all  duration-150  absolute left-0 bottom-2 bg-secondary"
         >
             <a
                 class="font-bold text-md rounded-[4px] flex h-[48px] items-center cursor-pointer mb-1
