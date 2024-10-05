@@ -41,9 +41,13 @@ class Order extends Model
     {
         $query->when($filters['search'] ?? null, function ($query) use ($filters) {
             $search = $filters['search'];
-            $query->whereHas('user', function ($query) use ($search) {
-                $query->where('name', 'LIKE', '%' . $search . '%')->orWhere("phone", 'LIKE', '%' . $search . '%');
+            $query->where(function($query) use ($search) {
+                $query->where('shipping_recipient_name','LIKE','%'.$search.'%')
+                ->orWhere('shipping_ph_number','LIKE','%'.$search.'%');
             });
+            // $query->whereHas('user', function ($query) use ($search) {
+            //     $query->where('name', 'LIKE', '%' . $search . '%')->orWhere("phone", 'LIKE', '%' . $search . '%');
+            // });
         });
     }
 

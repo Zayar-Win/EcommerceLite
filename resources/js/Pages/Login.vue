@@ -9,7 +9,7 @@
                 create('user',route('login'))
             }" class="flex flex-col gap-5">
                 <Input label="Email" v-model="form.email" :errorMessage="errors.email" placeholder="Enter your email"  />
-                <Input label="Password" v-model="form.password" :errorMessage="errors.password" placeholder="Enter your password"  />
+                <Input label="Password" :type="password" v-model="form.password" :errorMessage="errors.password" placeholder="Enter your password"  />
                 <button type="submit" class="w-full py-4 text-white font-bold text-xl rounded-full bg-primary block">Login</button>
                 <p class="text-sm text-center font-semibold">Don't have account? Register <Link class="text-primary underline" :href="route('register')">here.</Link></p>
             </form>

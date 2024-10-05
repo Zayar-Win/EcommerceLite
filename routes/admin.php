@@ -39,7 +39,9 @@ Route::prefix('/admin')
             ]);
         })->name('dashboard');
         Route::get('/orders', function () {
-            $orders = Order::with('payment')->filterBy(request()->all())->latest()->paginate(10);
+            $orders = Order::with('payment')->filterBy(request(['search']))->latest()->orderBy(request('sort', 'id'), request('direction', 'desc'))->paginate(10);
+            // $query = User::filterBy(request(['search', 'nationality', 'dob']))->orderBy(request('sort', 'id'), request('direction', 'desc'));
+        // $users = $query->paginate(request('per_page', 10))
             return Inertia::render('Admin/Orders/Index', [
                 'orders' => $orders
             ]);

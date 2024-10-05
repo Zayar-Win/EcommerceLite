@@ -10,6 +10,9 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+
 
 class ProductController extends Controller
 {
@@ -53,7 +56,12 @@ class ProductController extends Controller
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
-                $path = $this->uploader->upload($file, 'images');
+                $manager = new ImageManager(new Driver());
+                $image = $manager->read($file);
+
+                // resize image proportionally to 300px width
+                $image->resize(300, 300);
+                $path = $this->uploader->upload($image, 'images');
 
                 $product->images()->create([
                     'url' => $path,
@@ -73,7 +81,7 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with('images')->findOrFail($id);
 
         $product->update([
             'name' => $request->input('name'),
@@ -82,34 +90,32 @@ class ProductController extends Controller
             'discount' => $request->input('discount'),
             'category_id' => $request->input('category_id'),
         ]);
-
-        $images = $request->images;
-        $currentImage = array_filter($images, 'is_string');
-        $cleanedCurrentImagePaths = array_map(function ($imagePath) {
-            return str_replace('/storage/', '', $imagePath);
-        }, $currentImage);
-        dd($currentImage);
-        $newImages = array_filter($images, function ($image) {
-            return $image instanceof \Illuminate\Http\UploadedFile;
+        $existingImages = $product->images->pluck('url')->toArray();
+        $oldImages = array_filter($request->images, function ($value) {
+            return is_string($value); 
         });
-
-        $oldImagePaths = $product->images->pluck('url')->toArray();
-        $imagesToRemove = array_filter($oldImagePaths, function ($oldImage) use ($cleanedCurrentImagePaths) {
-            return !in_array($oldImage, $cleanedCurrentImagePaths);
-        });
-
-        if ($imagesToRemove) {
-            $product->images()->whereIn('url', $imagesToRemove)->delete();
+        $imagesToDelete = array_diff($existingImages, $oldImages);
+        foreach ($imagesToDelete as $url) {
+            $image = $product->images()->where('url', $url)->first();
+            if ($image) {
+                $image->delete();
+            }
         }
 
-        foreach ($newImages as $image) {
-            $path = $image->store('images');
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $file) {
+                $manager = new ImageManager(new Driver());
+                $image = $manager->read($file);
 
-            $product->images()->create([
-                'url' => $path,
-            ]);
+                // resize image proportionally to 300px width
+                $image->resize(300, 300);
+                $path = $this->uploader->upload($image, 'images');
+
+                $product->images()->create([
+                    'url' => $path,
+                ]);
+            }
         }
-
         return to_route('admin.products.index');
     }
 
