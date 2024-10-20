@@ -9,6 +9,9 @@
                 <li v-for="category in categories" :key="category.id">
                     <Link :href="route('home',{category : category.name})">{{category.name}}</Link>
                 </li>
+                <li>
+                    <Link href="/support-ticket">Support Ticket</Link>
+                </li>
             </ul>
         </div>
         <div class="col-span-2">

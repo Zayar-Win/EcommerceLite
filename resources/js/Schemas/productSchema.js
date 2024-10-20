@@ -15,10 +15,8 @@ export const productSchema = yup.object({
         .positive("Price must be a positive number")
         .min(1, "Price must be at least 1"),
     discount: yup
-        .number()
-        .nullable()
-        .min(0, "Discount must be at least 0")
-        .max(100, "Discount cannot exceed 100"),
+        .mixed()
+        .nullable(),
     category_id: yup
         .number()
         .required("Category is required")

@@ -33,13 +33,13 @@
                 <div v-if="products?.length > 0" class="grid lg:grid-cols-4 md:grid-cols-2 mb-14 gap-x-5 gap-y-10">
                     <div  v-for="product in products" :key="product.id" class="cursor-pointer">
                         <Link :href="route('product-detail',{product})">
-                            <div class="w-full h-auto group rounded-xl overflow-hidden">
-                                <img class="w-full group-hover:scale-[1.1] transition-all duration-200 h-full" :src="product.images[0]?.url" />
+                            <div class="w-full h-auto bg-[#F7F8F9] group rounded-xl overflow-hidden">
+                                <img class="w-full h-full group-hover:scale-[1.1] transition-all duration-200" :src="product.images[0]?.url" />
                             </div>
                             <p class="mt-3 font-semibold">{{product?.name}}</p>
                             <div class="flex gap-2 text-sm items-center font-semibold mt-1">
-                                <p class="text-primary">{{Math.floor(product?.price - ((product?.discount / 100) * product?.price))}} MMK</p>
-                                <p v-if="product?.discount || product?.discount !== 0" class=" line-through">{{ product?.price ?? '1000' }} MMK</p>
+                                <!-- <p class="text-primary">{{Math.floor(product?.price - ((product?.discount / 100) * product?.price))}} MMK</p> -->
+                                <p v-if="product?.discount || product?.discount !== 0" class="text-primary">{{ product?.price ?? '1000' }} MMK</p>
                             </div>
                         </Link>
                     </div>

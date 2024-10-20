@@ -35,7 +35,7 @@
                         </div>
                         <div class="flex items-center ">
                             <p class="basis-[35%] font-semibold">Stock:</p>
-                            <p :class="[totalStock ? '' : 'text-red-500']" class="basis-[65%] text-black/70">{{ totalStock ? totalStock : 'Out of stock' }}</p>
+                            <p :class="[totalStock ? '' : 'text-red-500']" class="basis-[65%] text-black/70">{{ totalStock > 0 ? totalStock : 'Out of stock' }}</p>
                         </div>
                         <div class="flex items-end cursor-pointer" :key="optionKey" v-for="optionKey in Object.keys(product?.groupAttributeOptions)">
                             <p class="basis-[35%] shrink-0 capitalize font-semibold">{{optionKey}}:</p>
@@ -162,7 +162,7 @@
                         </div>
                         <div class="flex items-center ">
                             <p class="basis-[35%] font-semibold">Stock:</p>
-                            <p :class="[totalStock ? '' : 'text-red-500']" class="basis-[65%] text-black/70">{{totalStock ? totalStock : 'Out of stock'}}</p>
+                            <p :class="[totalStock ? '' : 'text-red-500']" class="basis-[65%] text-black/70">{{totalStock >0 ? totalStock : 'Out of stock'}}</p>
                         </div>
                         <div class="flex items-end cursor-pointer" :key="optionKey" v-for="optionKey in Object.keys(product?.groupAttributeOptions)">
                             <p class="basis-[35%] shrink-0 capitalize font-semibold">{{optionKey}}:</p>
@@ -189,7 +189,7 @@
                             </select>
                         </div>
                     </div>
-                    <button @click="handleAddItemToCart" :disabled="!totalStock" class="w-full h-full disabled:opacity-45 disabled:cursor-not-allowed text-white bg-primary rounded-full py-4 font-bold mt-3">Add to Cart</button>
+                    <button @click="handleAddItemToCart" :disabled="!totalStock || totalStock <= 0" class="w-full h-full disabled:opacity-45 disabled:cursor-not-allowed text-white bg-primary rounded-full py-4 font-bold mt-3">Add to Cart</button>
                 </div>
                 <div class="mt-12">
                     <div class="flex items-center justify-between mb-7">

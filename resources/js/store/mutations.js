@@ -25,6 +25,6 @@ export default{
     },
     clearAllItemsFromCart(state){
         state.cartItems = []
-        localStorage.setItem('p&p-store',state.cartItems)
+        localStorage.removeItem('p&p-cart')
     }
 }

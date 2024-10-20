@@ -129,7 +129,7 @@ class ProductDetailController extends Controller
                 })->where('attribute_options.id', $attribute);
             });
         }
-        $productDetailWithThisVariants = $productDetailWithThisVariantsQuery->first();
+        $productDetailWithThisVariants = $productDetailWithThisVariantsQuery->where('id', '!=', $detailId)->first();
 
         if ($productDetailWithThisVariants) {
             return back()->with('error', 'Product Detail with this variants already exists.');

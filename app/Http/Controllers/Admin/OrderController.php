@@ -18,10 +18,29 @@ class OrderController extends Controller
 
     public function update(Order $order)
     {
-        if ($order->status == 'completed') {
-            return back()->with('success', 'Your order is already completed.');
+        // if ($order->status == 'completed') {
+        //     return back()->with('success', 'Your order is already completed.');
+        // }
+        $orderProductDetails = $order->orderProductDetails()->with('productDetail', 'productDetail.product')->get();
+
+        $outStocksProductDetails = [];
+        foreach ($orderProductDetails as $orderProductDetail) {
+            if ($orderProductDetail->productDetail->stock_quantity < $orderProductDetail->quantity) {
+                $outStocksProductDetails[] = $orderProductDetail;
+            }
         }
-        $orderProductDetails = $order->orderProductDetails()->with('productDetail')->get();
+        if (count($outStocksProductDetails)) {
+            $errorMessage = '';
+            foreach ($orderProductDetails as $orderProductDetail) {
+                if ($errorMessage) {
+                    $errorMessage = $errorMessage . ' and ' . $orderProductDetail->productDetail->proudct->name;
+                } else {
+                    $errorMessage = $orderProductDetail->productDetail->product->name;
+                }
+            }
+            $errorMessage = $errorMessage . ' don\'t have enough stock';
+            return back()->with('error', $errorMessage);
+        }
         $order->update([
             'status' => 'completed'
         ]);

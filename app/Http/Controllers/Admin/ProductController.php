@@ -92,7 +92,7 @@ class ProductController extends Controller
         ]);
         $existingImages = $product->images->pluck('url')->toArray();
         $oldImages = array_filter($request->images, function ($value) {
-            return is_string($value); 
+            return is_string($value);
         });
         $imagesToDelete = array_diff($existingImages, $oldImages);
         foreach ($imagesToDelete as $url) {
@@ -121,7 +121,25 @@ class ProductController extends Controller
 
     public function sort()
     {
-        return Inertia::render('Admin/Product/OrderProduct');
+        $products = Product::with('images')->get();
+        $orderedProducts = Product::with('images')->whereNotNull('priority')->orderByRaw('CASE WHEN priority IS NULL THEN 9 ELSE priority END')->get();
+        return Inertia::render('Admin/Product/OrderProduct', [
+            'products' => $products,
+            'orderedProducts' => $orderedProducts
+        ]);
+    }
+
+    public function productSort()
+    {
+        Product::whereNotNull('priority')->update([
+            'priority' => null
+        ]);
+        foreach (request('selectedProducts') as $key => $product) {
+            Product::where('id', $product['id'])->update([
+                'priority' => $key + 1,
+            ]);
+        }
+        return back()->with('success', 'Order Success.');
     }
 
     public function destroy(Product $product)

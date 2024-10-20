@@ -2,28 +2,30 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Product;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProductRequest extends FormRequest
 {
-   
+
     public function authorize(): bool
     {
         return true;
     }
 
-    
+
     public function rules(): array
     {
         return [
-                'name' => 'required|string|max:255',    
-                'description' => 'nullable|string',        
-                'price' => 'required|numeric|min:0',     
-                'discount' => 'nullable|numeric|min:0|max:100', 
-                'category_id' => 'required|exists:categories,id', 
-                'images.*' => 'nullable|image|mimes:jpeg,png,gif|max:2048',
+            'name' => ['required', 'string', 'max:255', Rule::unique(Product::class, 'name')],
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'discount' => 'nullable',
+            'category_id' => 'required|exists:categories,id',
+            'images.*' => 'nullable|image|mimes:jpeg,png,gif|max:2048',
             'images' => 'array|max:5',
-            ];
+        ];
     }
 
     public function messages()

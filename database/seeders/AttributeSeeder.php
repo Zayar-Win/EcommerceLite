@@ -22,7 +22,7 @@ class AttributeSeeder extends Seeder
             'color' => ['red', 'green', 'blue', 'black'],
             'size' => ['lg', 'xl', 'md', 'xxl'],
             'storage' => ['128gb', '256gb', '528gb', '1TB'],
-            'brand' => ['LV', 'Lee', 'Gucci', 'Uni']
+            'brand' => ['LV', 'Boss', 'Gucci', 'Uni']
         ];
 
         $products = [

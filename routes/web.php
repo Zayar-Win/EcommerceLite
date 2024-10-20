@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    $products = Product::with(['images', 'category'])->filter(request()->all())->paginate(20);
+    $products = Product::with(['images', 'category'])->filter(request()->all())->orderByRaw('CASE WHEN priority IS NULL THEN 9 ELSE priority END')->paginate(20);
     $categories = Category::all();
 
     if (request()->expectsJson()) {

@@ -1,11 +1,14 @@
 <script setup>
 import { Head } from '@inertiajs/vue3';
 import Tabs from '../Components/Tabs.vue';
+import Navbar from '@/Components/Common/Navbar.vue';
+import Footer from '@/Components/Common/Footer.vue';
 // import GuestLayout from '@/Layouts/GuestLayout.vue';
 </script>
 
 <template>
     <Head :title="`${$page.props.auth.user?.name}'s Settings`" />
+    <Navbar />
     <div>
         <div class="flex flex-col items-start p-5 md:p-10 min-h-screen font-roboto mt-6 mb-24 max-w-[1500px] mx-auto">
             <div
@@ -21,13 +24,14 @@ import Tabs from '../Components/Tabs.vue';
                     >
                         <transition name="tab-animation" mode="out-in">
                             <slot/>
-                        
                         </transition>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+  <Footer />
+
 </template>
 
 <script>
