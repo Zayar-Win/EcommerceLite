@@ -278,7 +278,7 @@ export default {
         }
     },
     methods:{
-        ...mapMutations(['addItemToCart']),
+        ...mapMutations(['addItemToCart','setIsCartOpen']),
         handleAddItemToCart(){
             let item = {
                 product : {
@@ -288,8 +288,8 @@ export default {
                     quantity : this.quantity
                 }
             };
-
             this.addItemToCart(item);
+            this.setIsCartOpen(true)
 
         },
         handleGetProductDetail(paramKey,value){
