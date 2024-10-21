@@ -109,6 +109,7 @@ import "vue-multiselect/dist/vue-multiselect.css";
     watch:{
       selectedProduct(){
         this.selectedProducts[this.currentSelectedProductIndex] = this.selectedProduct
+        this.options = this.products.filter(product => !this.selectedProducts.find(selectedProduct => selectedProduct?.id == product?.id))
       }
     },
     methods: {
@@ -132,10 +133,10 @@ import "vue-multiselect/dist/vue-multiselect.css";
         router.post(route('admin.products.sort'),{selectedProducts:this.selectedProducts})
       }
     },
-    
-    mounted(){
+    mounted() {
       this.options = this.products
-    }
+    },
+    
   };
   </script>
   
