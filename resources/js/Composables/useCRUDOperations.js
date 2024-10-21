@@ -34,7 +34,7 @@ export function useCRUDOperations(initialFormFields = {}, validationSchema = {},
 
 
     // Create Action
-    const create = (model, url,onSuccess = () => {}) => {
+    const create = (model, url,onSuccess = () => {},onError = () => {}) => {
         return handleSubmit((values)=>{
             processing.value = true;
             router.post(url,
@@ -56,6 +56,7 @@ export function useCRUDOperations(initialFormFields = {}, validationSchema = {},
                     onFinish: () => (processing.value = false),
                     onError: (errors) => {
                         backendErrors.value = errors;
+                        onError()
                     }
                 }
             );

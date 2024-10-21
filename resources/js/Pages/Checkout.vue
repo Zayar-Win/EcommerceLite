@@ -124,6 +124,7 @@ import { router, usePage } from '@inertiajs/vue3';
 import { useCRUDOperations } from '@/Composables/useCRUDOperations';
 import ValidationError from '@/Components/Atoms/ValidationError.vue';
 import FilePond from '@/Components/Atoms/FilePond.vue';
+import { debounce } from 'lodash';
 export default {
     components:{
         Input,
@@ -190,11 +191,22 @@ export default {
             payment_id : null
         },schema,false)
 
+        const debouncedErrorHandler = debounce(() => {
+            let errorInput = document.querySelector('#error');
+            if (errorInput) {
+                errorInput.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }
+        }, 300);
+
         return {
             errors,
             form,
             create,
-            user
+            user,
+            debouncedErrorHandler
         }
 
     },
@@ -202,6 +214,9 @@ export default {
         'form.payment_id'(){
             this.selectedPayment = this.payments.filter(payment => payment.id == this.form.payment_id)[0].name
         },
+        errors(){
+            this.debouncedErrorHandler()
+        }
     },
     mounted(){
         if(!this.cartItems.length){
