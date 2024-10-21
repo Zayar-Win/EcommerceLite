@@ -60,7 +60,7 @@ Route::get('/products/{product:slug}', function (Product $product) {
 
         $filters = $defaultAttribute;
     } else {
-        $productDetail = $product->productDetails()->where(function ($query) use ($filters) {
+        $productDetail = $product->productDetails()->with('attributeOptions', 'attributeOptions.attribute')->where(function ($query) use ($filters) {
             foreach ($filters as $key => $value) {
                 $query->whereHas('attributeOptions', function ($query) use ($filters, $key, $value) {
                     $query->whereHas('attribute', function ($query) use ($filters, $key, $value) {
@@ -72,7 +72,6 @@ Route::get('/products/{product:slug}', function (Product $product) {
             }
         })->first();
     }
-
 
     $productWithSize = Product::with(['productDetails' => function ($query) {
         return $query->with('size');

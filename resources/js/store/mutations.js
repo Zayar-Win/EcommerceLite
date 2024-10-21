@@ -3,7 +3,16 @@ export default{
         state.isCartOpen= payload
     },
     addItemToCart(state,payload) {
-        state.cartItems = [...state.cartItems,payload];
+        if(state.cartItems.find(cartItem => cartItem.product.product_detail.id == payload.product.product_detail.id)){
+            state.cartItems = state.cartItems.map(cartItem => {
+                if(cartItem.product.product_detail.id == payload.product.product_detail.id){
+                    cartItem.product.quantity += payload.product.quantity
+                }
+                return cartItem
+            })
+        }else{
+            state.cartItems = [...state.cartItems,payload];
+        }
         localStorage.setItem('p&p-cart',JSON.stringify(state.cartItems))
     },
     updateCartItem(state,payload) {

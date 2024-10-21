@@ -55,12 +55,7 @@
                             <p class="font-bold mb-2">Quantity</p>
                             <input :disabled="!totalStock" v-model="quantity" class="w-full border-black/10 rounded-full py-3 pl-5" :max="totalStock" type="number" />
                         </div>
-                        <div v-if="isClothCategory" class="lg:basis-[60%] w-full">
-                            <p class="font-bold mb-2">Size</p>
-                            <select v-model="selectedSize" class="w-full border-black/10 rounded-full py-3 ">
-                                <option v-for="size in sizes" :value="size" :key="size">{{size}}</option>
-                            </select>
-                        </div>
+                        <p v-if="stockError" class="text-[10px] text-red-500">{{ stockError }}</p>
                     </div>
                     <button @click="handleAddItemToCart" :disabled="!totalStock" class="w-full h-full disabled:opacity-45 disabled:cursor-not-allowed text-white bg-primary rounded-full py-4 font-bold mt-3">Add to Cart</button>
                 </div>
@@ -177,19 +172,14 @@
                         </div>
                     </div>
                     <div class="my-8 h-[1px] w-full bg-black/20"></div>
-                    <div class="flex lg:items-center lg:flex-row flex-col gap-3 mt-4 mb-2">
+                    <div class="flex  items-start  flex-col gap-3 mt-4 mb-2">
                         <div class="lg:basis-[40%]">
                             <p class="font-bold mb-2">Quantity</p>
                             <input :disabled="!totalStock" v-model="quantity" class="w-full border-black/10 rounded-full py-3 pl-5" :max="totalStock" type="number" />
                         </div>
-                        <div v-if="isClothCategory" class="lg:basis-[60%] w-full">
-                            <p class="font-bold mb-2">Size</p>
-                            <select   v-model="selectedSize" class="w-full border-black/10 rounded-full py-3 ">
-                                <option v-for="size in sizes" :value="size" :key="size">{{size}}</option>
-                            </select>
-                        </div>
+                        <p v-if="stockError" class="text-[10px] text-red-500">{{ stockError }}</p>
                     </div>
-                    <button @click="handleAddItemToCart" :disabled="!totalStock || totalStock <= 0" class="w-full h-full disabled:opacity-45 disabled:cursor-not-allowed text-white bg-primary rounded-full py-4 font-bold mt-3">Add to Cart</button>
+                    <button @click="handleAddItemToCart" :disabled="!totalStock || totalStock <= 0 || stockError" class="w-full h-full disabled:opacity-45 disabled:cursor-not-allowed text-white bg-primary rounded-full py-4 font-bold mt-3">Add to Cart</button>
                 </div>
                 <div class="mt-12">
                     <div class="flex items-center justify-between mb-7">
@@ -274,12 +264,23 @@ export default {
             selectedSize : this.sizes[0],
             quantity : this.totalStock ? 1 : 0,
             params : this.filters,
-            Autoplay : Autoplay
+            Autoplay : Autoplay,
+            stockError : null
+        }
+    },
+    watch:{
+        quantity(){
+            if(this.quantity > this.productDetail.stock_quantity){
+                this.stockError = 'Your stock quantity is more than our stock.'
+            }else{
+                this.stockError = null
+            }
         }
     },
     methods:{
         ...mapMutations(['addItemToCart','setIsCartOpen']),
         handleAddItemToCart(){
+            console.log(this.productDetail)
             let item = {
                 product : {
                     ...this.product,
