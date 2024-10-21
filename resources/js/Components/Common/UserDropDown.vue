@@ -47,6 +47,7 @@ const dropdownItems = computed(() => {
 });
 
 const handleLogout=()=>{
+    console.log('hit')
     emitter.emit('open-confirmation-dialog', {
         title:'Account Logout',
         body:'Are you sure you would like to do this ?',

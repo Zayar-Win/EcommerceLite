@@ -65,7 +65,7 @@
       class="block w-full p-0  rounded-md font-semibold text-sm text-primary bg-gray-00 outline-none disabled:cursor-not-allowed transition-all focus:ring-2 focus:ring-slate-300 border border-gray-300 focus:border-slate-400': true" 
        :options="options" 
        v-model="selectedProduct"
-       :custom-label="productName" 
+       :custom-label="productName"
        placeholder="Select one" 
        label="name"
       track-by="name"></multiselect>
@@ -73,7 +73,7 @@
     </Modal>
   </template>
   
-  <script>
+<script>
 import FormButton from '@/Components/Atoms/FormButton.vue';
 import Modal from '@/Components/Atoms/Modal.vue';
 import Multiselect from 'vue-multiselect';
