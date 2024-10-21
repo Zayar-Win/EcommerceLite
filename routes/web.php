@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    $products = Product::with(['images', 'category'])->filter(request()->all())->orderByRaw('CASE WHEN priority IS NULL THEN 9 ELSE priority END')->paginate(20);
+    $products = Product::with(['images', 'category', 'productDetails'])->filter(request()->all())->whereHas('productDetails')->orderByRaw('CASE WHEN priority IS NULL THEN 9 ELSE priority END')->paginate(20);
     $categories = Category::all();
 
     if (request()->expectsJson()) {
@@ -87,9 +87,9 @@ Route::get('/products/{product:slug}', function (Product $product) {
         return $detail->size ? $detail->size->name : null; // Adjust 'name' to your actual size field
     })->filter()->unique();
 
-    $latestProducts = Product::with(['images', 'category'])->latest()->limit(6)->get();
+    $latestProducts = Product::with(['images', 'category', 'productDetails'])->whereHas('productDetails')->latest()->limit(6)->get();
 
-    $relatedProducts = Product::with('images')->where('category_id', $product->category->id)->limit(6)->get();
+    $relatedProducts = Product::with('images', 'productDetails')->where('category_id', $product->category->id)->whereHas('productDetails')->limit(6)->get();
     return Inertia::render('ProductDetail', [
         'product' => $product,
         'filters' => $filters,

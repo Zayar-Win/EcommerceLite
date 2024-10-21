@@ -16,12 +16,10 @@ class ProductFactory extends Factory
             'category_id' => $this->faker->numberBetween(1, 5),
             'name' => $this->faker->unique()->words(3, true),
             'description' => $this->faker->paragraph(),
-            'discount' => $this->faker->numberBetween(0, 100),
             'priority' => null,
             'slug' => Str::slug($this->faker->unique()->words(3, true)),
             'created_at' => now(),
             'updated_at' => now(),
-            'price' => $this->faker->numberBetween(10000, 100000)
         ];
     }
 }

@@ -7,8 +7,7 @@
             <div class="basis-[70%]">
                 <p class="text-lg group-hover:text-primary transition-all duration-200 font-semibold ">{{product?.name}}</p>
                 <div class="flex items-center gap-2">
-                    <p class="font-bold">{{Math.floor(product?.price - (((product?.discount ?? 0) / 100) * product?.price))}} MMK</p>
-                    <p v-if="product?.discount && product?.discount > 0" class="font-medium line-through text-black/60">{{ product?.price ?? '1000' }} MMK</p>
+                    <p  class="font-semibold text-primary text-black/60">{{ product?.product_details[0]?.price ?? 'No price' }} MMK</p>
                 </div>
             </div>
         </div>

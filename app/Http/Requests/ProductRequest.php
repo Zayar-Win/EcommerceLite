@@ -20,8 +20,6 @@ class ProductRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255', Rule::unique(Product::class, 'name')],
             'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'discount' => 'nullable',
             'category_id' => 'required|exists:categories,id',
             'images.*' => 'nullable|image|mimes:jpeg,png,gif|max:2048',
             'images' => 'array|max:5',

@@ -46,8 +46,6 @@ class ProductController extends Controller
         $data = [
             'name' => $request->input('name'),
             'description' => $request->input('description'),
-            'price' => $request->input('price'),
-            'discount' => $request->input('discount'),
             'category_id' => $request->input('category_id'),
             'slug' => Str::slug($request->input('name')),
         ];
@@ -86,8 +84,6 @@ class ProductController extends Controller
         $product->update([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
-            'price' => $request->input('price'),
-            'discount' => $request->input('discount'),
             'category_id' => $request->input('category_id'),
         ]);
         $existingImages = $product->images->pluck('url')->toArray();

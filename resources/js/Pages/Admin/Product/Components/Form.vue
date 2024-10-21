@@ -36,8 +36,6 @@ const { form, create, edit, errors, processing } = useCRUDOperations(
         {
         name: props.product?.name || "",
         description: props.product?.description || "",
-        price: props.product?.price || "",
-        discount: props.product?.discount || "",
         category_id: props.product?.category_id || "",
         images: props.product?.images ? props.product?.images.map(image => image.url) : [],
     },
@@ -141,35 +139,6 @@ const selectedCategory = computed(() => {
                         :message="errors?.category_id"
                     />
                 </div>
-
-                <div>
-                    <Label label="Price" required />
-
-                    <InputField
-                        v-model="form.price"
-                        type="number"
-                        name="price"
-                        placeholder="Enter Price"
-                        required
-                    />
-
-                    <ValidationError :message="errors?.price" />
-                </div>
-
-                <div>
-                    <Label label="Discount" />
-
-                    <InputField
-                        v-model="form.discount"
-                        type="text"
-                        name="discount"
-                        placeholder="Enter Discount"
-                    />
-
-                    <ValidationError :message="errors?.discount" />
-                </div>
-
-                
             </div>
             <div>
                 <div>

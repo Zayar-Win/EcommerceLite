@@ -39,7 +39,7 @@
                             <p class="mt-3 font-semibold">{{product?.name}}</p>
                             <div class="flex gap-2 text-sm items-center font-semibold mt-1">
                                 <!-- <p class="text-primary">{{Math.floor(product?.price - ((product?.discount / 100) * product?.price))}} MMK</p> -->
-                                <p v-if="product?.discount || product?.discount !== 0" class="text-primary">{{ product?.price ?? '1000' }} MMK</p>
+                                <p class="text-primary">{{ product?.product_details[0]?.price ?? '1000' }} MMK</p>
                             </div>
                         </Link>
                     </div>

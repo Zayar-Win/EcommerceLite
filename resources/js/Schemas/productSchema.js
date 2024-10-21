@@ -9,14 +9,6 @@ export const productSchema = yup.object({
         .string()
         .nullable()
         .max(500, "Description cannot exceed 500 characters"),
-    price: yup
-        .number()
-        .required("Price is required")
-        .positive("Price must be a positive number")
-        .min(1, "Price must be at least 1"),
-    discount: yup
-        .mixed()
-        .nullable(),
     category_id: yup
         .number()
         .required("Category is required")
