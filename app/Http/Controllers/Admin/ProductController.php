@@ -130,7 +130,11 @@ class ProductController extends Controller
         Product::whereNotNull('priority')->update([
             'priority' => null
         ]);
-        foreach (request('selectedProducts') as $key => $product) {
+        foreach (
+            collect(request('selectedProducts'))->filter(function ($product) {
+                return  $product !== null;
+            }) as $key => $product
+        ) {
             Product::where('id', $product['id'])->update([
                 'priority' => $key + 1,
             ]);
