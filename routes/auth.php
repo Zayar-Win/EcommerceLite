@@ -1,59 +1,70 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\ConfirmablePasswordController;
-use App\Http\Controllers\Auth\EmailVerificationNotificationController;
-use App\Http\Controllers\Auth\EmailVerificationPromptController;
-use App\Http\Controllers\Auth\NewPasswordController;
-use App\Http\Controllers\Auth\PasswordController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Middleware\GuestMiddleware;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
-Route::middleware('guest')->group(function () {
-    Route::get('register', [RegisteredUserController::class, 'create'])
-                ->name('register');
+Route::post('/logout', function () {
+    auth()->logout();
+    return redirect(route('home'))->with('success', 'See you later.');
+})->name('logout')->middleware('auth');
 
-    Route::post('register', [RegisteredUserController::class, 'store']);
+Route::middleware(GuestMiddleware::class)->group(function () {
+    Route::get('/login', function () {
+        return Inertia::render('Login');
+    })->name('show-login');
+    Route::get('/register', function () {
+        return Inertia::render('Register');
+    })->name('show-register');
 
-    Route::get('login', [AuthenticatedSessionController::class, 'create'])
-                ->name('login');
+    Route::post('/register', function () {
+        $validatedData = request()->validate([
+            'name' => ['required', 'min:2'],
+            'email' => ['required', 'email'],
+            'phone' => ['required', 'min:6'],
+            'password' => ['required', 'min:6']
+        ]);
 
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+        $user = User::where('email', $validatedData['email'])->first();
+        if ($user) {
+            return back()->withErrors([
+                'email' => 'Email is already used.'
+            ]);
+        }
 
-    Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
-                ->name('password.request');
+        $hashPassword = Hash::make($validatedData['password']);
+        $validatedData['password'] = $hashPassword;
+        $user = User::create($validatedData);
+        auth()->login($user);
+        return redirect(route('home'))->with('success', 'Register successful.');
+    })->name('register');
 
-    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
-                ->name('password.email');
+    Route::post('/login', function () {
+        $validatedData = request()->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required', 'min:6']
+        ]);
 
-    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
-                ->name('password.reset');
+        $user = User::where('email', $validatedData['email'])->first();
+        if (!$user) {
+            return back()->withErrors([
+                'email' => 'Email doesn\'t exists.'
+            ]);
+        }
 
-    Route::post('reset-password', [NewPasswordController::class, 'store'])
-                ->name('password.store');
-});
-
-Route::middleware('auth')->group(function () {
-    Route::get('verify-email', EmailVerificationPromptController::class)
-                ->name('verification.notice');
-
-    Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
-                ->middleware(['signed', 'throttle:6,1'])
-                ->name('verification.verify');
-
-    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-                ->middleware('throttle:6,1')
-                ->name('verification.send');
-
-    Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
-                ->name('password.confirm');
-
-    Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
-
-    Route::put('password', [PasswordController::class, 'update'])->name('password.update');
-
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
-                ->name('logout');
+        $isPasswordCorrect = Hash::check($validatedData['password'], $user->password);
+        if ($isPasswordCorrect) {
+            auth()->login($user);
+            return redirect(route('home'))->with(
+                'success',
+                'Login success.'
+            );
+        } else {
+            return back()->withErrors([
+                'password' => 'Your password is wrong.'
+            ]);
+        }
+    })->name('login');
 });
